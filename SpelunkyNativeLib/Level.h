@@ -4,6 +4,8 @@
 #include <Texture.hpp>
 #include <VisualServer.hpp>
 #include <PackedScene.hpp>
+#include <QuadMesh.hpp>
+#include <MultiMesh.hpp>
 struct LevelBlock {
 	bool present;
 };
@@ -12,7 +14,9 @@ class Level : public Node2D
 {
 	GODOT_CLASS(Level, Node2D);
 
-	Ref<Texture> groundTexture;
+	Ref<MultiMesh> groundMultimesh;
+	Ref<MultiMesh> topMultimesh;
+	Ref<MultiMesh> bottomMultimesh;
 	float blockSize=0;
 
 public:
@@ -20,9 +24,9 @@ public:
 	void _init();
 	void _ready();
 	void _process(float delta);
-	void Draw();
-	RID GetRid(VisualServer * server);
 	LevelBlock* GetBlock(int x, int y);
+	void CopyLayoutIntoBlocks(string layout, int x, int y);
+	void UpdateMeshes();
 	Level();
 	~Level();
 };

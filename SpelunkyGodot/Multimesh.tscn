@@ -1,0 +1,3 @@
+[gd_scene format=2]
+
+[node name="MultiMeshInstance2D" type="MultiMeshInstance2D"]

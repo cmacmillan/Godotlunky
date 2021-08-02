@@ -4,21 +4,65 @@
 #include <vector>
 #include <MultiMeshInstance2D.hpp>
 #include <MultiMesh.hpp>
+#include <QuadMesh.hpp>
+#include <string>
+#include <sstream>
 
 void Level::_register_methods()
 {
 	register_method("_ready", &Level::_ready);
 	register_method("_process", &Level::_process);
 
-	register_property("groundTexture", &Level::groundTexture, Ref<Texture>());
 	register_property("blockSize", &Level::blockSize, 0.0f);
+	register_property("groundMultimesh", &Level::groundMultimesh, Ref<MultiMesh>());
+	register_property("topMultimesh", &Level::topMultimesh, Ref<MultiMesh>());
+	register_property("bottomMultimesh", &Level::bottomMultimesh, Ref<MultiMesh>());
 }
 
+enum DrawType {
+	Normal = 0,
+	Top = 1,
+	Bottom = 2,
+	None = 3,
+};
+
 LevelBlock* blocks;
+DrawType* drawTypes;
 int blocksXRes;
 int blocksYRes;
-vector<RID>* allCanvasIds;
-vector<RID>* freeCanvasIds;
+
+const string layout1 = 
+"X00000000X\n\
+ X00000000X\n\
+ X00XXX000X\n\
+ X00XXX000X\n\
+ X00XXX000X\n\
+ X00XXX000X\n\
+ X00000000X\n\
+ X00000000X\n\
+ X00000000X\n\
+ XXXXXXXXXX";
+
+void Level::CopyLayoutIntoBlocks(string layout,int x, int y) 
+{
+	std::istringstream iss(layout);
+	for (std::string line; std::getline(iss, line); )
+	{
+		int xCurr = x;
+		int len = line.length();
+		for (int i = 0; i < len; i++) {
+			if (line[i]=='X') {
+				GetBlock(xCurr,y)->present=true;
+				xCurr++;
+			}
+			else if (line[i]=='0') {
+				GetBlock(xCurr,y)->present=false;
+				xCurr++;
+			}
+		}
+		y++;
+	}
+}
 
 void Level::_init()
 {
@@ -26,51 +70,66 @@ void Level::_init()
 
 void Level::_ready()
 {
-	//Draw();
-	Draw();
+	blocksXRes = 30;
+	blocksYRes = 30;
+	blocks = (LevelBlock*)malloc(sizeof(LevelBlock) * blocksXRes*blocksYRes);
+	drawTypes = (DrawType*)malloc(sizeof(DrawType) * blocksXRes*blocksYRes);
+	CopyLayoutIntoBlocks(layout1, 0, 0);
+	UpdateMeshes();
 }
-
-float k = 0.0f;
-void Level::_process(float delta)
-{
-	k+=.0005f;
-	this->translate(Vector2(k, 0));
-	auto vs = VisualServer::get_singleton();
-	//vs->force_draw();
-	auto instance = MultiMeshInstance2D::_new();
-	auto mm = new MultiMesh();
-	instance->set_multimesh(mm);
-}
-
-RID Level::GetRid(VisualServer* server) {
-	if (freeCanvasIds->size() > 0) {
-		auto retr = freeCanvasIds->back();
-		freeCanvasIds->pop_back();
-		return retr;
-	}
-	allCanvasIds->push_back(server->canvas_item_create());
-	return allCanvasIds->back();
-}
-
-void Level::Draw()
-{
-	auto vs = VisualServer::get_singleton();
-	freeCanvasIds->clear();
-	for (auto x : *allCanvasIds) {
-		freeCanvasIds->push_back(x);
-	}
+void Level::UpdateMeshes() {
+	int topCount = 0;
+	int bottomCount = 0;
+	int normalCount = 0;
 	for (int i = 0; i < blocksXRes; i++) {
 		for (int j = 0; j < blocksYRes; j++) {
-			auto id = GetRid(vs);
-			vs->canvas_item_clear(id);
-			vs->canvas_item_set_parent(id, get_canvas_item());
-			vs->canvas_item_add_texture_rect(id, Rect2(Point2(blockSize*i, blockSize*j), Point2(blockSize, blockSize)), groundTexture.ptr()->get_rid());
-			/*
-			auto xform = Transform2D().rotated(godot::Math::deg2rad(k));
-			vs->canvas_item_set_transform(id, xform);
-			*/
+			if (!GetBlock(i, j)->present) {
+				drawTypes[j * blocksXRes + i] = DrawType::None;
+			}
+			else if (j > 0 && !GetBlock(i, j - 1)->present) {
+				drawTypes[j * blocksXRes + i] = DrawType::Top;
+				topCount++;
+			} 
+			else if (j < blocksYRes-1 && !GetBlock(i, j + 1)->present)
+			{
+				drawTypes[j * blocksXRes + i] = DrawType::Bottom;
+				bottomCount++;
+			}
+			else
+			{
+				drawTypes[j * blocksXRes + i] = DrawType::Normal;
+				normalCount++;
+			}
 		}
 	}
+	groundMultimesh->set_instance_count(normalCount);
+	topMultimesh->set_instance_count(topCount);
+	bottomMultimesh->set_instance_count(bottomCount);
+	int normalIndex = 0;
+	int topIndex = 0;
+	int bottomIndex= 0;
+	for (int i = 0; i < blocksXRes; i++) {
+		for (int j = 0; j < blocksYRes; j++) {
+			switch (drawTypes[j*blocksXRes+i])
+			{
+			case DrawType::Bottom:
+				bottomMultimesh->set_instance_transform_2d(bottomIndex++,Transform2D().scaled(Vector2(1,-1)).translated(Vector2(i*100,-j*100)));
+				break;
+			case DrawType::Top:
+				topMultimesh->set_instance_transform_2d(topIndex++, Transform2D().scaled(Vector2(1,-1)).translated(Vector2(i*100,-j*100)));
+				break;
+			case DrawType::Normal:
+				groundMultimesh->set_instance_transform_2d(normalIndex++, Transform2D().scaled(Vector2(1,-1)).translated(Vector2(i*100,-j*100)));
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}
+
+void Level::_process(float delta)
+{
 }
 
 LevelBlock* Level::GetBlock(int x, int y) {
@@ -84,16 +143,10 @@ LevelBlock* Level::GetBlock(int x, int y) {
 
 Level::Level()
 {
-	blocksXRes = 300;
-	blocksYRes = 300;
-	blocks = (LevelBlock*)malloc(sizeof(LevelBlock) * blocksXRes*blocksYRes);
-	allCanvasIds = new vector<RID>();
-	freeCanvasIds = new vector<RID>();
 }
 
 Level::~Level()
 {
 	_CSTDLIB_::free(blocks);
-	delete allCanvasIds;
-	delete freeCanvasIds;
+	_CSTDLIB_::free(drawTypes);
 }
