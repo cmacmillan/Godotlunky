@@ -1,6 +1,7 @@
 #pragma once
 #include "Common.h"
 #include <Node2D.hpp>
+#include "Level.h"
 
 class Spelunker : public Node2D
 {
@@ -8,6 +9,7 @@ class Spelunker : public Node2D
 
 	float jumpHeight = 0;
 	float gravity = 0;
+	//Ref<Level> level;
 
 public:
 	static void _register_methods();

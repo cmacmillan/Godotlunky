@@ -8,6 +8,13 @@
 #include <MultiMesh.hpp>
 struct LevelBlock {
 	bool present;
+	bool indestructible;
+};
+
+struct SpelAABB
+{
+	Vector2 center;
+	Vector2 size;
 };
 
 class Level : public Node2D
@@ -17,14 +24,20 @@ class Level : public Node2D
 	Ref<MultiMesh> groundMultimesh;
 	Ref<MultiMesh> topMultimesh;
 	Ref<MultiMesh> bottomMultimesh;
-	float blockSize=0;
 
 public:
+	static Level* singleton;
 	static void _register_methods();
 	void _init();
 	void _ready();
 	void _process(float delta);
 	LevelBlock* GetBlock(int x, int y);
+	Vector2 WorldToGrid(Vector2 v);
+	Vector2 GridToWorld(Vector2 v);
+	void CheckCollisionWithTerrain(SpelAABB aabb,Vector2 previousPos,Vector2& endPos,Vector2& normal);
+	float MarchVertical(float startY, float endY, float x1, float x2);
+	float MarchHorizontal(float startX, float endX, float y1, float y2);
+	bool IsOverlappingTerrain(Vector2 pos);
 	void CopyLayoutIntoBlocks(string layout, int x, int y);
 	void UpdateMeshes();
 	Level();
