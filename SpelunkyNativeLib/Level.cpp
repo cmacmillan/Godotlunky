@@ -33,15 +33,15 @@ int blocksYRes;
 float worldBlockSize;
 
 const string layout1 = 
-"XXXXXXXXXX\n\
- X00000000X\n\
- X00XXX000X\n\
- X00XXX000X\n\
- X00XXX000X\n\
- X00XXX000X\n\
- X00000000X\n\
- X00000000X\n\
- X00000000X\n\
+"XXXXXXXXXXX\n\
+ X000000000X\n\
+ X00XXX00X0X\n\
+ X00XXX0000X\n\
+ X00XXX0000X\n\
+ X00XXX0000X\n\
+ X0000000X0X\n\
+ X00000X0X0X\n\
+ X000000000X\n\
  XXXXXXXXXX";
 
 void Level::CopyLayoutIntoBlocks(string layout,int x, int y) 
@@ -85,46 +85,36 @@ bool Level::IsOverlappingTerrain(Vector2 pos) {
 
 
 float Level::MarchVertical(float startY, float endY, float x1, float x2,bool& hit) {
-	float dir = endY > startY ? 1.0 : -1.0;
-	if (GetBlock(x1, endY)->present || GetBlock(x2, endY)->present) {
-		hit = true;
-		if (dir > 0)
-		{
-			return floor(endY)-.0001f;
-		}
-		else
-		{
-			return ceil(endY)+.0001f;
+	int dir = endY > startY ? 1 : -1;
+	for (int i = startY; i != (int)endY+dir; i+=dir) {
+		if (GetBlock(x1, i)->present || GetBlock(x2, i)->present) {
+			hit = true;
+			if (dir > 0)
+			{
+				return i - .0001f;
+			}
+			else
+			{
+				return i+1.0 + .0001f;
+			}
 		}
 	}
 	return endY;
-	/*
-	for (float f = startY; abs(f - endY) < 1; f += dir) {
-		if (GetBlock(x1, f)->present || GetBlock(x2, f)->present) {
-			if (dir > 0) 
-			{
-				return floor(f);
-			}
-			else 
-			{
-				return ceil(f);
-			}
-		}
-	}
-	*/
 }
 
 float Level::MarchHorizontal(float startX, float endX, float y1, float y2, bool& hit) {
 	float dir = endX > startX ? 1.0 : -1.0;
-	if (GetBlock(endX, y1)->present || GetBlock(endX,y2)->present) {
-		hit = true;
-		if (dir > 0)
-		{
-			return floor(endX)-.0001f;
-		}
-		else
-		{
-			return ceil(endX)+.0001f;
+	for (int i = startX; i != (int)endX+dir;i+=dir) {
+		if (GetBlock(i, y1)->present || GetBlock(i, y2)->present) {
+			hit = true;
+			if (dir > 0)
+			{
+				return i - .0001f;
+			}
+			else
+			{
+				return i + 1.0 + .0001f;
+			}
 		}
 	}
 	return endX;

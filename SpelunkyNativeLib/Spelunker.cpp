@@ -29,14 +29,14 @@ void Spelunker::_process(float delta)
 	printf("%f    ", delta);
 	if (!inited) {
 		inited = true;
-		vel = Vector2(2000,0 );
+		vel = Vector2(-1000,-1000);
 		Level* level = (Level*)this->get_node("/root/GameScene/Level");
 		startPos = level->WorldToGrid(get_position());
 	}
 	Level* level = (Level*)this->get_node("/root/GameScene/Level");
 	SpelAABB aabb = SpelAABB();
 	Vector2 offset = Vector2(0,.08f);
-	vel.y += 1000.0f * delta;
+	//vel.y += 1000.0f * delta;
 	aabb.size = Vector2(.72f, .96f);
 	aabb.center = level->WorldToGrid(get_position()+vel*delta)+offset;
 	//aabb.size = Vector2(.25f, .25f);
@@ -45,7 +45,7 @@ void Spelunker::_process(float delta)
 	Vector2 normal;
 	Vector2 finalPos=aabb.center;
 	//printf("(%f,%f)", startPos.x,startPos.y);
-	float bounciness = .5;
+	float bounciness = 1;
 	if (level->CheckCollisionWithTerrain(aabb, startPos, finalPos, normal)) 
 	{
 		if (normal.x!=0 && sign(normal.x) != sign(vel.x)) {
