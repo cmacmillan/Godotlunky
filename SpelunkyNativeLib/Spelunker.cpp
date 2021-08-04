@@ -1,6 +1,7 @@
 #include "Spelunker.h"
 #include <Input.hpp>
 #include "Level.h"
+using namespace godot::Math;
 
 void Spelunker::_register_methods()
 {
@@ -8,7 +9,6 @@ void Spelunker::_register_methods()
 	register_method("_process", &Spelunker::_process);
 
 	register_property("jumpHeight", &Spelunker::jumpHeight, 0.0f);
-	//register_property("level", &Spelunker::level, Ref<Level>());
 }
 
 void Spelunker::_init()
@@ -18,30 +18,49 @@ void Spelunker::_init()
 
 Vector2 vel;
 Vector2 startPos;
+bool inited = false;
 void Spelunker::_ready()
 {
-	//vel = Vector2(0, -10);
-	auto level = Level::singleton;
-	startPos = level->WorldToGrid(get_position());
-	vel = Vector2(.3, -1);
-	printf("Ready");
 }
 
 void Spelunker::_process(float delta)
 {
-	vel.y += 1.0f*delta;
-	set_position(get_position()+vel);
-	auto level = Level::singleton;
+	//set_position(get_position()+vel);
+	printf("%f    ", delta);
+	if (!inited) {
+		inited = true;
+		vel = Vector2(2000,0 );
+		Level* level = (Level*)this->get_node("/root/GameScene/Level");
+		startPos = level->WorldToGrid(get_position());
+	}
+	Level* level = (Level*)this->get_node("/root/GameScene/Level");
 	SpelAABB aabb = SpelAABB();
-	aabb.center = level->WorldToGrid(get_position());
+	Vector2 offset = Vector2(0,.08f);
+	vel.y += 1000.0f * delta;
+	aabb.size = Vector2(.72f, .96f);
+	aabb.center = level->WorldToGrid(get_position()+vel*delta)+offset;
 	//aabb.size = Vector2(.25f, .25f);
-	aabb.size = Vector2(.9f, .9f);
+	//aabb.size = Vector2(.99f, .99f);
+	//aabb.size = Vector2(.01f, .01f);
 	Vector2 normal;
 	Vector2 finalPos=aabb.center;
-	printf("(%f,%f)", aabb.center.x, aabb.center.y);
-	level->CheckCollisionWithTerrain(aabb,startPos,finalPos,normal);
+	//printf("(%f,%f)", startPos.x,startPos.y);
+	float bounciness = .5;
+	if (level->CheckCollisionWithTerrain(aabb, startPos, finalPos, normal)) 
+	{
+		if (normal.x!=0 && sign(normal.x) != sign(vel.x)) {
+			vel.x = -vel.x * bounciness;
+		}
+		if (normal.y!=0 && sign(normal.y) != sign(vel.y)) {
+			vel.y = -vel.y * bounciness;
+		}
+		//could do dot product reflection like this, but that produces bad corner behaviour
+		//float proj = vel.dot(-normal);
+		//vel = vel + normal * proj + normal * proj * bounciness;
+	}
+
 	//printf("(%f,%f)", finalPosRef.x, finalPosRef.y);
-	set_position(level->GridToWorld(finalPos));
+	set_position(level->GridToWorld(finalPos-offset));
 	startPos = finalPos;
 	//
 	//i += delta;

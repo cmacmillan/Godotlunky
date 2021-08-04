@@ -26,7 +26,6 @@ enum DrawType {
 	None = 3,
 };
 
-Level* Level::singleton = nullptr;
 LevelBlock* blocks;
 DrawType* drawTypes;
 int blocksXRes;
@@ -34,7 +33,7 @@ int blocksYRes;
 float worldBlockSize;
 
 const string layout1 = 
-"X00000000X\n\
+"XXXXXXXXXX\n\
  X00000000X\n\
  X00XXX000X\n\
  X00XXX000X\n\
@@ -85,9 +84,10 @@ bool Level::IsOverlappingTerrain(Vector2 pos) {
 }
 
 
-float Level::MarchVertical(float startY, float endY, float x1, float x2) {
+float Level::MarchVertical(float startY, float endY, float x1, float x2,bool& hit) {
 	float dir = endY > startY ? 1.0 : -1.0;
 	if (GetBlock(x1, endY)->present || GetBlock(x2, endY)->present) {
+		hit = true;
 		if (dir > 0)
 		{
 			return floor(endY)-.0001f;
@@ -97,6 +97,7 @@ float Level::MarchVertical(float startY, float endY, float x1, float x2) {
 			return ceil(endY)+.0001f;
 		}
 	}
+	return endY;
 	/*
 	for (float f = startY; abs(f - endY) < 1; f += dir) {
 		if (GetBlock(x1, f)->present || GetBlock(x2, f)->present) {
@@ -111,12 +112,12 @@ float Level::MarchVertical(float startY, float endY, float x1, float x2) {
 		}
 	}
 	*/
-	return endY;
 }
 
-float Level::MarchHorizontal(float startX, float endX, float y1, float y2) {
+float Level::MarchHorizontal(float startX, float endX, float y1, float y2, bool& hit) {
 	float dir = endX > startX ? 1.0 : -1.0;
 	if (GetBlock(endX, y1)->present || GetBlock(endX,y2)->present) {
+		hit = true;
 		if (dir > 0)
 		{
 			return floor(endX)-.0001f;
@@ -126,23 +127,9 @@ float Level::MarchHorizontal(float startX, float endX, float y1, float y2) {
 			return ceil(endX)+.0001f;
 		}
 	}
-	/*
-	for (float f = startX; abs(f - endX) < 1; f += dir) {
-		if (GetBlock(f,y1)->present || GetBlock(f,y2)->present) {
-			if (dir > 0) 
-			{
-				return floor(f);
-			}
-			else 
-			{
-				return ceil(f);
-			}
-		}
-	}
-	*/
 	return endX;
 }
-void Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector2& endPos, Vector2& normal) 
+bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector2& endPos, Vector2& normal) 
 {
 	Vector2 size = aabb.size;
 	Vector2 half = aabb.size/2;
@@ -158,20 +145,40 @@ void Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 	Vector2 prevLowerLeft = previousPos+ Vector2(-half.x, half.y);
 	Vector2 prevLowerRight = previousPos+ half;
 
+	normal = Vector2();
+	bool horizHit= false;
 	if (center.x > previousPos.x) {
-		endPos.x = MarchHorizontal(previousPos.x+half.x,upperRight.x,prevUpperRight.y,prevLowerRight.y)-half.x;
+		endPos.x = MarchHorizontal(previousPos.x+half.x,upperRight.x,prevUpperRight.y,prevLowerRight.y,horizHit)-half.x;
+		if (horizHit) {
+			normal += Vector2(-1,0);
+		}
 	}
 	else if (center.x < previousPos.x) {
-		endPos.x = MarchHorizontal(previousPos.x - half.x, upperLeft.x, prevUpperLeft.y, prevLowerLeft.y)+half.x;
+		endPos.x = MarchHorizontal(previousPos.x - half.x, upperLeft.x, prevUpperLeft.y, prevLowerLeft.y,horizHit)+half.x;
+		if (horizHit) {
+			normal += Vector2(1,0);
+		}
 	}
 
+	bool vertHit= false;
 	if (center.y > previousPos.y) {
-		endPos.y = MarchVertical(previousPos.y + half.y, lowerLeft.y, prevLowerLeft.x, prevLowerRight.x)-half.y;
+		endPos.y = MarchVertical(previousPos.y + half.y, lowerLeft.y, prevLowerLeft.x, prevLowerRight.x,vertHit)-half.y;
+		if (vertHit) {
+			normal += Vector2(0,-1);
+		}
 	}
 	else if (center.y < previousPos.y)
 	{
-		endPos.y = MarchVertical(previousPos.y - half.y, upperLeft.y, prevUpperLeft.x, prevUpperRight.x)+half.y;
+		endPos.y = MarchVertical(previousPos.y - half.y, upperLeft.y, prevUpperLeft.x, prevUpperRight.x,vertHit)+half.y;
+		if (vertHit) {
+			normal += Vector2(0,1);
+		}
 	}
+	bool retr;
+	retr = vertHit || horizHit;
+	//if (retr)
+		//normal.normalize();
+	return retr;
 }
 
 void Level::_ready()
@@ -241,7 +248,7 @@ void Level::_process(float delta)
 
 LevelBlock* Level::GetBlock(int x, int y) {
 	if (x < 0 || x >= blocksXRes || y >= blocksYRes || y < 0) {
-		printf("ERROR!!!! OUT OF BOUNDS!!!!!");
+		printf("ERROR!!!! OUT OF BOUNDS!!!!! (%d,%d)",x,y);
 		return blocks;
 	}
 	int index = x+y*blocksXRes;
@@ -250,7 +257,6 @@ LevelBlock* Level::GetBlock(int x, int y) {
 
 Level::Level()
 {
-	singleton = this;
 }
 
 Level::~Level()
