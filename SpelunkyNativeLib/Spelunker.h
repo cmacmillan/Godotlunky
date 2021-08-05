@@ -9,6 +9,7 @@ class Spelunker : public Node2D
 
 	float jumpHeight = 0;
 	float gravity = 0;
+	float walkSpeed;
 	Variant* level;
 
 public:

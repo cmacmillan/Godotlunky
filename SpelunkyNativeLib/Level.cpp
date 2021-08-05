@@ -33,16 +33,16 @@ int blocksYRes;
 float worldBlockSize;
 
 const string layout1 = 
-"XXXXXXXXXXX\n\
- X000000000X\n\
- X00XXX00X0X\n\
- X00XXX0000X\n\
- X00XXX0000X\n\
- X00XXX0000X\n\
- X0000000X0X\n\
- X00000X0X0X\n\
- X000000000X\n\
- XXXXXXXXXX";
+"XXXXXXXXXXXXXXXXXXXXXX\n\
+ X00000000000000000000X\n\
+ X00XXX00X000000000000X\n\
+ X00XXX000000000000000X\n\
+ X00XXX000000000000000X\n\
+ X00XXX000000000000000X\n\
+ X0000000X000000000000X\n\
+ XX0000X0X000000000000X\n\
+ X0X000000000000000000X\n\
+ XXXXXXXXXXXXXXXXXXXXXX";
 
 void Level::CopyLayoutIntoBlocks(string layout,int x, int y) 
 {
@@ -119,7 +119,7 @@ float Level::MarchHorizontal(float startX, float endX, float y1, float y2, bool&
 	}
 	return endX;
 }
-bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector2& endPos, Vector2& normal) 
+bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector2& endPos, Vector2& normal,bool& isGrounded)
 {
 	Vector2 size = aabb.size;
 	Vector2 half = aabb.size/2;
@@ -135,6 +135,7 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 	Vector2 prevLowerLeft = previousPos+ Vector2(-half.x, half.y);
 	Vector2 prevLowerRight = previousPos+ half;
 
+	isGrounded = false;
 	normal = Vector2();
 	bool horizHit= false;
 	if (center.x > previousPos.x) {
@@ -155,6 +156,7 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 		endPos.y = MarchVertical(previousPos.y + half.y, lowerLeft.y, prevLowerLeft.x, prevLowerRight.x,vertHit)-half.y;
 		if (vertHit) {
 			normal += Vector2(0,-1);
+			isGrounded = true;
 		}
 	}
 	else if (center.y < previousPos.y)

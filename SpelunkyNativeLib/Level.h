@@ -34,7 +34,7 @@ public:
 	LevelBlock* GetBlock(int x, int y);
 	Vector2 WorldToGrid(Vector2 v);
 	Vector2 GridToWorld(Vector2 v);
-	bool CheckCollisionWithTerrain(SpelAABB aabb,Vector2 previousPos,Vector2& endPos,Vector2& normal);
+	bool CheckCollisionWithTerrain(SpelAABB aabb,Vector2 previousPos,Vector2& endPos,Vector2& normal,bool& isGrounded);
 	float MarchVertical(float startY, float endY, float x1, float x2,bool& hit);
 	float MarchHorizontal(float startX, float endX, float y1, float y2,bool& hit);
 	bool IsOverlappingTerrain(Vector2 pos);
