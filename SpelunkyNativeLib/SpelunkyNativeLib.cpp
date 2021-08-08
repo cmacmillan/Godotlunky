@@ -1,6 +1,8 @@
 #include "Common.h"
 #include "Spelunker.h"
 #include "Level.h"
+#include "Bomb.h"
+#include "Rope.h"
 
 extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
 	godot::Godot::gdnative_init(o);
@@ -15,4 +17,6 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 
 	godot::register_class<Level>();
 	godot::register_class<Spelunker>();
+	godot::register_class<Bomb>();
+	godot::register_class<Rope>();
 }

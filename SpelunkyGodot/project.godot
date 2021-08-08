@@ -18,6 +18,11 @@ config/name="Spelunky"
 run/main_scene="res://MainScene.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/width=1920
+window/size/height=1080
+
 [input]
 
 jump={
@@ -68,4 +73,5 @@ rope={
 
 [rendering]
 
+2d/snapping/use_gpu_pixel_snap=true
 environment/default_environment="res://default_env.tres"

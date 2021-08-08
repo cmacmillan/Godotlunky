@@ -1,0 +1,28 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://CaveTex/sExplosion_1.png" type="Texture" id=1]
+[ext_resource path="res://CaveTex/sExplosion_3.png" type="Texture" id=2]
+[ext_resource path="res://CaveTex/sExplosion_7.png" type="Texture" id=3]
+[ext_resource path="res://CaveTex/sExplosion_0.png" type="Texture" id=4]
+[ext_resource path="res://CaveTex/sExplosion_2.png" type="Texture" id=5]
+[ext_resource path="res://CaveTex/sExplosion_5.png" type="Texture" id=6]
+[ext_resource path="res://CaveTex/sExplosion_9.png" type="Texture" id=7]
+[ext_resource path="res://CaveTex/sExplosion_6.png" type="Texture" id=8]
+[ext_resource path="res://CaveTex/sExplosion_4.png" type="Texture" id=9]
+[ext_resource path="res://CaveTex/sExplosion_8.png" type="Texture" id=10]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 4 ), ExtResource( 1 ), ExtResource( 5 ), ExtResource( 2 ), ExtResource( 9 ), ExtResource( 6 ), ExtResource( 8 ), ExtResource( 3 ), ExtResource( 10 ), ExtResource( 7 ) ],
+"loop": false,
+"name": "Explode",
+"speed": 16.0
+} ]
+
+[node name="Explosion" type="Node2D"]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+visible = false
+scale = Vector2( 7, 7 )
+frames = SubResource( 1 )
+animation = "Explode"

@@ -7,12 +7,18 @@ class Spelunker : public Node2D
 {
 	GODOT_CLASS(Spelunker, Node2D);
 
-	float jumpHeight = 0;
-	float gravity = 0;
-	float walkSpeed;
-	Variant* level;
-
 public:
+	float jumpHeight = 0;
+	float walkSpeed;
+	Vector2 vel;
+	Vector2 startPos;
+	bool inited = false;
+	Level* level=nullptr;
+	bool holdingLedge = false;
+	bool holdingRope= false;
+	float grabRopeDisableTime = 0;
+	bool facingRight = true;
+	Vector2 ledgeCoords=Vector2(0,0);
 	static void _register_methods();
 	void _init();
 

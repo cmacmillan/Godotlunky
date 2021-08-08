@@ -17,20 +17,8 @@ void Level::_register_methods()
 	register_property("groundMultimesh", &Level::groundMultimesh, Ref<MultiMesh>());
 	register_property("topMultimesh", &Level::topMultimesh, Ref<MultiMesh>());
 	register_property("bottomMultimesh", &Level::bottomMultimesh, Ref<MultiMesh>());
+	register_property("g", &Level::g, 0.0f);
 }
-
-enum DrawType {
-	Normal = 0,
-	Top = 1,
-	Bottom = 2,
-	None = 3,
-};
-
-LevelBlock* blocks;
-DrawType* drawTypes;
-int blocksXRes;
-int blocksYRes;
-float worldBlockSize;
 
 const string layout1 = 
 "XXXXXXXXXXXXXXXXXXXXXX\n\
@@ -43,6 +31,12 @@ const string layout1 =
  XX0000X0X000000000000X\n\
  X0X000000000000000000X\n\
  XXXXXXXXXXXXXXXXXXXXXX";
+
+LevelBlock* blocks;
+DrawType* drawTypes;
+int blocksXRes;
+int blocksYRes;
+float worldBlockSize;
 
 void Level::CopyLayoutIntoBlocks(string layout,int x, int y) 
 {
@@ -180,6 +174,15 @@ void Level::_ready()
 	worldBlockSize = 100;
 	blocks = (LevelBlock*)malloc(sizeof(LevelBlock) * blocksXRes*blocksYRes);
 	drawTypes = (DrawType*)malloc(sizeof(DrawType) * blocksXRes*blocksYRes);
+	topMultimeshInstance = get_node<MultiMeshInstance2D>("/root/GameScene/TopMultimesh");
+	bottomMultimeshInstance = get_node<MultiMeshInstance2D>("/root/GameScene/BottomMultimesh");
+	groundMultimeshInstance= get_node<MultiMeshInstance2D>("/root/GameScene/GroundMultimesh");
+	for (int i = 0; i < blocksXRes; i++) {
+		for (int j = 0; j < blocksYRes; j++) {
+			GetBlock(i, j)->hasRope = false;
+			GetBlock(i, j)->indestructible= false;
+		}
+	}
 	CopyLayoutIntoBlocks(layout1, 0, 0);
 	UpdateMeshes();
 }
@@ -208,6 +211,7 @@ void Level::UpdateMeshes() {
 			}
 		}
 	}
+	//groundMultimeshInstance->set_custom_aabb(AABB());
 	groundMultimesh->set_instance_count(normalCount);
 	topMultimesh->set_instance_count(topCount);
 	bottomMultimesh->set_instance_count(bottomCount);

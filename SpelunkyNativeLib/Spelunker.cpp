@@ -2,6 +2,9 @@
 #include <Input.hpp>
 #include "Level.h"
 #include <AnimatedSprite.hpp>
+#include "Bomb.h"
+#include "Rope.h"
+#include <ResourceLoader.hpp>
 using namespace godot::Math;
 
 void Spelunker::_register_methods()
@@ -11,7 +14,7 @@ void Spelunker::_register_methods()
 
 	register_property("jumpHeight", &Spelunker::jumpHeight, 0.0f);
 	register_property("walkSpeed", &Spelunker::walkSpeed, 0.0f);
-	register_property("gravity", &Spelunker::gravity, 0.0f);
+	//register_property("bombScene", &Spelunker::bombScene, Ref<PackedScene>());
 }
 
 void Spelunker::_init()
@@ -19,31 +22,24 @@ void Spelunker::_init()
 	printf("init");
 }
 
-Vector2 vel;
-Vector2 startPos;
-bool inited = false;
-bool holdingLedge = false;
-bool facingRight = true;
-Vector2 ledgeCoords;
 void Spelunker::_ready()
 {
 }
 
 void Spelunker::_process(float delta)
 {
-	auto animator = (AnimatedSprite*)get_node(".");
+	auto animator = get_node<AnimatedSprite>(".");
 	if (!inited) {
 		inited = true;
-		Level* level = (Level*)this->get_node("/root/GameScene/Level");
+		level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 		startPos = level->WorldToGrid(get_position());
 	}
-	Level* level = (Level*)this->get_node("/root/GameScene/Level");
 	SpelAABB aabb = SpelAABB();
-	Vector2 offset = Vector2(0,.08f);
-	if (!holdingLedge) {
-		vel.y += gravity * delta;
+	Vector2 offset = Vector2(0,.11f);
+	if (!holdingLedge && !holdingRope) {
+		vel.y += level->g * delta;
 	}
-	aabb.size = Vector2(.72f, .96f);
+	aabb.size = Vector2(.72f, .9f);
 	aabb.center = level->WorldToGrid(get_position()+vel*delta)+offset;
 	Vector2 normal;
 	Vector2 finalPos=aabb.center;
@@ -95,63 +91,131 @@ void Spelunker::_process(float delta)
 	if (input->is_action_pressed("crouch")) {
 		isCrouching = true;
 	}
-	if (input->is_action_just_pressed("jump")&&(isGrounded||holdingLedge)) {
+	if (input->is_action_just_pressed("bomb")) {
+		Bomb* bomb = Object::cast_to<Bomb>(((Ref<PackedScene>)ResourceLoader::get_singleton()->load("res://Bomb.tscn"))->instance());
+		if (!facingRight) {
+			bomb->vel.x *= -1; 
+		}
+		if (isCrouching) {
+			bomb->vel = Vector2(400, 0);
+		}
+		//bomb->vel += vel;
+		bomb->set_position(get_position());
+		level->add_child(bomb);
+	}
+	if (input->is_action_just_pressed("rope")) {
+		Rope* rope = Object::cast_to<Rope>(((Ref<PackedScene>)ResourceLoader::get_singleton()->load("res://Rope.tscn"))->instance());
+		rope->set_position(get_position());
+		level->add_child(rope);
+	}
+	grabRopeDisableTime -= delta;
+	if (input->is_action_pressed("lookup") && !holdingRope && grabRopeDisableTime<=0) {
+		auto ogPos = get_position();
+		auto coord = level->WorldToGrid(ogPos);
+		if (level->GetBlock(coord.x,coord.y)->hasRope){
+			holdingRope = true;
+			auto gridCoord = level->GridToWorld(Vector2(((int)coord.x)+.5f,coord.y));
+			gridCoord.y = ogPos.y-(isGrounded?.2f:0.0f);
+			isGrounded = false;
+			set_position(gridCoord);
+		}
+	}
+	if (holdingRope) {
+		auto ogPos = get_position();
+		auto coord = level->WorldToGrid(ogPos);
+		if (!level->GetBlock(coord.x,coord.y)->hasRope || isGrounded){
+			holdingRope = false;
+		}
+	}
+	if (input->is_action_just_pressed("jump")&&(isGrounded||holdingLedge||holdingRope)) {
+		if (holdingRope) {
+			grabRopeDisableTime = .1f;
+		}
 		vel.y = -jumpHeight;
 		holdingLedge = false;
+		holdingRope = false;
 	}
-	if (!isGrounded) {
+	if (holdingRope) {
+		vel.x = 0;
+		isIdle = false;
+		auto coord = level->WorldToGrid(get_position());
+		if (input->is_action_pressed("lookup") && (level->GetBlock(coord.x,coord.y-1)->hasRope || coord.y-(int)coord.y>.5f)) {
+			animator->set_speed_scale(2.5);
+			animator->set_animation("Climb");
+			vel.y = -500;
+		}
+		else if (isCrouching) {
+			animator->set_speed_scale(2.5);
+			animator->set_animation("Climb");
+			vel.y = 500;
+		}
+		else {
+			animator->set_animation("ClimbStill");
+			vel.y = 0;
+		}
+	}
+	else if (holdingLedge) {
 		animator->set_animation("Jump");
 		isIdle = false;
 	}
-	if (input->is_action_pressed("left")){
+	else if (!isGrounded) {
+		animator->set_animation("Jump");
+		isIdle = false;
+	}
+	if (input->is_action_pressed("left") && !holdingLedge){
 		isIdle = false;
 		animator->set_flip_h(true);
 		facingRight = false;
-		if (isCrouching && isGrounded)
-		{
-			vel.x = -walkSpeed / 2;
-			animator->set_animation("Crawl");
-		}
-		else 
-		{
-			vel.x = isRunning ? -walkSpeed * 2 : -walkSpeed;
-			if (isGrounded) {
-				animator->set_animation("Walk");
-				if (!isRunning)
-					animator->set_speed_scale(2.5);
-				else
-					animator->set_speed_scale(5);
+		if (!holdingRope) {
+			if (isCrouching && isGrounded)
+			{
+				vel.x = -walkSpeed / 2;
+				animator->set_animation("Crawl");
+			}
+			else
+			{
+				vel.x = isRunning ? -walkSpeed * 2 : -walkSpeed;
+				if (isGrounded) {
+					animator->set_animation("Walk");
+					if (!isRunning)
+						animator->set_speed_scale(2.5);
+					else
+						animator->set_speed_scale(5);
+				}
 			}
 		}
 	}
-	else if (input->is_action_pressed("right")) {
-		isIdle = false;
+	else if (input->is_action_pressed("right")&&!holdingLedge) {
 		animator->set_flip_h(false);
 		facingRight = true;
-		if (isCrouching && isGrounded)
-		{
-			vel.x = walkSpeed / 2;
-			animator->set_speed_scale(4);
-			animator->set_animation("Crawl");
-		}
-		else
-		{
-			vel.x = isRunning ? walkSpeed * 2 : walkSpeed;
-			if (isGrounded) {
-				animator->set_animation("Walk");
-				if (!isRunning)
-					animator->set_speed_scale(2.5);
-				else
-					animator->set_speed_scale(5);
+		if (!holdingRope) {
+			isIdle = false;
+			if (isCrouching && isGrounded)
+			{
+				vel.x = walkSpeed / 2;
+				animator->set_speed_scale(4);
+				animator->set_animation("Crawl");
+			}
+			else
+			{
+				vel.x = isRunning ? walkSpeed * 2 : walkSpeed;
+				if (isGrounded) {
+					animator->set_animation("Walk");
+					if (!isRunning)
+						animator->set_speed_scale(2.5);
+					else
+						animator->set_speed_scale(5);
+				}
 			}
 		}
 	} 
-	else {
+	else if (!holdingRope)
+	{
 		vel.x = 0;
 		if (isGrounded && isIdle) {
 			if (input->is_action_pressed("lookup")) {
 				animator->set_animation("LookUp");
-			} 
+			}
 			else if (isCrouching) {
 				animator->set_animation("CrouchStill");
 			}

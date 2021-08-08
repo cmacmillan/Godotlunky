@@ -6,9 +6,17 @@
 #include <PackedScene.hpp>
 #include <QuadMesh.hpp>
 #include <MultiMesh.hpp>
+#include <MultiMeshInstance2D.hpp>
+enum DrawType {
+	Normal = 0,
+	Top = 1,
+	Bottom = 2,
+	None = 3,
+};
 struct LevelBlock {
 	bool present;
-	bool indestructible;
+	bool indestructible=false;
+	bool hasRope = false;
 };
 
 struct SpelAABB
@@ -25,8 +33,12 @@ class Level : public Node2D
 	Ref<MultiMesh> topMultimesh;
 	Ref<MultiMesh> bottomMultimesh;
 
+	MultiMeshInstance2D* groundMultimeshInstance;
+	MultiMeshInstance2D* topMultimeshInstance;
+	MultiMeshInstance2D* bottomMultimeshInstance;
+
 public:
-	static Level* singleton;
+	float g;
 	static void _register_methods();
 	void _init();
 	void _ready();
