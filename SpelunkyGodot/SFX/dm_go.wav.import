@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/dm_go.wav-719b17a34b41d6d8de29c753a4e61d2d.sample"
+
+[deps]
+
+source_file="res://SFX/dm_go.wav"
+dest_files=[ "res://.import/dm_go.wav-719b17a34b41d6d8de29c753a4e61d2d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

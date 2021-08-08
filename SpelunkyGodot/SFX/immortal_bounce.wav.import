@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/immortal_bounce.wav-24c066de7126fcf666eb17f3a666819d.sample"
+
+[deps]
+
+source_file="res://SFX/immortal_bounce.wav"
+dest_files=[ "res://.import/immortal_bounce.wav-24c066de7126fcf666eb17f3a666819d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

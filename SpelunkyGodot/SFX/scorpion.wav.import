@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/scorpion.wav-794933bb4acfed997b635eb0c41c62a5.sample"
+
+[deps]
+
+source_file="res://SFX/scorpion.wav"
+dest_files=[ "res://.import/scorpion.wav-794933bb4acfed997b635eb0c41c62a5.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

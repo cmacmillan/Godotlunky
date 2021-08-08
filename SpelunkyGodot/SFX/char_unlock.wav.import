@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/char_unlock.wav-f0fcfca1b1ce1a7fafb527c97ae3a8f0.sample"
+
+[deps]
+
+source_file="res://SFX/char_unlock.wav"
+dest_files=[ "res://.import/char_unlock.wav-f0fcfca1b1ce1a7fafb527c97ae3a8f0.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

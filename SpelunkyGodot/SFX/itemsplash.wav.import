@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/itemsplash.wav-1ab762b5fb9da444d1d6c85a8bae21e5.sample"
+
+[deps]
+
+source_file="res://SFX/itemsplash.wav"
+dest_files=[ "res://.import/itemsplash.wav-1ab762b5fb9da444d1d6c85a8bae21e5.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

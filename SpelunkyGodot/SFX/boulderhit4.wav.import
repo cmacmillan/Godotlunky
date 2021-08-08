@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/boulderhit4.wav-6ba794d25e16b3e71d14d5d242a773d7.sample"
+
+[deps]
+
+source_file="res://SFX/boulderhit4.wav"
+dest_files=[ "res://.import/boulderhit4.wav-6ba794d25e16b3e71d14d5d242a773d7.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

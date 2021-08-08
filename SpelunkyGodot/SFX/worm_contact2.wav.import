@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/worm_contact2.wav-a067265a06e119595488be4f999a64b3.sample"
+
+[deps]
+
+source_file="res://SFX/worm_contact2.wav"
+dest_files=[ "res://.import/worm_contact2.wav-a067265a06e119595488be4f999a64b3.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

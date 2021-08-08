@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/lick.wav-0166d1ae6b32a3d7ba861ed6b1b7869c.sample"
+
+[deps]
+
+source_file="res://SFX/lick.wav"
+dest_files=[ "res://.import/lick.wav-0166d1ae6b32a3d7ba861ed6b1b7869c.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

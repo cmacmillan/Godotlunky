@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/menu_enter.wav-4217bbedac990e9e7840443f3abbcbf9.sample"
+
+[deps]
+
+source_file="res://SFX/menu_enter.wav"
+dest_files=[ "res://.import/menu_enter.wav-4217bbedac990e9e7840443f3abbcbf9.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

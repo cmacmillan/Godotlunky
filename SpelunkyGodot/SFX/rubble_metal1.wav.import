@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/rubble_metal1.wav-86ac625d6f2b08b05c6421b0cf4b4a8a.sample"
+
+[deps]
+
+source_file="res://SFX/rubble_metal1.wav"
+dest_files=[ "res://.import/rubble_metal1.wav-86ac625d6f2b08b05c6421b0cf4b4a8a.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

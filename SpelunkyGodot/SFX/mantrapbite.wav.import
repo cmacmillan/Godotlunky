@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/mantrapbite.wav-dc75654cbe50f14a402cbe2ce0b34479.sample"
+
+[deps]
+
+source_file="res://SFX/mantrapbite.wav"
+dest_files=[ "res://.import/mantrapbite.wav-dc75654cbe50f14a402cbe2ce0b34479.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

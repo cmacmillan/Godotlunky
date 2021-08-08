@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/worm_eats.wav-e98743d9f1b382712318d336a3a86600.sample"
+
+[deps]
+
+source_file="res://SFX/worm_eats.wav"
+dest_files=[ "res://.import/worm_eats.wav-e98743d9f1b382712318d336a3a86600.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

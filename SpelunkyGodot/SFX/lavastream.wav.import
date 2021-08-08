@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/lavastream.wav-649f5d0edc52484dde839d8c234a0291.sample"
+
+[deps]
+
+source_file="res://SFX/lavastream.wav"
+dest_files=[ "res://.import/lavastream.wav-649f5d0edc52484dde839d8c234a0291.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/bookdead.wav-6ccaf3d76c57fb3e5fb04ecfe4586d97.sample"
+
+[deps]
+
+source_file="res://SFX/bookdead.wav"
+dest_files=[ "res://.import/bookdead.wav-6ccaf3d76c57fb3e5fb04ecfe4586d97.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

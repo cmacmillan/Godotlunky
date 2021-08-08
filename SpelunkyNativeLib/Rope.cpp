@@ -1,5 +1,7 @@
 #include "Rope.h"
 #include <ResourceLoader.hpp>
+#include <AudioStreamPlayer2D.hpp>
+#include <AudioStream.hpp>
 using namespace godot::Math;
 
 void Rope::_register_methods()
@@ -27,6 +29,9 @@ void Rope::_process(float delta)
 		startPos = level->WorldToGrid(get_position());
 		startPos.x = godot::Math::floor(startPos.x) + .5f;
 		set_position(level->GridToWorld(startPos));
+		auto audio = get_node<AudioStreamPlayer2D>("Audio");
+		audio->set_stream(level->ropeThrowSFX);
+		audio->play();
 	}
 	if (!hasUnfurled) {
 		SpelAABB aabb = SpelAABB();
@@ -47,6 +52,9 @@ void Rope::_process(float delta)
 			}
 		}
 		if (vel.y>=-100 && (int)(startPos.y+.5f)!=(int)(finalPos.y+.5f)) {
+			auto audio = get_node<AudioStreamPlayer2D>("Audio");
+			audio->set_stream(level->ropeCatchSFX);
+			audio->play();
 			hasUnfurled = true;
 			baseX = finalPos.x;
 			baseY = finalPos.y;
@@ -68,7 +76,13 @@ void Rope::_process(float delta)
 				subIndex = 0;
 				currSegmentIndex++;
 				if (currSegmentIndex < length) {
-					level->GetBlock(baseX, baseY+currSegmentIndex)->hasRope = true;
+					auto block = level->GetBlock(baseX, baseY + currSegmentIndex);
+					if (block->present) {
+						currSegmentIndex = length;
+					}
+					else {
+						block->hasRope = true;
+					}
 				}
 			}
 		}

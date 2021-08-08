@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/gold_poop.wav-08a8c74a7966c68bbbdbcde382b5653f.sample"
+
+[deps]
+
+source_file="res://SFX/gold_poop.wav"
+dest_files=[ "res://.import/gold_poop.wav-08a8c74a7966c68bbbdbcde382b5653f.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

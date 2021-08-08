@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/dm_jump.wav-74809c6f18ed0a68d2995d2481aff241.sample"
+
+[deps]
+
+source_file="res://SFX/dm_jump.wav"
+dest_files=[ "res://.import/dm_jump.wav-74809c6f18ed0a68d2995d2481aff241.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

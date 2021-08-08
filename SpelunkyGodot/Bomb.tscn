@@ -30,3 +30,8 @@ frames = SubResource( 1 )
 animation = "Flashing"
 
 [node name="Explosion" parent="." instance=ExtResource( 4 )]
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="."]
+scale = Vector2( 8, 8 )
+volume_db = -5.0
+max_distance = 4000.0

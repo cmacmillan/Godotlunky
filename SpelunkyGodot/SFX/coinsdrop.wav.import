@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/coinsdrop.wav-e0c7fe4ad0e421aa5d62f3f08b76b457.sample"
+
+[deps]
+
+source_file="res://SFX/coinsdrop.wav"
+dest_files=[ "res://.import/coinsdrop.wav-e0c7fe4ad0e421aa5d62f3f08b76b457.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

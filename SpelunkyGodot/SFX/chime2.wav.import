@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/chime2.wav-8d60bb56c257cdcb6862bb1a88f0f13b.sample"
+
+[deps]
+
+source_file="res://SFX/chime2.wav"
+dest_files=[ "res://.import/chime2.wav-8d60bb56c257cdcb6862bb1a88f0f13b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -2,6 +2,9 @@
 #include "Common.h"
 #include <Node2D.hpp>
 #include "Level.h"
+#include <Camera2D.hpp>
+#include <Sprite.hpp>
+
 
 class Spelunker : public Node2D
 {
@@ -18,7 +21,19 @@ public:
 	bool holdingRope= false;
 	float grabRopeDisableTime = 0;
 	bool facingRight = true;
+	float timeLookingUp = 0;
+	float timeLookingDown = 0;
+	bool wasGrounded;
+	Camera2D* camera;
 	Vector2 ledgeCoords=Vector2(0,0);
+	Sprite* whipBack;
+	Sprite* whipForward;
+	bool isWhipping;
+	bool isStunned;
+	float stunTime = 0;
+	bool playedWhipSound;
+	float whipTime;
+	float friction;
 	static void _register_methods();
 	void _init();
 

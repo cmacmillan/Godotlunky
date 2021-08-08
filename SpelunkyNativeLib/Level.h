@@ -7,6 +7,7 @@
 #include <QuadMesh.hpp>
 #include <MultiMesh.hpp>
 #include <MultiMeshInstance2D.hpp>
+#include <AudioStreamPlayer2D.hpp>
 enum DrawType {
 	Normal = 0,
 	Top = 1,
@@ -39,6 +40,14 @@ class Level : public Node2D
 
 public:
 	float g;
+	Ref<AudioStream> ropeThrowSFX;
+	Ref<AudioStream> ropeCatchSFX;
+	Ref<AudioStream> bombExplosionSFX;
+	Ref<AudioStream> bombTimerSFX;
+	Ref<AudioStream> jumpSFX;
+	Ref<AudioStream> landSFX;
+	Ref<AudioStream> whipSFX;
+	Ref<AudioStream> hitSFX;
 	static void _register_methods();
 	void _init();
 	void _ready();

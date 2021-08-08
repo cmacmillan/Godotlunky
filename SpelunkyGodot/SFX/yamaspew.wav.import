@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/yamaspew.wav-d0b9e317d328f6bf83a56c2532e6e49e.sample"
+
+[deps]
+
+source_file="res://SFX/yamaspew.wav"
+dest_files=[ "res://.import/yamaspew.wav-d0b9e317d328f6bf83a56c2532e6e49e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

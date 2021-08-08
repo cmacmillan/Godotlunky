@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/shop_bells.wav-4db063acfc60f37b3c62ed58d5451df2.sample"
+
+[deps]
+
+source_file="res://SFX/shop_bells.wav"
+dest_files=[ "res://.import/shop_bells.wav-4db063acfc60f37b3c62ed58d5451df2.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

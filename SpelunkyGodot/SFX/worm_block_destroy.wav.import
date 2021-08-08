@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/worm_block_destroy.wav-be96449b0de63e1c0740980a83185808.sample"
+
+[deps]
+
+source_file="res://SFX/worm_block_destroy.wav"
+dest_files=[ "res://.import/worm_block_destroy.wav-be96449b0de63e1c0740980a83185808.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

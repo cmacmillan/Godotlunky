@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/camera.wav-c71b1b5f95427563965211d397d11366.sample"
+
+[deps]
+
+source_file="res://SFX/camera.wav"
+dest_files=[ "res://.import/camera.wav-c71b1b5f95427563965211d397d11366.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

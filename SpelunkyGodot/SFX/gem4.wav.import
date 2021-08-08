@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/gem4.wav-e92d548fbb5418ecf289503ab2d87e8b.sample"
+
+[deps]
+
+source_file="res://SFX/gem4.wav"
+dest_files=[ "res://.import/gem4.wav-e92d548fbb5418ecf289503ab2d87e8b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

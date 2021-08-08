@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/blockfall.wav-1189b98230c5afee75d6105744ea5e79.sample"
+
+[deps]
+
+source_file="res://SFX/blockfall.wav"
+dest_files=[ "res://.import/blockfall.wav-1189b98230c5afee75d6105744ea5e79.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

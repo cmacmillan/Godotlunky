@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/tikifire.wav-6bce03aa45a51bbbdb11e20e1ec96510.sample"
+
+[deps]
+
+source_file="res://SFX/tikifire.wav"
+dest_files=[ "res://.import/tikifire.wav-6bce03aa45a51bbbdb11e20e1ec96510.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

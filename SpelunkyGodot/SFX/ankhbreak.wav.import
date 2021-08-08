@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/ankhbreak.wav-129f8eea18e16e59279c883e1f6e6a53.sample"
+
+[deps]
+
+source_file="res://SFX/ankhbreak.wav"
+dest_files=[ "res://.import/ankhbreak.wav-129f8eea18e16e59279c883e1f6e6a53.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

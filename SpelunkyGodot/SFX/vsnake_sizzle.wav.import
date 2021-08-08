@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/vsnake_sizzle.wav-12a61536b30a4fc8f0b07ec39b2417f3.sample"
+
+[deps]
+
+source_file="res://SFX/vsnake_sizzle.wav"
+dest_files=[ "res://.import/vsnake_sizzle.wav-12a61536b30a4fc8f0b07ec39b2417f3.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

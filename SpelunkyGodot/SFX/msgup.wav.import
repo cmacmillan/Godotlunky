@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/msgup.wav-94e699fb3ebdaf71a5e0642d36f529ca.sample"
+
+[deps]
+
+source_file="res://SFX/msgup.wav"
+dest_files=[ "res://.import/msgup.wav-94e699fb3ebdaf71a5e0642d36f529ca.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/fwboom.wav-f3f427da26ea2507bb919952896056f2.sample"
+
+[deps]
+
+source_file="res://SFX/fwboom.wav"
+dest_files=[ "res://.import/fwboom.wav-f3f427da26ea2507bb919952896056f2.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

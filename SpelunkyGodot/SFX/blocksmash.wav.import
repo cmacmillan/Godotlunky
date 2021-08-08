@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/blocksmash.wav-b926d59000d3b890277869e168d8ac14.sample"
+
+[deps]
+
+source_file="res://SFX/blocksmash.wav"
+dest_files=[ "res://.import/blocksmash.wav-b926d59000d3b890277869e168d8ac14.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/end_chest.wav-3d48d04d171407ef3478232d9c5b0177.sample"
+
+[deps]
+
+source_file="res://SFX/end_chest.wav"
+dest_files=[ "res://.import/end_chest.wav-3d48d04d171407ef3478232d9c5b0177.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

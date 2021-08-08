@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/homing2.wav-a98ce19269a5d276a79196452dae9d50.sample"
+
+[deps]
+
+source_file="res://SFX/homing2.wav"
+dest_files=[ "res://.import/homing2.wav-a98ce19269a5d276a79196452dae9d50.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

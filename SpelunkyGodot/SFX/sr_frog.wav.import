@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/sr_frog.wav-705ac326a973b44482ac773b0438da57.sample"
+
+[deps]
+
+source_file="res://SFX/sr_frog.wav"
+dest_files=[ "res://.import/sr_frog.wav-705ac326a973b44482ac773b0438da57.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

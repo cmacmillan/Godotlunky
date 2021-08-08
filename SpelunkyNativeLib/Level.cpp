@@ -7,6 +7,8 @@
 #include <QuadMesh.hpp>
 #include <string>
 #include <sstream>
+#include <ResourceLoader.hpp>
+#include <AudioStream.hpp>
 
 
 void Level::_register_methods()
@@ -18,6 +20,15 @@ void Level::_register_methods()
 	register_property("topMultimesh", &Level::topMultimesh, Ref<MultiMesh>());
 	register_property("bottomMultimesh", &Level::bottomMultimesh, Ref<MultiMesh>());
 	register_property("g", &Level::g, 0.0f);
+
+	register_property("bombExplosionSFX", &Level::bombExplosionSFX, Ref<AudioStream>());
+	register_property("bombTimerSFX", &Level::bombTimerSFX, Ref<AudioStream>());
+	register_property("jumpSFX", &Level::jumpSFX, Ref<AudioStream>());
+	register_property("ropeCatchSFX", &Level::ropeCatchSFX, Ref<AudioStream>());
+	register_property("ropeThrowSFX", &Level::ropeThrowSFX, Ref<AudioStream>());
+	register_property("landSFX", &Level::landSFX, Ref<AudioStream>());
+	register_property("whipSFX", &Level::whipSFX, Ref<AudioStream>());
+	register_property("hitSFX", &Level::hitSFX, Ref<AudioStream>());
 }
 
 const string layout1 = 
@@ -223,13 +234,13 @@ void Level::UpdateMeshes() {
 			switch (drawTypes[j*blocksXRes+i])
 			{
 			case DrawType::Bottom:
-				bottomMultimesh->set_instance_transform_2d(bottomIndex++,Transform2D().scaled(Vector2(1,-1)).translated(Vector2(i*worldBlockSize+worldBlockSize/2.0f,-j*worldBlockSize-worldBlockSize/2.0f)));
+				bottomMultimesh->set_instance_transform_2d(bottomIndex++,Transform2D().scaled(Vector2(1,1)).translated(Vector2(i*worldBlockSize+worldBlockSize/2.0f,(j+1)*worldBlockSize-worldBlockSize/2.0f)));
 				break;
 			case DrawType::Top:
-				topMultimesh->set_instance_transform_2d(topIndex++, Transform2D().scaled(Vector2(1,-1)).translated(Vector2(i*worldBlockSize+worldBlockSize/2.0f,-j*worldBlockSize-worldBlockSize/2.0f)));
+				topMultimesh->set_instance_transform_2d(topIndex++, Transform2D().scaled(Vector2(1,1)).translated(Vector2(i*worldBlockSize+worldBlockSize/2.0f,(j+1)*worldBlockSize-worldBlockSize/2.0f)));
 				break;
 			case DrawType::Normal:
-				groundMultimesh->set_instance_transform_2d(normalIndex++, Transform2D().scaled(Vector2(1,-1)).translated(Vector2(i*worldBlockSize+worldBlockSize/2.0f,-j*worldBlockSize-worldBlockSize/2.0f)));
+				groundMultimesh->set_instance_transform_2d(normalIndex++, Transform2D().scaled(Vector2(1,1)).translated(Vector2(i*worldBlockSize+worldBlockSize/2.0f,(j+1)*worldBlockSize-worldBlockSize/2.0f)));
 				break;
 			default:
 				break;

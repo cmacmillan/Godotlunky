@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/idol_get6.wav-c4fa64f774293177e47df550023f763a.sample"
+
+[deps]
+
+source_file="res://SFX/idol_get6.wav"
+dest_files=[ "res://.import/idol_get6.wav-c4fa64f774293177e47df550023f763a.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

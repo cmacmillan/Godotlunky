@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/sr_frogburp.wav-71e3bb4d0666857c6585eae40ea8fc2c.sample"
+
+[deps]
+
+source_file="res://SFX/sr_frogburp.wav"
+dest_files=[ "res://.import/sr_frogburp.wav-71e3bb4d0666857c6585eae40ea8fc2c.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

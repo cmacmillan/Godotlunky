@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/yama_slam.wav-9e145e2abc7d3a2e3e99648c60f96b75.sample"
+
+[deps]
+
+source_file="res://SFX/yama_slam.wav"
+dest_files=[ "res://.import/yama_slam.wav-9e145e2abc7d3a2e3e99648c60f96b75.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

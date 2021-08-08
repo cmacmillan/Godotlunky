@@ -1,6 +1,8 @@
 #include "Bomb.h"
 #include "Level.h"
 #include <AnimatedSprite.hpp>
+#include <AudioStream.hpp>
+#include <AudioStreamPlayer2D.hpp>
 using namespace godot::Math;
 
 void Bomb::_register_methods()
@@ -29,6 +31,9 @@ void Bomb::_process(float delta)
 		inited = true;
 		level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 		startPos = level->WorldToGrid(get_position());
+		auto audio = get_node<AudioStreamPlayer2D>("Audio");
+		audio->set_stream(level->bombTimerSFX);
+		audio->play();
 	}
 	lifetime += delta;
 	if (!hasExploded) {
@@ -59,6 +64,9 @@ void Bomb::_process(float delta)
 		queue_free();
 	}
 	else if (lifetime > 2.5f && !hasExploded) {
+		auto audio = get_node<AudioStreamPlayer2D>("Audio");
+		audio->set_stream(level->bombExplosionSFX);
+		audio->play();
 		hasExploded = true;
 		Vector2 coord = level->WorldToGrid(get_position());
 		for (int i = coord.x - 2; i <= coord.x + 2; i++) {

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/rubble.wav-60afc1cc54ef4ec13cee39079a9f3197.sample"
+
+[deps]
+
+source_file="res://SFX/rubble.wav"
+dest_files=[ "res://.import/rubble.wav-60afc1cc54ef4ec13cee39079a9f3197.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

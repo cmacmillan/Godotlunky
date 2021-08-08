@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/worm_block_regen.wav-37cf1e3149a7fc25e9eb2a5d72d1ec23.sample"
+
+[deps]
+
+source_file="res://SFX/worm_block_regen.wav"
+dest_files=[ "res://.import/worm_block_regen.wav-37cf1e3149a7fc25e9eb2a5d72d1ec23.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

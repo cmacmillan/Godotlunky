@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/rubble_vase2.wav-7da2202cae04a42d41d5781f3e3e38b5.sample"
+
+[deps]
+
+source_file="res://SFX/rubble_vase2.wav"
+dest_files=[ "res://.import/rubble_vase2.wav-7da2202cae04a42d41d5781f3e3e38b5.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

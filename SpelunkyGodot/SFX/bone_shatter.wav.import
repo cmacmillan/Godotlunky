@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/bone_shatter.wav-41fef5a41620ad9344c209f474a7c70e.sample"
+
+[deps]
+
+source_file="res://SFX/bone_shatter.wav"
+dest_files=[ "res://.import/bone_shatter.wav-41fef5a41620ad9344c209f474a7c70e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

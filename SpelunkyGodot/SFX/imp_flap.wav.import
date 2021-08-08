@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/imp_flap.wav-a61d50a7d4664c55f97a4af9b34553e5.sample"
+
+[deps]
+
+source_file="res://SFX/imp_flap.wav"
+dest_files=[ "res://.import/imp_flap.wav-a61d50a7d4664c55f97a4af9b34553e5.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

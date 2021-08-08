@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/rubble_bone1.wav-0fb5698d30daa1e99b343d8f1c36edeb.sample"
+
+[deps]
+
+source_file="res://SFX/rubble_bone1.wav"
+dest_files=[ "res://.import/rubble_bone1.wav-0fb5698d30daa1e99b343d8f1c36edeb.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

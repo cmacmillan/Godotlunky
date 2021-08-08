@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/yamaamb.wav-a81adc1f9b86251044211d61f3b1730d.sample"
+
+[deps]
+
+source_file="res://SFX/yamaamb.wav"
+dest_files=[ "res://.import/yamaamb.wav-a81adc1f9b86251044211d61f3b1730d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

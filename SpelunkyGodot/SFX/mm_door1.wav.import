@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/mm_door1.wav-445c0e1375e812aae48fddd2a01840e6.sample"
+
+[deps]
+
+source_file="res://SFX/mm_door1.wav"
+dest_files=[ "res://.import/mm_door1.wav-445c0e1375e812aae48fddd2a01840e6.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

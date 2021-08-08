@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/ice_crack3.wav-7344ff1d87e652cc9d4f00184cf6e761.sample"
+
+[deps]
+
+source_file="res://SFX/ice_crack3.wav"
+dest_files=[ "res://.import/ice_crack3.wav-7344ff1d87e652cc9d4f00184cf6e761.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

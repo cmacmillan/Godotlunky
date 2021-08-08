@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/menu_hor_l.wav-6462790f52e6ab353282a733a28d598b.sample"
+
+[deps]
+
+source_file="res://SFX/menu_hor_l.wav"
+dest_files=[ "res://.import/menu_hor_l.wav-6462790f52e6ab353282a733a28d598b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

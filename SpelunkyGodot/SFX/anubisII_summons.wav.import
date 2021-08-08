@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/anubisII_summons.wav-d552f4187f6fa8621ce97eff84d653f2.sample"
+
+[deps]
+
+source_file="res://SFX/anubisII_summons.wav"
+dest_files=[ "res://.import/anubisII_summons.wav-d552f4187f6fa8621ce97eff84d653f2.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/dm_ready.wav-ccce5809b63aaf97f386636ea30b3ec2.sample"
+
+[deps]
+
+source_file="res://SFX/dm_ready.wav"
+dest_files=[ "res://.import/dm_ready.wav-ccce5809b63aaf97f386636ea30b3ec2.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
