@@ -72,11 +72,11 @@ void Bomb::_process(float delta)
 		for (int i = coord.x - 2; i <= coord.x + 2; i++) {
 			for (int j = coord.y - 2; j <= coord.y + 2; j++) {
 				auto block = level->GetBlock(i, j);
-				//printf("bbbb!");
-				//if (!block->indestructible) {
-					//printf("set!");
+				if (!block->indestructible) {
 					block->present = false;
-				//}
+					block->hasSpikes = false;
+					block->bloody = false;
+				}
 			}
 		}
 		level->UpdateMeshes();

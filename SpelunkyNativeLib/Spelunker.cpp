@@ -39,6 +39,7 @@ void Spelunker::_process(float delta)
 		whipForward= get_node<Sprite>("WhipForward");
 		whipBack= get_node<Sprite>("WhipBack");
 		isWhipping = false;
+		isDead = false;
 		isStunned = false;
 	}
 	SpelAABB aabb = SpelAABB();
@@ -167,7 +168,7 @@ void Spelunker::_process(float delta)
 	if (input->is_action_pressed("crouch")) {
 		isCrouching = true;
 	}
-	if (!isWhipping) {
+	if (!isWhipping && !isStunned) {
 		if (input->is_action_just_pressed("bomb")) {
 			Bomb* bomb = Object::cast_to<Bomb>(((Ref<PackedScene>)ResourceLoader::get_singleton()->load("res://Bomb.tscn"))->instance());
 			if (!facingRight) {
@@ -207,7 +208,7 @@ void Spelunker::_process(float delta)
 	}
 	if (input->is_action_just_pressed("jump")&&(isGrounded||holdingLedge||holdingRope)&&!isStunned) {
 		if (holdingRope) {
-			grabRopeDisableTime = .1f;
+			grabRopeDisableTime = .15f;
 		}
 		auto audio = get_node<AudioStreamPlayer2D>("JumpAudio");
 		audio->set_volume_db(0.0f);
@@ -349,7 +350,7 @@ void Spelunker::_process(float delta)
 	{
 		camera->set_position(Vector2(0, 0));
 	}
-	if (isGrounded && !wasGrounded && ogVel.y>0)
+	if (isGrounded && !wasGrounded && ogVel.y>0 && !isDead)
 	{
 		if (ogVel.y > 2600) {
 			auto audio = get_node<AudioStreamPlayer2D>("JumpAudio");
@@ -365,6 +366,21 @@ void Spelunker::_process(float delta)
 			audio->set_volume_db(-5.0f);
 			audio->set_stream(level->landSFX);
 			audio->play();
+		}
+	}
+	{
+		auto coord = level->WorldToGrid(get_position());
+		auto block = level->GetBlock(coord.x, coord.y);
+		if (block->hasSpikes && vel.y>0 && !isDead) {
+			isDead = true;
+			auto audio = get_node<AudioStreamPlayer2D>("JumpAudio");
+			audio->set_volume_db(0.0f);
+			audio->set_stream(level->skewerSFX);
+			audio->play();
+			block->bloody = true;
+			level->UpdateMeshes();
+			isStunned = true;
+			stunTime = -10000;
 		}
 	}
 	wasGrounded = isGrounded;

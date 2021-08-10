@@ -13,11 +13,15 @@ enum DrawType {
 	Top = 1,
 	Bottom = 2,
 	None = 3,
+	Spikes = 4,
+	BloodySpikes = 5,
 };
 struct LevelBlock {
 	bool present;
-	bool indestructible=false;
-	bool hasRope = false;
+	bool indestructible;
+	bool hasRope;
+	bool hasSpikes;
+	bool bloody;
 };
 
 struct SpelAABB
@@ -33,10 +37,8 @@ class Level : public Node2D
 	Ref<MultiMesh> groundMultimesh;
 	Ref<MultiMesh> topMultimesh;
 	Ref<MultiMesh> bottomMultimesh;
-
-	MultiMeshInstance2D* groundMultimeshInstance;
-	MultiMeshInstance2D* topMultimeshInstance;
-	MultiMeshInstance2D* bottomMultimeshInstance;
+	Ref<MultiMesh> spikeMultimesh;
+	Ref<MultiMesh> bloodySpikesMultimesh;
 
 public:
 	float g;
@@ -48,6 +50,7 @@ public:
 	Ref<AudioStream> landSFX;
 	Ref<AudioStream> whipSFX;
 	Ref<AudioStream> hitSFX;
+	Ref<AudioStream> skewerSFX;
 	static void _register_methods();
 	void _init();
 	void _ready();

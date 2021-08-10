@@ -140,13 +140,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="Rope.cpp" />
     <ClCompile Include="Spelunker.cpp" />
     <ClCompile Include="SpelunkyNativeLib.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bomb.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="Rope.h" />
     <ClInclude Include="Spelunker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

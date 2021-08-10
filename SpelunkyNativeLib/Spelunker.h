@@ -30,6 +30,7 @@ public:
 	Sprite* whipForward;
 	bool isWhipping;
 	bool isStunned;
+	bool isDead = false;
 	float stunTime = 0;
 	bool playedWhipSound;
 	float whipTime;

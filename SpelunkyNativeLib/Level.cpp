@@ -19,6 +19,9 @@ void Level::_register_methods()
 	register_property("groundMultimesh", &Level::groundMultimesh, Ref<MultiMesh>());
 	register_property("topMultimesh", &Level::topMultimesh, Ref<MultiMesh>());
 	register_property("bottomMultimesh", &Level::bottomMultimesh, Ref<MultiMesh>());
+	register_property("spikeMultimesh", &Level::spikeMultimesh, Ref<MultiMesh>());
+	register_property("bloodySpikeMultimesh", &Level::bloodySpikesMultimesh, Ref<MultiMesh>());
+
 	register_property("g", &Level::g, 0.0f);
 
 	register_property("bombExplosionSFX", &Level::bombExplosionSFX, Ref<AudioStream>());
@@ -29,6 +32,7 @@ void Level::_register_methods()
 	register_property("landSFX", &Level::landSFX, Ref<AudioStream>());
 	register_property("whipSFX", &Level::whipSFX, Ref<AudioStream>());
 	register_property("hitSFX", &Level::hitSFX, Ref<AudioStream>());
+	register_property("skewerSFX", &Level::skewerSFX, Ref<AudioStream>());
 }
 
 const string layout1 = 
@@ -40,7 +44,7 @@ const string layout1 =
  X00XXX000000000000000X\n\
  X0000000X000000000000X\n\
  XX0000X0X000000000000X\n\
- X0X000000000000000000X\n\
+ X0X0000000000000W0000X\n\
  XXXXXXXXXXXXXXXXXXXXXX";
 
 LevelBlock* blocks;
@@ -57,7 +61,12 @@ void Level::CopyLayoutIntoBlocks(string layout,int x, int y)
 		int xCurr = x;
 		int len = line.length();
 		for (int i = 0; i < len; i++) {
-			if (line[i]=='X') {
+			if (line[i] == 'W') {
+				GetBlock(xCurr,y)->hasSpikes=true;
+				GetBlock(xCurr,y)->present=false;
+				xCurr++;
+			}
+			else if (line[i]=='X') {
 				GetBlock(xCurr,y)->present=true;
 				xCurr++;
 			}
@@ -185,13 +194,12 @@ void Level::_ready()
 	worldBlockSize = 100;
 	blocks = (LevelBlock*)malloc(sizeof(LevelBlock) * blocksXRes*blocksYRes);
 	drawTypes = (DrawType*)malloc(sizeof(DrawType) * blocksXRes*blocksYRes);
-	topMultimeshInstance = get_node<MultiMeshInstance2D>("/root/GameScene/TopMultimesh");
-	bottomMultimeshInstance = get_node<MultiMeshInstance2D>("/root/GameScene/BottomMultimesh");
-	groundMultimeshInstance= get_node<MultiMeshInstance2D>("/root/GameScene/GroundMultimesh");
 	for (int i = 0; i < blocksXRes; i++) {
 		for (int j = 0; j < blocksYRes; j++) {
 			GetBlock(i, j)->hasRope = false;
 			GetBlock(i, j)->indestructible= false;
+			GetBlock(i, j)->hasSpikes= false;
+			GetBlock(i, j)->bloody= false;
 		}
 	}
 	CopyLayoutIntoBlocks(layout1, 0, 0);
@@ -201,9 +209,19 @@ void Level::UpdateMeshes() {
 	int topCount = 0;
 	int bottomCount = 0;
 	int normalCount = 0;
+	int spikeCount = 0;
+	int bloodySpikeCount= 0;
 	for (int i = 0; i < blocksXRes; i++) {
 		for (int j = 0; j < blocksYRes; j++) {
-			if (!GetBlock(i, j)->present) {
+			if (GetBlock(i, j)->bloody) {
+				drawTypes[j * blocksXRes + i] = DrawType::BloodySpikes;
+				bloodySpikeCount++;
+			}
+			else if (GetBlock(i, j)->hasSpikes) {
+				drawTypes[j * blocksXRes + i] = DrawType::Spikes;
+				spikeCount++;
+			}
+			else if (!GetBlock(i, j)->present) {
 				drawTypes[j * blocksXRes + i] = DrawType::None;
 			}
 			else if (j > 0 && !GetBlock(i, j - 1)->present) {
@@ -222,25 +240,34 @@ void Level::UpdateMeshes() {
 			}
 		}
 	}
-	//groundMultimeshInstance->set_custom_aabb(AABB());
 	groundMultimesh->set_instance_count(normalCount);
 	topMultimesh->set_instance_count(topCount);
 	bottomMultimesh->set_instance_count(bottomCount);
+	spikeMultimesh->set_instance_count(spikeCount);
+	bloodySpikesMultimesh->set_instance_count(bloodySpikeCount);
 	int normalIndex = 0;
 	int topIndex = 0;
 	int bottomIndex= 0;
+	int spikeIndex= 0;
+	int bloodySpikeIndex= 0;
 	for (int i = 0; i < blocksXRes; i++) {
 		for (int j = 0; j < blocksYRes; j++) {
 			switch (drawTypes[j*blocksXRes+i])
 			{
+			case DrawType::BloodySpikes:
+				bloodySpikesMultimesh->set_instance_transform_2d(bloodySpikeIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
+				break;
+			case DrawType::Spikes:
+				spikeMultimesh->set_instance_transform_2d(spikeIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
+				break;
 			case DrawType::Bottom:
-				bottomMultimesh->set_instance_transform_2d(bottomIndex++,Transform2D().scaled(Vector2(1,1)).translated(Vector2(i*worldBlockSize+worldBlockSize/2.0f,(j+1)*worldBlockSize-worldBlockSize/2.0f)));
+				bottomMultimesh->set_instance_transform_2d(bottomIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
 				break;
 			case DrawType::Top:
-				topMultimesh->set_instance_transform_2d(topIndex++, Transform2D().scaled(Vector2(1,1)).translated(Vector2(i*worldBlockSize+worldBlockSize/2.0f,(j+1)*worldBlockSize-worldBlockSize/2.0f)));
+				topMultimesh->set_instance_transform_2d(topIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
 				break;
 			case DrawType::Normal:
-				groundMultimesh->set_instance_transform_2d(normalIndex++, Transform2D().scaled(Vector2(1,1)).translated(Vector2(i*worldBlockSize+worldBlockSize/2.0f,(j+1)*worldBlockSize-worldBlockSize/2.0f)));
+				groundMultimesh->set_instance_transform_2d(normalIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
 				break;
 			default:
 				break;
