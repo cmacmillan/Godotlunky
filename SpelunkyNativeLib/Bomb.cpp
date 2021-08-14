@@ -9,10 +9,6 @@ void Bomb::_register_methods()
 {
 	register_method("_ready", &Bomb::_ready);
 	register_method("_process", &Bomb::_process);
-
-	register_property("friction", &Bomb::friction, 0.0f);
-	register_property("bounciness", &Bomb::bounciness, 0.0f);
-	register_property("vel", &Bomb::vel, Vector2(0,0));
 }
 
 void Bomb::_init()
@@ -30,35 +26,16 @@ void Bomb::_process(float delta)
 	if (!inited) {
 		inited = true;
 		level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-		startPos = level->WorldToGrid(get_position());
+		//body = Body(Vector2(.5f, .5f),Vector2(0,0),.3,3000,this,level,Vector2(1300,-1300));
+		body = Body();
+		body.Init(Vector2(.5f, .5f),Vector2(0,0),.3,3000,this,level,Vector2(1300,-1300));
 		auto audio = get_node<AudioStreamPlayer2D>("Audio");
 		audio->set_stream(level->bombTimerSFX);
 		audio->play();
 	}
 	lifetime += delta;
 	if (!hasExploded) {
-		SpelAABB aabb = SpelAABB();
-		vel.y += level->g * delta;
-		aabb.size = Vector2(.5f, .5f);
-		aabb.center = level->WorldToGrid(get_position() + vel * delta);
-		Vector2 normal;
-		Vector2 finalPos = aabb.center;
-		bool isGrounded;
-		float bounciness = .3f;
-		if (level->CheckCollisionWithTerrain(aabb, startPos, finalPos, normal, isGrounded))
-		{
-			if (normal.x != 0 && sign(normal.x) != sign(vel.x)) {
-				vel.x = -vel.x * bounciness;
-			}
-			if (normal.y != 0 && sign(normal.y) != sign(vel.y)) {
-				vel.y = -vel.y * bounciness;
-			}
-		}
-		set_position(level->GridToWorld(finalPos));
-		startPos = finalPos;
-		if (isGrounded) {
-			vel.x = godot::Math::move_toward(vel.x, 0, delta * friction);
-		}
+		body.process(delta, true, true);
 	}
 	if (lifetime > 3.15f) {
 		queue_free();

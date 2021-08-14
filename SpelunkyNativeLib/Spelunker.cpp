@@ -172,10 +172,10 @@ void Spelunker::_process(float delta)
 		if (input->is_action_just_pressed("bomb")) {
 			Bomb* bomb = Object::cast_to<Bomb>(((Ref<PackedScene>)ResourceLoader::get_singleton()->load("res://Bomb.tscn"))->instance());
 			if (!facingRight) {
-				bomb->vel.x *= -1;
+				bomb->body.vel.x *= -1;
 			}
 			if (isCrouching) {
-				bomb->vel = Vector2(400 * (facingRight ? 1 : -1), 0);
+				bomb->body.vel = Vector2(400 * (facingRight ? 1 : -1), 0);
 			}
 			//bomb->vel += vel;
 			bomb->set_position(get_position());

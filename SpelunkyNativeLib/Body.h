@@ -8,11 +8,14 @@ public:
 	Node2D* node;
 	Vector2 startPos;
 	Vector2 vel;
-	Vector2 size;
+	SpelAABB aabb;
 	Vector2 offset;
 	float bounciness;
 	float friction;
 	bool isGrounded;
-	Body(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level);
-	bool process(float delta,Level* level);
+	Vector2 endPos;//basically just out
+	Vector2 normal;//basically just out
+	//Body(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level,Vector2 initialVelocity);
+	void Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level,Vector2 initialVelocity);
+	bool process(float delta, bool applyGravity, bool applyFriction);
 };
