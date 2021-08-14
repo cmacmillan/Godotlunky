@@ -103,7 +103,7 @@ void Spelunker::_process(float delta)
 		isWhipping = false;
 		holdingRope = false;
 		animator->set_animation("Stunned");
-		get_node<AnimatedSprite>("StunBirds")->set_visible(true);
+		get_node<AnimatedSprite>("StunBirds")->set_visible(!isDead);
 		if (stunTime > 1.5) {
 			isStunned = false;
 		}
@@ -208,7 +208,7 @@ void Spelunker::_process(float delta)
 	}
 	if (input->is_action_just_pressed("jump")&&(isGrounded||holdingLedge||holdingRope)&&!isStunned) {
 		if (holdingRope) {
-			grabRopeDisableTime = .15f;
+			grabRopeDisableTime = .1f;
 		}
 		auto audio = get_node<AudioStreamPlayer2D>("JumpAudio");
 		audio->set_volume_db(0.0f);
