@@ -20,9 +20,6 @@ animations = [ {
 
 [node name="Bomb" type="Node2D"]
 script = ExtResource( 1 )
-friction = 3000.0
-bounciness = 0.3
-vel = Vector2( 1300, -1300 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 8, 8 )

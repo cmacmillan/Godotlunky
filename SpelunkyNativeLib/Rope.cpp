@@ -10,7 +10,6 @@ void Rope::_register_methods()
 	register_method("_process", &Rope::_process);
 
 	register_property("length", &Rope::length, 0);
-	register_property("vel", &Rope::vel, Vector2(0,0));
 }
 
 void Rope::_init()
@@ -19,51 +18,35 @@ void Rope::_init()
 
 void Rope::_ready()
 {
+	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
+	Vector2 start = level->WorldToGrid(get_position());
+	start.x = godot::Math::floor(start.x) + .5f;
+	set_position(level->GridToWorld(start));
+	body = Body();
+	body.Init(Vector2(.5f, .5f), Vector2(0, 0), 0.0f, 0.0f, this, level, Vector2(0, -2100));
+	auto audio = get_node<AudioStreamPlayer2D>("Audio");
+	audio->set_stream(level->ropeThrowSFX);
+	audio->play();
 }
 
 void Rope::_process(float delta)
 {
-	if (!isInited) {
-		isInited = true;
-		level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-		startPos = level->WorldToGrid(get_position());
-		startPos.x = godot::Math::floor(startPos.x) + .5f;
-		set_position(level->GridToWorld(startPos));
-		auto audio = get_node<AudioStreamPlayer2D>("Audio");
-		audio->set_stream(level->ropeThrowSFX);
-		audio->play();
-	}
 	if (!hasUnfurled) {
-		SpelAABB aabb = SpelAABB();
-		vel.y += level->g * delta;
-		aabb.size = Vector2(.5f, .5f);
-		aabb.center = level->WorldToGrid(get_position() + vel * delta);
-		Vector2 normal;
-		Vector2 finalPos = aabb.center;
-		bool isGrounded;
-		float bounciness = 0.0f;
-		if (level->CheckCollisionWithTerrain(aabb, startPos, finalPos, normal, isGrounded))
-		{
-			if (normal.x != 0 && sign(normal.x) != sign(vel.x)) {
-				vel.x = -vel.x * bounciness;
-			}
-			if (normal.y != 0 && sign(normal.y) != sign(vel.y)) {
-				vel.y = -vel.y * bounciness;
-			}
-		}
-		if (vel.y>=-100 && (int)(startPos.y+.5f)!=(int)(finalPos.y+.5f)) {
+		Vector2 ogStartPos = body.startPos;
+		body.process(delta, true, false);
+		if (body.vel.y>=-100 && (int)(ogStartPos.y+.5f)!=(int)(body.endPos.y+.5f)) {
 			auto audio = get_node<AudioStreamPlayer2D>("Audio");
 			audio->set_stream(level->ropeCatchSFX);
 			audio->play();
 			hasUnfurled = true;
-			baseX = finalPos.x;
-			baseY = finalPos.y;
+			baseX = body.endPos.x;
+			baseY = body.endPos.y;
 			level->GetBlock(baseX, baseY)->hasRope = true;
-			finalPos.y = baseY + .5f;
+			body.endPos.y = baseY + .5f;
 			subIndex = 2;
 		}
-		set_position(level->GridToWorld(finalPos));
-		startPos = finalPos;
+		set_position(level->GridToWorld(body.endPos));
+		body.startPos= body.endPos;
 	}
 	else
 	{

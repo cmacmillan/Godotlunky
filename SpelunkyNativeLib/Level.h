@@ -51,6 +51,9 @@ public:
 	Ref<AudioStream> whipSFX;
 	Ref<AudioStream> hitSFX;
 	Ref<AudioStream> skewerSFX;
+
+	Ref<PackedScene> snakeScene;
+
 	static void _register_methods();
 	void _init();
 	void _ready();

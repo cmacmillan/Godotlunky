@@ -15,7 +15,6 @@ public:
 	float walkSpeed;
 	Vector2 vel;
 	Vector2 startPos;
-	bool inited = false;
 	Level* level=nullptr;
 	bool holdingLedge = false;
 	bool holdingRope= false;
@@ -25,6 +24,7 @@ public:
 	float timeLookingDown = 0;
 	bool wasGrounded;
 	Camera2D* camera;
+	Vector2 grabbedLedgeBlock;
 	Vector2 ledgeCoords=Vector2(0,0);
 	Sprite* whipBack;
 	Sprite* whipForward;

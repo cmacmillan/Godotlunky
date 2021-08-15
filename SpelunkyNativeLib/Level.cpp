@@ -9,6 +9,7 @@
 #include <sstream>
 #include <ResourceLoader.hpp>
 #include <AudioStream.hpp>
+#include "Snake.h"
 
 
 void Level::_register_methods()
@@ -33,13 +34,15 @@ void Level::_register_methods()
 	register_property("whipSFX", &Level::whipSFX, Ref<AudioStream>());
 	register_property("hitSFX", &Level::hitSFX, Ref<AudioStream>());
 	register_property("skewerSFX", &Level::skewerSFX, Ref<AudioStream>());
+
+	register_property("snakeScene", &Level::snakeScene, Ref<PackedScene>());
 }
 
 const string layout1 = 
 "XXXXXXXXXXXXXXXXXXXXXX\n\
  X00000000000000000000X\n\
  X00XXX00X000000000000X\n\
- X00XXX000000000000000X\n\
+ X00XXX000000000S00000X\n\
  X00XXX000000000000000X\n\
  X00XXX000000000000000X\n\
  X0000000X000000000000X\n\
@@ -61,7 +64,14 @@ void Level::CopyLayoutIntoBlocks(string layout,int x, int y)
 		int xCurr = x;
 		int len = line.length();
 		for (int i = 0; i < len; i++) {
-			if (line[i] == 'W') {
+			if (line[i] == 'S') {
+				auto snake = cast_to<Snake>(snakeScene->instance());
+				snake->set_position(GridToWorld(Vector2(xCurr,y)));
+				this->add_child(snake);
+				GetBlock(xCurr, y)->present = false;
+				xCurr++;
+			}
+			else if (line[i] == 'W') {
 				GetBlock(xCurr,y)->hasSpikes=true;
 				GetBlock(xCurr,y)->present=false;
 				xCurr++;

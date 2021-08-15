@@ -21,27 +21,23 @@ void Spelunker::_register_methods()
 
 void Spelunker::_init()
 {
-	printf("init");
 }
 
 void Spelunker::_ready()
 {
+	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
+	startPos = level->WorldToGrid(get_position());
+	camera = Object::cast_to<Camera2D>(get_node("Camera2D"));
+	whipForward = get_node<Sprite>("WhipForward");
+	whipBack = get_node<Sprite>("WhipBack");
+	isWhipping = false;
+	isDead = false;
+	isStunned = false;
 }
 
 void Spelunker::_process(float delta)
 {
 	auto animator = get_node<AnimatedSprite>(".");
-	if (!inited) {
-		inited = true;
-		level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-		startPos = level->WorldToGrid(get_position());
-		camera = Object::cast_to<Camera2D>(get_node("Camera2D"));
-		whipForward= get_node<Sprite>("WhipForward");
-		whipBack= get_node<Sprite>("WhipBack");
-		isWhipping = false;
-		isDead = false;
-		isStunned = false;
-	}
 	SpelAABB aabb = SpelAABB();
 	Vector2 offset = Vector2(0,.11f);
 	if (!holdingLedge && !holdingRope) {
@@ -54,6 +50,9 @@ void Spelunker::_process(float delta)
 	Vector2 finalPos=aabb.center;
 	bool isGrounded;
 	float bounciness = 0;
+	if (holdingLedge && !level->GetBlock(grabbedLedgeBlock.x, grabbedLedgeBlock.y)->present) {
+		holdingLedge = false;
+	}
 	if (!holdingLedge) {
 		if (level->CheckCollisionWithTerrain(aabb, startPos, finalPos, normal, isGrounded))
 		{
@@ -70,6 +69,7 @@ void Spelunker::_process(float delta)
 			Vector2 coordsUp = coordsAhead - Vector2(0, 1);
 			if (!isStunned&&!isWhipping&&normal.x == (facingRight ? -1 : 1) && vel.y > 0 && level->GetBlock(coordsAhead.x,coordsAhead.y)->present && !level->GetBlock(coordsUp.x,coordsUp.y)->present && godot::Math::fmod(finalPos.y,1)<.3f)
 			{
+				grabbedLedgeBlock = coordsAhead;
 				holdingLedge = true;
 				ledgeCoords = finalPos;
 				ledgeCoords.y = godot::Math::floor(finalPos.y)+.15f;
@@ -171,11 +171,12 @@ void Spelunker::_process(float delta)
 	if (!isWhipping && !isStunned) {
 		if (input->is_action_just_pressed("bomb")) {
 			Bomb* bomb = Object::cast_to<Bomb>(((Ref<PackedScene>)ResourceLoader::get_singleton()->load("res://Bomb.tscn"))->instance());
+			bomb->startVelocity = Vector2(1300, -1300);
 			if (!facingRight) {
-				bomb->body.vel.x *= -1;
+				bomb->startVelocity.x *= -1;
 			}
 			if (isCrouching) {
-				bomb->body.vel = Vector2(400 * (facingRight ? 1 : -1), 0);
+				bomb->startVelocity = Vector2(400 * (facingRight ? 1 : -1), 0);
 			}
 			//bomb->vel += vel;
 			bomb->set_position(get_position());

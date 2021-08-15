@@ -9,10 +9,10 @@ class Bomb : public Node2D
 	GODOT_CLASS(Bomb, Node2D);
 
 public:
+	Vector2 startVelocity;
 	Body body;
 	float lifetime = 0;
 	bool hasExploded = false;
-	bool inited = false;
 	Level* level;
 	static void _register_methods();
 	void _init();
