@@ -24,9 +24,14 @@ void Spelunker::_init()
 
 
 void Spelunker::TakeDamage(int damageAmount) {
-	health -= damageAmount;
-	if (health < 0) {
-		Die();
+	if (invulTime <= 0) {
+		health -= damageAmount;
+		if (health < 0) {
+			Die();
+		}
+		else {
+			invulTime = 2;
+		}
 	}
 }
 void Spelunker::Die() {
@@ -39,7 +44,7 @@ void Spelunker::Die() {
 
 void Spelunker::_ready()
 {
-	health = 400;
+	health = 4;
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body = Body();
 	body.Init(Vector2(.72f, .9f),Vector2(0,.11f),0,5000,this,level,Vector2(0,0));
@@ -54,7 +59,15 @@ void Spelunker::_ready()
 void Spelunker::_process(float delta)
 {
 	auto animator = get_node<AnimatedSprite>(".");
-	SpelAABB aabb = SpelAABB();
+	if (invulTime > 0) {
+		invulTime -= delta;
+		invulFlicker = !invulFlicker;
+	}
+	else {
+		invulTime = 0;
+		invulFlicker = false;
+	}
+	animator->set_visible(!invulFlicker);
 	Vector2 ogVel = body.vel;
 	if (holdingLedge && !level->GetBlock(grabbedLedgeBlock.x, grabbedLedgeBlock.y)->present) {
 		holdingLedge = false;

@@ -16,6 +16,8 @@ public:
 	float jumpHeight = 0;
 	float walkSpeed;
 	int health=0;
+	bool invulFlicker;
+	float invulTime=0;
 	Level* level=nullptr;
 	bool holdingLedge = false;
 	bool holdingRope= false;
