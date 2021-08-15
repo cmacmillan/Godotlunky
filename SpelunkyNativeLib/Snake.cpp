@@ -16,13 +16,23 @@ void Snake::_ready()
 	sprite = get_node<AnimatedSprite>("AnimatedSprite");
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body = Body();
-	body.Init(Vector2(1, .6), Vector2(0, .2), 0, 0, this, level, Vector2(0, 0));
+	body.Init(Vector2(.8, .6), Vector2(0, .2), 0, 0, this, level, Vector2(0, 0));
 }
 
 void Snake::_process(float delta)
 {
 	sprite->set_flip_h(isFacingRight);
-	body.vel.x = 120*(isFacingRight?1:-1);
+	auto currGridCoord = level->WorldToGrid(get_position());
+	if (!body.isGrounded || ((level->GetBlock(currGridCoord.x - 1, currGridCoord.y)->present && level->GetBlock(currGridCoord.x + 1, currGridCoord.y)->present) ||
+		!level->GetBlock(currGridCoord.x-1,currGridCoord.y+1)->present &&!level->GetBlock(currGridCoord.x+1,currGridCoord.y+1)->present
+		)) {
+		sprite->set_animation("Idle");
+		body.vel.x = 0;
+	}
+	else {
+		sprite->set_animation("Walk");
+		body.vel.x = 120*(isFacingRight?1:-1);
+	}
 	if (body.process(delta, true, false)) {
 		if (body.normal.x != 0) {
 			isFacingRight = body.normal.x > 0;
@@ -34,4 +44,5 @@ void Snake::_process(float delta)
 			isFacingRight = !isFacingRight;
 		}
 	}
+	level->RegisterHitbox(body.aabb, 1, HitboxMask::Player);
 }

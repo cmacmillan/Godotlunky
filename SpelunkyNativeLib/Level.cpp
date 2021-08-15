@@ -45,16 +45,14 @@ const string layout1 =
  X00XXX000000000S00000X\n\
  X00XXX000000000000000X\n\
  X00XXX000000000000000X\n\
- X0000000X000000000000X\n\
+ X00000S0X000000000000X\n\
  XX0000X0X000000000000X\n\
- X0X0000000000000W0000X\n\
+ X0X00S0000000000WW000X\n\
+ XXXXX0XXXXXXXXXXXXXXXX\n\
  XXXXXXXXXXXXXXXXXXXXXX";
 
-LevelBlock* blocks;
-DrawType* drawTypes;
-int blocksXRes;
-int blocksYRes;
-float worldBlockSize;
+//this should probably not be global
+////////////////////////////////
 
 void Level::CopyLayoutIntoBlocks(string layout,int x, int y) 
 {
@@ -66,7 +64,7 @@ void Level::CopyLayoutIntoBlocks(string layout,int x, int y)
 		for (int i = 0; i < len; i++) {
 			if (line[i] == 'S') {
 				auto snake = cast_to<Snake>(snakeScene->instance());
-				snake->set_position(GridToWorld(Vector2(xCurr,y)));
+				snake->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
 				this->add_child(snake);
 				GetBlock(xCurr, y)->present = false;
 				xCurr++;
@@ -88,6 +86,23 @@ void Level::CopyLayoutIntoBlocks(string layout,int x, int y)
 		y++;
 	}
 }
+void Level::RegisterHurtbox(SpelAABB box, IDamageReciever* receiver, HitboxMask mask) 
+{
+	auto data= HurtboxData();
+	data.reciever = receiver;
+	data.aabb = box;
+	data.mask = mask;
+	hurtboxes->push_back(data);
+}
+
+void Level::RegisterHitbox(SpelAABB box, int damageAmount, HitboxMask mask) 
+{
+	auto data = HitboxData();
+	data.aabb = box;
+	data.damageAmount = damageAmount;
+	data.mask = mask;
+	hitboxes->push_back(data);
+}
 
 void Level::_init()
 {
@@ -106,7 +121,6 @@ Vector2 Level::GridToWorld(Vector2 v)
 bool Level::IsOverlappingTerrain(Vector2 pos) {
 	return GetBlock(pos.x, pos.y)->present;
 }
-
 
 float Level::MarchVertical(float startY, float endY, float x1, float x2,bool& hit) {
 	int dir = endY > startY ? 1 : -1;
@@ -202,6 +216,8 @@ void Level::_ready()
 	blocksXRes = 30;
 	blocksYRes = 30;
 	worldBlockSize = 100;
+	hitboxes = new std::vector<HitboxData>();
+	hurtboxes = new std::vector<HurtboxData>();
 	blocks = (LevelBlock*)malloc(sizeof(LevelBlock) * blocksXRes*blocksYRes);
 	drawTypes = (DrawType*)malloc(sizeof(DrawType) * blocksXRes*blocksYRes);
 	for (int i = 0; i < blocksXRes; i++) {
@@ -288,6 +304,17 @@ void Level::UpdateMeshes() {
 
 void Level::_process(float delta)
 {
+	//process hit/hurt
+	for (auto hitbox : *hitboxes)
+	{
+		for (auto hurtbox : *hurtboxes) {
+			if (((hitbox.mask&hurtbox.mask)!=0)&&hitbox.aabb.overlaps(hurtbox.aabb)) {
+				hurtbox.reciever->TakeDamage(hitbox.damageAmount);
+			}
+		}
+	}
+	hitboxes->clear();
+	hurtboxes->clear();
 }
 
 LevelBlock* Level::GetBlock(int x, int y) {
@@ -307,4 +334,6 @@ Level::~Level()
 {
 	_CSTDLIB_::free(blocks);
 	_CSTDLIB_::free(drawTypes);
+	delete hitboxes;
+	delete hurtboxes;
 }

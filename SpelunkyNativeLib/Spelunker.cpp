@@ -16,17 +16,33 @@ void Spelunker::_register_methods()
 
 	register_property("jumpHeight", &Spelunker::jumpHeight, 0.0f);
 	register_property("walkSpeed", &Spelunker::walkSpeed, 0.0f);
-	register_property("friction", &Spelunker::friction, 0.0f);
 }
 
 void Spelunker::_init()
 {
 }
 
+
+void Spelunker::TakeDamage(int damageAmount) {
+	health -= damageAmount;
+	if (health < 0) {
+		Die();
+	}
+}
+void Spelunker::Die() {
+	if (!isDead) {
+		isDead = true;
+		isStunned = true;
+		stunTime = -10000;
+	}
+}
+
 void Spelunker::_ready()
 {
+	health = 400;
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	startPos = level->WorldToGrid(get_position());
+	body = Body();
+	body.Init(Vector2(.72f, .9f),Vector2(0,.11f),0,5000,this,level,Vector2(0,0));
 	camera = Object::cast_to<Camera2D>(get_node("Camera2D"));
 	whipForward = get_node<Sprite>("WhipForward");
 	whipBack = get_node<Sprite>("WhipBack");
@@ -39,54 +55,32 @@ void Spelunker::_process(float delta)
 {
 	auto animator = get_node<AnimatedSprite>(".");
 	SpelAABB aabb = SpelAABB();
-	Vector2 offset = Vector2(0,.11f);
-	if (!holdingLedge && !holdingRope) {
-		vel.y += level->g * delta;
-	}
-	Vector2 ogVel=vel;
-	aabb.size = Vector2(.72f, .9f);
-	aabb.center = level->WorldToGrid(get_position()+vel*delta)+offset;
-	Vector2 normal;
-	Vector2 finalPos=aabb.center;
-	bool isGrounded;
-	float bounciness = 0;
+	Vector2 ogVel = body.vel;
 	if (holdingLedge && !level->GetBlock(grabbedLedgeBlock.x, grabbedLedgeBlock.y)->present) {
 		holdingLedge = false;
 	}
 	if (!holdingLedge) {
-		if (level->CheckCollisionWithTerrain(aabb, startPos, finalPos, normal, isGrounded))
-		{
-			if (normal.x != 0 && sign(normal.x) != sign(vel.x)) {
-				vel.x = -vel.x * bounciness;
-			}
-			if (normal.y != 0 && sign(normal.y) != sign(vel.y)) {
-				vel.y = -vel.y * bounciness;
-			}
-			//could do dot product reflection like this, but that produces bad corner behaviour
-			//float proj = vel.dot(-normal);
-			//vel = vel + normal * proj + normal * proj * bounciness;
-			Vector2 coordsAhead = finalPos + Vector2((facingRight ? 1 : -1), 0);
+		if (body.process(delta, !holdingLedge && !holdingRope, true)) {
+			Vector2 coordsAhead = body.endPos + Vector2((facingRight ? 1 : -1), 0);
 			Vector2 coordsUp = coordsAhead - Vector2(0, 1);
-			if (!isStunned&&!isWhipping&&normal.x == (facingRight ? -1 : 1) && vel.y > 0 && level->GetBlock(coordsAhead.x,coordsAhead.y)->present && !level->GetBlock(coordsUp.x,coordsUp.y)->present && godot::Math::fmod(finalPos.y,1)<.3f)
+			if (!isStunned&&!isWhipping&&body.normal.x == (facingRight ? -1 : 1) && body.vel.y > 0 && level->GetBlock(coordsAhead.x,coordsAhead.y)->present && !level->GetBlock(coordsUp.x,coordsUp.y)->present && godot::Math::fmod(body.endPos.y,1)<.3f)
 			{
 				grabbedLedgeBlock = coordsAhead;
 				holdingLedge = true;
-				ledgeCoords = finalPos;
-				ledgeCoords.y = godot::Math::floor(finalPos.y)+.15f;
-				vel.x = 0;
-				vel.y = 0;
+				ledgeCoords = body.endPos;
+				ledgeCoords.y = godot::Math::floor(body.endPos.y)+.15f;
+				body.vel.x = 0;
+				body.vel.y = 0;
 			}
 			else
 			{
 				holdingLedge = false;
 			}
 		}
-		set_position(level->GridToWorld(finalPos-offset));
-		startPos = finalPos;
 	}
 	else 
 	{
-		startPos = ledgeCoords;
+		body.startPos = ledgeCoords;
 		set_position(level->GridToWorld(ledgeCoords));
 	}
 
@@ -194,20 +188,20 @@ void Spelunker::_process(float delta)
 			if (level->GetBlock(coord.x, coord.y)->hasRope) {
 				holdingRope = true;
 				auto gridCoord = level->GridToWorld(Vector2(((int)coord.x) + .5f, coord.y));
-				gridCoord.y = ogPos.y - (isGrounded ? .2f : 0.0f);
-				isGrounded = false;
+				gridCoord.y = ogPos.y - (body.isGrounded ? .2f : 0.0f);
+				body.isGrounded = false;
 				set_position(gridCoord);
 			}
 		}
 		if (holdingRope) {
 			auto ogPos = get_position();
 			auto coord = level->WorldToGrid(ogPos);
-			if (!level->GetBlock(coord.x, coord.y)->hasRope || isGrounded) {
+			if (!level->GetBlock(coord.x, coord.y)->hasRope || body.isGrounded) {
 				holdingRope = false;
 			}
 		}
 	}
-	if (input->is_action_just_pressed("jump")&&(isGrounded||holdingLedge||holdingRope)&&!isStunned) {
+	if (input->is_action_just_pressed("jump")&&(body.isGrounded||holdingLedge||holdingRope)&&!isStunned) {
 		if (holdingRope) {
 			grabRopeDisableTime = .1f;
 		}
@@ -215,12 +209,12 @@ void Spelunker::_process(float delta)
 		audio->set_volume_db(0.0f);
 		audio->set_stream(level->jumpSFX);
 		audio->play();
-		vel.y = -jumpHeight;
+		body.vel.y = -jumpHeight;
 		holdingLedge = false;
 		holdingRope = false;
 	}
 	if (holdingRope) {
-		vel.x = 0;
+		body.vel.x = 0;
 		isIdle = false;
 		auto coord = level->WorldToGrid(get_position());
 		if (input->is_action_pressed("lookup") && (level->GetBlock(coord.x,coord.y-1)->hasRope || coord.y-(int)coord.y>.5f)) {
@@ -228,20 +222,20 @@ void Spelunker::_process(float delta)
 				animator->set_speed_scale(2.5);
 				animator->set_animation("Climb");
 			}
-			vel.y = -500;
+			body.vel.y = -500;
 		}
 		else if (isCrouching) {
 			if (!isWhipping) {
 				animator->set_speed_scale(2.5);
 				animator->set_animation("Climb");
 			}
-			vel.y = 500;
+			body.vel.y = 500;
 		}
 		else {
 			if (!isWhipping) {
 				animator->set_animation("ClimbStill");
 			}
-			vel.y = 0;
+			body.vel.y = 0;
 		}
 	}
 	else if (holdingLedge) {
@@ -250,7 +244,7 @@ void Spelunker::_process(float delta)
 		}
 		isIdle = false;
 	}
-	else if (!isGrounded) {
+	else if (!body.isGrounded) {
 		if (!isWhipping && !isStunned) {
 			animator->set_animation("Jump");
 		}
@@ -264,9 +258,9 @@ void Spelunker::_process(float delta)
 			facingRight = false;
 		}
 		if (!holdingRope) {
-			if (isCrouching && isGrounded)
+			if (isCrouching && body.isGrounded)
 			{
-				vel.x = -walkSpeed / 2;
+				body.vel.x = -walkSpeed / 2;
 				if (!isWhipping) {
 					animator->set_speed_scale(2);
 					animator->set_animation("Crawl");
@@ -274,8 +268,8 @@ void Spelunker::_process(float delta)
 			}
 			else
 			{
-				vel.x = isRunning ? -walkSpeed * 2 : -walkSpeed;
-				if (isGrounded && !isWhipping) {
+				body.vel.x = isRunning ? -walkSpeed * 2 : -walkSpeed;
+				if (body.isGrounded && !isWhipping) {
 					animator->set_animation("Walk");
 					if (!isRunning)
 						animator->set_speed_scale(2.5);
@@ -292,9 +286,9 @@ void Spelunker::_process(float delta)
 		}
 		if (!holdingRope) {
 			isIdle = false;
-			if (isCrouching && isGrounded)
+			if (isCrouching && body.isGrounded)
 			{
-				vel.x = walkSpeed / 2;
+				body.vel.x = walkSpeed / 2;
 				if (!isWhipping) {
 					animator->set_speed_scale(4);
 					animator->set_animation("Crawl");
@@ -302,8 +296,8 @@ void Spelunker::_process(float delta)
 			}
 			else
 			{
-				vel.x = isRunning ? walkSpeed * 2 : walkSpeed;
-				if (isGrounded && !isWhipping) {
+				body.vel.x = isRunning ? walkSpeed * 2 : walkSpeed;
+				if (body.isGrounded && !isWhipping) {
 					animator->set_animation("Walk");
 					if (!isRunning)
 						animator->set_speed_scale(2.5);
@@ -315,8 +309,8 @@ void Spelunker::_process(float delta)
 	} 
 	else if (!holdingRope && !isStunned)
 	{
-		vel.x = 0;
-		if (isGrounded && isIdle &&!isWhipping) {
+		body.vel.x = 0;
+		if (body.isGrounded && isIdle &&!isWhipping) {
 			if (input->is_action_pressed("lookup")) {
 				timeLookingUp += delta;
 				didSetLook = true;
@@ -330,7 +324,7 @@ void Spelunker::_process(float delta)
 			}
 		}
 	}
-	if (isCrouching && isGrounded &&!isStunned) {
+	if (isCrouching && body.isGrounded &&!isStunned) {
 		timeLookingDown += delta;
 		didSetLook = true;
 	}
@@ -351,7 +345,7 @@ void Spelunker::_process(float delta)
 	{
 		camera->set_position(Vector2(0, 0));
 	}
-	if (isGrounded && !wasGrounded && ogVel.y>0 && !isDead)
+	if (body.isGrounded && !wasGrounded && ogVel.y>0 && !isDead)
 	{
 		if (ogVel.y > 2600) {
 			auto audio = get_node<AudioStreamPlayer2D>("JumpAudio");
@@ -372,22 +366,20 @@ void Spelunker::_process(float delta)
 	{
 		auto coord = level->WorldToGrid(get_position());
 		auto block = level->GetBlock(coord.x, coord.y);
-		if (block->hasSpikes && vel.y>0 && !isDead) {
-			isDead = true;
+		if (block->hasSpikes && body.vel.y>0 && !isDead) {
 			auto audio = get_node<AudioStreamPlayer2D>("JumpAudio");
 			audio->set_volume_db(0.0f);
 			audio->set_stream(level->skewerSFX);
 			audio->play();
 			block->bloody = true;
 			level->UpdateMeshes();
-			isStunned = true;
-			stunTime = -10000;
+			body.vel.x = 0;
+			body.friction = 1000000;
+			Die();
 		}
 	}
-	wasGrounded = isGrounded;
-	if (isGrounded) {
-		vel.x = godot::Math::move_toward(vel.x, 0, delta * friction);
-	}
+	level->RegisterHurtbox(body.aabb, this, HitboxMask::Player);
+	wasGrounded = body.isGrounded;
 }
 Spelunker::Spelunker() {
 	printf("const");

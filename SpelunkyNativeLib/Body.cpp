@@ -35,6 +35,7 @@ bool Body::process(float delta, bool applyGravity, bool applyFriction)
 		vel.x = godot::Math::move_toward(vel.x, 0, delta * friction);
 	}
 	node->set_position(level->GridToWorld(endPos - offset));
+	aabb.center = endPos;
 	startPos = endPos;
 	return hitTerrain;
 }

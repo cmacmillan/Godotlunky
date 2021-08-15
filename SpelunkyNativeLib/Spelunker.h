@@ -4,17 +4,18 @@
 #include "Level.h"
 #include <Camera2D.hpp>
 #include <Sprite.hpp>
+#include "Body.h"
 
 
-class Spelunker : public Node2D
+class Spelunker : public Node2D, IDamageReciever
 {
 	GODOT_CLASS(Spelunker, Node2D);
 
 public:
+	Body body;
 	float jumpHeight = 0;
 	float walkSpeed;
-	Vector2 vel;
-	Vector2 startPos;
+	int health=0;
 	Level* level=nullptr;
 	bool holdingLedge = false;
 	bool holdingRope= false;
@@ -34,10 +35,12 @@ public:
 	float stunTime = 0;
 	bool playedWhipSound;
 	float whipTime;
-	float friction;
+
+	void Die();
+	void TakeDamage(int damageAmount);
+
 	static void _register_methods();
 	void _init();
-
 	void _ready();
 	void _process(float delta);
 	Spelunker();
