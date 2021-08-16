@@ -3,7 +3,7 @@
 #include <Node2D.hpp>
 #include "Level.h"
 #include "Body.h"
-class Rock : public Node2D, IBody
+class Rock : public Node2D
 {
 };
 

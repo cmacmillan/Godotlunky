@@ -44,6 +44,13 @@ void Spelunker::Die() {
 	}
 }
 
+void Spelunker::PickedBodyDestroyed() {
+	pickedBody = nullptr;
+}
+Vector2 Spelunker::GetPickPosition() {
+	return get_position();
+}
+
 Body* Spelunker::GetBody() {
 	return &body;
 }
@@ -109,16 +116,20 @@ void Spelunker::_process(float delta)
 	bool isRunning = false;
 	bool isIdle = true;
 	bool isCrouching = false;
-	/*
 	if (input->is_action_just_pressed("PickUp")) {
-		if (this->pickedBody == nullptr) {
+		if (pickedBody == nullptr) {
+			for (auto i : *level->hurtboxes) {
+				if (body.aabb.overlaps(i->aabb) && i->pickable) {
+					pickedBody = i;
+					i->pickedBy = this;
+				}
+			}
+		}
+		else {
+			pickedBody->pickedBy = nullptr;
+			pickedBody = nullptr;
 		}
 	}
-	else 
-	{
-		level->pickedBody = nullptr;
-	}
-	*/
 	if (input->is_action_just_pressed("debugstun")) {
 		isStunned = true;
 		stunTime = 0;
@@ -150,13 +161,27 @@ void Spelunker::_process(float delta)
 		whipBack->set_flip_h(true);
 	}
 	if (input->is_action_just_pressed("whip") && !holdingLedge && !isWhipping && !isStunned) {
-		isWhipping = true;
-		playedWhipSound = false;
-		animator->set_animation("Whip");
-		animator->set_speed_scale(3);
-		animator->set_frame(0);
-		animator->play();
-		whipTime = 0;
+		if (pickedBody!=nullptr) {
+			pickedBody->vel = Vector2(1300, -1300);
+			if (!facingRight) {
+				pickedBody->vel.x *= -1;
+			}
+			if (isCrouching) {
+				pickedBody->vel = Vector2(400 * (facingRight ? 1 : -1), 0);
+			}
+			pickedBody->pickedBy = nullptr;
+			pickedBody = nullptr;
+		}
+		else 
+		{
+			isWhipping = true;
+			playedWhipSound = false;
+			animator->set_animation("Whip");
+			animator->set_speed_scale(3);
+			animator->set_frame(0);
+			animator->play();
+			whipTime = 0;
+		}
 	}
 	whipTime += delta;
 	if (isWhipping) {
@@ -205,7 +230,7 @@ void Spelunker::_process(float delta)
 			}
 			//bomb->vel += vel;
 			bomb->set_position(get_position());
-			level->add_child(bomb);
+			get_node("/root/GameScene/SpawnRoot")->add_child(bomb);
 		}
 		if (input->is_action_just_pressed("rope")) {
 			Rope* rope = Object::cast_to<Rope>(((Ref<PackedScene>)ResourceLoader::get_singleton()->load("res://Rope.tscn"))->instance());

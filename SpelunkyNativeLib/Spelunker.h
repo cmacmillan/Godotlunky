@@ -7,7 +7,7 @@
 #include "Body.h"
 
 
-class Spelunker : public Node2D, IDamageReciever, IBody
+class Spelunker : public Node2D, IDamageReciever, IPicker
 {
 	GODOT_CLASS(Spelunker, Node2D);
 
@@ -38,6 +38,9 @@ public:
 	bool playedWhipSound;
 	float whipTime;
 	Body* pickedBody = nullptr;
+
+	Vector2 GetPickPosition();
+	void PickedBodyDestroyed();
 
 	void Die();
 	bool TakeDamage(int damageAmount);

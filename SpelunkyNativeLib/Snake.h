@@ -3,7 +3,7 @@
 #include "Level.h"
 #include "Body.h"
 #include <AnimatedSprite.hpp>
-class Snake : public Node2D, IDamageReciever, IBody
+class Snake : public Node2D, IDamageReciever
 {
 	GODOT_CLASS(Snake, Node2D);
 public:

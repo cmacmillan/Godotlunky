@@ -4,7 +4,7 @@
 #include "Level.h"
 #include "Body.h"
 
-class Bomb : public Node2D, IBody
+class Bomb : public Node2D
 {
 	GODOT_CLASS(Bomb, Node2D);
 

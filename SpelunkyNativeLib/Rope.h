@@ -3,7 +3,7 @@
 #include <Node2D.hpp>
 #include "Level.h"
 #include "Body.h"
-class Rope : public Node2D, IBody
+class Rope : public Node2D
 {
 	GODOT_CLASS(Rope, Node2D);
 public:

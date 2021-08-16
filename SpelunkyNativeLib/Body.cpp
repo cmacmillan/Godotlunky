@@ -17,12 +17,16 @@ void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, 
 	this->weight = weight;
 	this->takeDamageMask = takeDamageMask;
 	this->damageReciever = damageReceiver;
+	this->pickedBy = nullptr;
 }
 
 bool Body::process(float delta, bool applyGravity, bool applyFriction)
 {
 	if (applyGravity) {
 		vel.y += level->g * delta;
+	}
+	if (pickedBy != nullptr) {
+		vel = (pickedBy->GetPickPosition() - node->get_position())/delta;
 	}
 	aabb.center = level->WorldToGrid(node->get_position()+vel*delta) + this->offset;
 	endPos = aabb.center;
@@ -38,6 +42,9 @@ bool Body::process(float delta, bool applyGravity, bool applyFriction)
 	}
 	if (isGrounded && applyFriction) {
 		vel.x = godot::Math::move_toward(vel.x, 0, delta * friction);
+	}
+	if (pickedBy != nullptr) {
+		vel = Vector2(0,0);
 	}
 	node->set_position(level->GridToWorld(endPos - offset));
 	aabb.center = endPos;
