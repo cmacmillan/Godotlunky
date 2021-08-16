@@ -10,6 +10,7 @@
 #include <ResourceLoader.hpp>
 #include <AudioStream.hpp>
 #include "Snake.h"
+#include "Rock.h"
 
 
 void Level::_register_methods()
@@ -36,6 +37,7 @@ void Level::_register_methods()
 	register_property("skewerSFX", &Level::skewerSFX, Ref<AudioStream>());
 
 	register_property("snakeScene", &Level::snakeScene, Ref<PackedScene>());
+	register_property("rockScene", &Level::rockScene, Ref<PackedScene>());
 }
 
 const string layout1 = 
@@ -47,7 +49,7 @@ const string layout1 =
  X00XXX000000000000000X\n\
  X00000S0X000000000000X\n\
  XX0000X0X000000000000X\n\
- X0X00S0000000000WW000X\n\
+ X0X00S00000000R0WW000X\n\
  XXXXX0XXXXXXXXXXXXXXXX\n\
  XXXXXXXXXXXXXXXXXXXXXX";
 
@@ -62,8 +64,15 @@ void Level::CopyLayoutIntoBlocks(string layout,int x, int y)
 		int xCurr = x;
 		int len = line.length();
 		for (int i = 0; i < len; i++) {
-			if (line[i] == 'S') {
-				auto snake = cast_to<Snake>(snakeScene->instance());
+			if (line[i] == 'R') {
+				auto rock =  cast_to<Rock>(rockScene->instance());
+				rock->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
+				get_node("/root/GameScene/SpawnRoot")->add_child(rock);
+				GetBlock(xCurr, y)->present = false;
+				xCurr++;
+			}
+			else if (line[i] == 'S') {
+				auto snake= cast_to<Snake>(snakeScene->instance());
 				snake->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
 				this->add_child(snake);
 				GetBlock(xCurr, y)->present = false;
@@ -228,7 +237,9 @@ void Level::_ready()
 			GetBlock(i, j)->bloody= false;
 		}
 	}
+	printf("start copying layout");
 	CopyLayoutIntoBlocks(layout1, 0, 0);
+	printf("done copying layout");
 	UpdateMeshes();
 }
 void Level::UpdateMeshes() {

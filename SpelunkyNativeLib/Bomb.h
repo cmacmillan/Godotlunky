@@ -14,8 +14,6 @@ public:
 	float lifetime = 0;
 	bool hasExploded = false;
 	Level* level;
-	
-	Body* GetBody();
 
 	static void _register_methods();
 	void _init();

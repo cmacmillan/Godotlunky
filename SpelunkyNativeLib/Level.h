@@ -85,6 +85,7 @@ public:
 	Ref<AudioStream> skewerSFX;
 
 	Ref<PackedScene> snakeScene;
+	Ref<PackedScene> rockScene;
 
 	LevelBlock* blocks;
 	DrawType* drawTypes;

@@ -12,8 +12,6 @@ public:
 	Body body;
 	bool isFacingRight;
 
-	Body* GetBody();
-
 	bool TakeDamage(int damageAmount);
 
 	static void _register_methods();

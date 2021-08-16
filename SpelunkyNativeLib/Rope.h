@@ -18,8 +18,6 @@ public:
 	Level* level;
 	Body body;
 
-	Body* GetBody();
-
 	void SpawnSegment(float yOffset);
 	static void _register_methods();
 	void _init();

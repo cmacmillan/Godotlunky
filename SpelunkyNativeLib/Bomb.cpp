@@ -11,13 +11,7 @@ void Bomb::_register_methods()
 	register_method("_process", &Bomb::_process);
 }
 
-void Bomb::_init()
-{
-}
-
-Body* Bomb::GetBody() {
-	return &body;
-}
+void Bomb::_init(){}
 
 void Bomb::_ready()
 {
@@ -25,7 +19,7 @@ void Bomb::_ready()
 	animator->_set_playing(true);
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body = Body();
-	body.Init(Vector2(.5f, .5f), Vector2(0, 0), .3, 3000, this, level, startVelocity,true,true,1,HitboxMask::Nothing,nullptr);
+	body.Init(Vector2(.5f, .5f), Vector2(0, 0), .3, 3000, this, level, startVelocity,true,1,HitboxMask::Everything,nullptr,nullptr);
 	level->RegisterHurtbox(&body);
 	auto audio = get_node<AudioStreamPlayer2D>("Audio");
 	audio->set_stream(level->bombTimerSFX);
@@ -48,9 +42,7 @@ void Bomb::_process(float delta)
 		hasExploded = true;
 		Vector2 coord = level->WorldToGrid(get_position());
 		SpelAABB damageBox = SpelAABB();
-		if (body.pickedBy != nullptr) {
-			body.pickedBy->PickedBodyDestroyed();
-		}
+		body.OnDestroy();
 		damageBox.center = coord;
 		damageBox.size = Vector2(4,4);
 		level->UnregisterHurtbox(&body);

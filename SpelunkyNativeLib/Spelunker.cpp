@@ -51,16 +51,12 @@ Vector2 Spelunker::GetPickPosition() {
 	return get_position();
 }
 
-Body* Spelunker::GetBody() {
-	return &body;
-}
-
 void Spelunker::_ready()
 {
 	health = 4;
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body = Body();
-	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, false, 1, HitboxMask::Player,this);
+	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player,this,nullptr);
 	camera = Object::cast_to<Camera2D>(get_node("Camera2D"));
 	whipForward = get_node<Sprite>("WhipForward");
 	whipBack = get_node<Sprite>("WhipBack");
@@ -116,19 +112,11 @@ void Spelunker::_process(float delta)
 	bool isRunning = false;
 	bool isIdle = true;
 	bool isCrouching = false;
-	if (input->is_action_just_pressed("PickUp")) {
-		if (pickedBody == nullptr) {
-			for (auto i : *level->hurtboxes) {
-				if (body.aabb.overlaps(i->aabb) && i->pickable) {
-					pickedBody = i;
-					i->pickedBy = this;
-				}
-			}
-		}
-		else {
-			pickedBody->pickedBy = nullptr;
-			pickedBody = nullptr;
-		}
+	if (input->is_action_pressed("run")) {
+		isRunning = true;
+	}
+	if (input->is_action_pressed("crouch")) {
+		isCrouching = true;
 	}
 	if (input->is_action_just_pressed("debugstun")) {
 		isStunned = true;
@@ -160,17 +148,37 @@ void Spelunker::_process(float delta)
 		whipForward->set_flip_h(true);
 		whipBack->set_flip_h(true);
 	}
-	if (input->is_action_just_pressed("whip") && !holdingLedge && !isWhipping && !isStunned) {
-		if (pickedBody!=nullptr) {
-			pickedBody->vel = Vector2(1300, -1300);
-			if (!facingRight) {
-				pickedBody->vel.x *= -1;
+	if (isCrouching && input->is_action_just_pressed("whip")&&!isStunned) {
+		if (pickedBody == nullptr) {
+			for (auto i : *level->hurtboxes) {
+				if (body.aabb.overlaps(i->aabb) && i->pickable) {
+					pickedBody = i;
+					i->pickedBy = this;
+				}
 			}
-			if (isCrouching) {
-				pickedBody->vel = Vector2(400 * (facingRight ? 1 : -1), 0);
-			}
+		}
+		else {
 			pickedBody->pickedBy = nullptr;
 			pickedBody = nullptr;
+		}
+	}  
+	else if (input->is_action_just_pressed("whip") && !holdingLedge && !isWhipping && !isStunned) {
+		if (pickedBody!=nullptr) {
+			if (pickedBody->throwAction==nullptr) {
+				pickedBody->vel = Vector2(1300, -1300);
+				if (!facingRight) {
+					pickedBody->vel.x *= -1;
+				}
+				if (isCrouching) {
+					pickedBody->vel = Vector2(400 * (facingRight ? 1 : -1), 0);
+				}
+				pickedBody->pickedBy = nullptr;
+				pickedBody = nullptr;
+			}
+			else 
+			{
+				pickedBody->throwAction->DoThrowAction();
+			}
 		}
 		else 
 		{
@@ -211,12 +219,6 @@ void Spelunker::_process(float delta)
 	else {
 		whipBack->set_visible(false);
 		whipForward->set_visible(false);
-	}
-	if (input->is_action_pressed("run")) {
-		isRunning = true;
-	}
-	if (input->is_action_pressed("crouch")) {
-		isCrouching = true;
 	}
 	if (!isWhipping && !isStunned) {
 		if (input->is_action_just_pressed("bomb")) {
@@ -408,7 +410,7 @@ void Spelunker::_process(float delta)
 			audio->set_volume_db(0.0f);
 			audio->set_stream(level->hitSFX);
 			audio->play();
-			//take 1 damage
+			TakeDamage(1);
 			isStunned = true;
 			stunTime = 0;
 		}

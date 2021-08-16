@@ -23,14 +23,10 @@ void Rope::_ready()
 	start.x = godot::Math::floor(start.x) + .5f;
 	set_position(level->GridToWorld(start));
 	body = Body();
-	body.Init(Vector2(.5f, .5f), Vector2(0, 0), 0.0f, 0.0f, this, level, Vector2(0, -2100),false,false,1, HitboxMask::Nothing,nullptr);
+	body.Init(Vector2(.5f, .5f), Vector2(0, 0), 0.0f, 0.0f, this, level, Vector2(0, -2100),false,1, HitboxMask::Nothing,nullptr,nullptr);
 	auto audio = get_node<AudioStreamPlayer2D>("Audio");
 	audio->set_stream(level->ropeThrowSFX);
 	audio->play();
-}
-
-Body* Rope::GetBody() {
-	return &body;
 }
 
 void Rope::_process(float delta)

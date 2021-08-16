@@ -45,8 +45,6 @@ public:
 	void Die();
 	bool TakeDamage(int damageAmount);
 
-	Body* GetBody();
-
 	static void _register_methods();
 	void _init();
 	void _ready();

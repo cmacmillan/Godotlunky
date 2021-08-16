@@ -1,7 +1,7 @@
 #include "Body.h"
 using namespace godot::Math;
 
-void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level,Vector2 initialVelocity,bool pickable, bool throwable,float weight,HitboxMask takeDamageMask, IDamageReciever* damageReceiver)
+void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level,Vector2 initialVelocity,bool pickable, float weight,HitboxMask takeDamageMask, IDamageReciever* damageReceiver, IThrowAction* throwAction)
 {
 	this->aabb = SpelAABB();
 	aabb.size = size;
@@ -13,11 +13,17 @@ void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, 
 	this->startPos = level->WorldToGrid(node->get_position());
 	this->vel = initialVelocity;
 	this->pickable = pickable;
-	this->throwable = throwable;
 	this->weight = weight;
 	this->takeDamageMask = takeDamageMask;
 	this->damageReciever = damageReceiver;
+	this->throwAction = throwAction;
 	this->pickedBy = nullptr;
+}
+
+void Body::OnDestroy() {
+	if (pickedBy!=nullptr) {
+		pickedBy->PickedBodyDestroyed();
+	}
 }
 
 bool Body::process(float delta, bool applyGravity, bool applyFriction)

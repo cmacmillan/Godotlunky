@@ -16,16 +16,13 @@ void Snake::_ready()
 	sprite = get_node<AnimatedSprite>("AnimatedSprite");
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body = Body();
-	body.Init(Vector2(.8, .6), Vector2(0, .2), 0, 0, this, level, Vector2(0, 0),false,false,1,HitboxMask::Enemy,this);
+	body.Init(Vector2(.8, .6), Vector2(0, .2), 0, 0, this, level, Vector2(0, 0),false,1,HitboxMask::Enemy,this,nullptr);
 	level->RegisterHurtbox(&body);
-}
-
-Body* Snake::GetBody() {
-	return &body;
 }
 
 bool Snake::TakeDamage(int damageAmount) {
 	//no health so just die
+	body.OnDestroy();
 	queue_free();
 	return true;
 }
