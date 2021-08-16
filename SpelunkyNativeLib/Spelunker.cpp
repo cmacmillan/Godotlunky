@@ -23,16 +23,18 @@ void Spelunker::_init()
 }
 
 
-void Spelunker::TakeDamage(int damageAmount) {
+bool Spelunker::TakeDamage(int damageAmount) {
 	if (invulTime <= 0) {
 		health -= damageAmount;
 		if (health < 0) {
 			Die();
+			return true;
 		}
 		else {
 			invulTime = 2;
 		}
 	}
+	return false;
 }
 void Spelunker::Die() {
 	if (!isDead) {
@@ -42,18 +44,24 @@ void Spelunker::Die() {
 	}
 }
 
+Body* Spelunker::GetBody() {
+	return &body;
+}
+
 void Spelunker::_ready()
 {
 	health = 4;
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body = Body();
-	body.Init(Vector2(.72f, .9f),Vector2(0,.11f),0,5000,this,level,Vector2(0,0));
+	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, false, 1, HitboxMask::Player,this);
 	camera = Object::cast_to<Camera2D>(get_node("Camera2D"));
 	whipForward = get_node<Sprite>("WhipForward");
 	whipBack = get_node<Sprite>("WhipBack");
 	isWhipping = false;
 	isDead = false;
 	isStunned = false;
+	pickedBody = nullptr;
+	level->RegisterHurtbox(&body);
 }
 
 void Spelunker::_process(float delta)
@@ -101,6 +109,16 @@ void Spelunker::_process(float delta)
 	bool isRunning = false;
 	bool isIdle = true;
 	bool isCrouching = false;
+	/*
+	if (input->is_action_just_pressed("PickUp")) {
+		if (this->pickedBody == nullptr) {
+		}
+	}
+	else 
+	{
+		level->pickedBody = nullptr;
+	}
+	*/
 	if (input->is_action_just_pressed("debugstun")) {
 		isStunned = true;
 		stunTime = 0;
@@ -391,7 +409,6 @@ void Spelunker::_process(float delta)
 			Die();
 		}
 	}
-	level->RegisterHurtbox(body.aabb, this, HitboxMask::Player);
 	wasGrounded = body.isGrounded;
 }
 Spelunker::Spelunker() {

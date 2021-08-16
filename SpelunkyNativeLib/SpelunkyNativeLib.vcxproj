@@ -140,17 +140,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Body.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="OmniTemplate.cpp" />
+    <ClCompile Include="Rock.cpp" />
     <ClCompile Include="Rope.cpp" />
+    <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Spelunker.cpp" />
     <ClCompile Include="SpelunkyNativeLib.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Body.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="OmniTemplate.h" />
+    <ClInclude Include="Rock.h" />
     <ClInclude Include="Rope.h" />
+    <ClInclude Include="Snake.h" />
     <ClInclude Include="Spelunker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

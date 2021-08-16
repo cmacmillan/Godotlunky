@@ -9,6 +9,7 @@
 #include <MultiMeshInstance2D.hpp>
 #include <AudioStreamPlayer2D.hpp>
 #include <vector>
+#include <set>
 enum DrawType {
 	Normal = 0,
 	Top = 1,
@@ -21,7 +22,7 @@ enum HitboxMask : unsigned int {
 	Nothing = 0,
 	Player = 1,
 	Enemy = 2,
-	All = 4294967295,
+	Everything = 4294967295,
 };
 struct LevelBlock {
 	bool present;
@@ -46,21 +47,19 @@ struct SpelAABB
 		return max1 >= min2 && max2 >= min1;
 	}
 };
+class Body;
 
-class IDamageReciever {
-public:
-	virtual void TakeDamage(int damageAmount) = 0;
-};
-
-struct HurtboxData {
-	SpelAABB aabb;
-	IDamageReciever* reciever;
-	HitboxMask mask;
-};
 struct HitboxData {
 	SpelAABB aabb;
 	int damageAmount;
 	HitboxMask mask;
+	Vector2 knockInDirectionAmount;
+	float knockAwayAmount;
+};
+
+class IDamageReciever {
+public:
+	virtual bool TakeDamage(int damageAmount) { return false; }
 };
 
 class Level : public Node2D
@@ -93,7 +92,7 @@ public:
 	int blocksYRes;
 	float worldBlockSize;
 	std::vector<HitboxData>* hitboxes;
-	std::vector<HurtboxData>* hurtboxes;
+	std::set<Body*>* hurtboxes;
 
 	static void _register_methods();
 	void _init();
@@ -102,8 +101,9 @@ public:
 	LevelBlock* GetBlock(int x, int y);
 	Vector2 WorldToGrid(Vector2 v);
 	Vector2 GridToWorld(Vector2 v);
-	void RegisterHurtbox(SpelAABB box,IDamageReciever* receiver,HitboxMask mask);
-	void RegisterHitbox(SpelAABB box,int damageAmount,HitboxMask mask);
+	void RegisterHurtbox(Body* hurtbox);
+	void UnregisterHurtbox(Body* hurtbox);
+	void RegisterHitbox(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount);
 	bool CheckCollisionWithTerrain(SpelAABB aabb,Vector2 previousPos,Vector2& endPos,Vector2& normal,bool& isGrounded);
 	float MarchVertical(float startY, float endY, float x1, float x2,bool& hit);
 	float MarchHorizontal(float startX, float endX, float y1, float y2,bool& hit);

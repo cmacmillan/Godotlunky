@@ -16,15 +16,28 @@ void Snake::_ready()
 	sprite = get_node<AnimatedSprite>("AnimatedSprite");
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body = Body();
-	body.Init(Vector2(.8, .6), Vector2(0, .2), 0, 0, this, level, Vector2(0, 0));
+	body.Init(Vector2(.8, .6), Vector2(0, .2), 0, 0, this, level, Vector2(0, 0),false,false,1,HitboxMask::Enemy,this);
+	level->RegisterHurtbox(&body);
+}
+
+Body* Snake::GetBody() {
+	return &body;
+}
+
+bool Snake::TakeDamage(int damageAmount) {
+	//no health so just die
+	queue_free();
+	return true;
 }
 
 void Snake::_process(float delta)
 {
 	sprite->set_flip_h(isFacingRight);
 	auto currGridCoord = level->WorldToGrid(get_position());
-	if (!body.isGrounded || ((level->GetBlock(currGridCoord.x - 1, currGridCoord.y)->present && level->GetBlock(currGridCoord.x + 1, currGridCoord.y)->present) ||
-		!level->GetBlock(currGridCoord.x-1,currGridCoord.y+1)->present &&!level->GetBlock(currGridCoord.x+1,currGridCoord.y+1)->present
+	if (!body.isGrounded || (((level->GetBlock(currGridCoord.x - 1, currGridCoord.y)->present && level->GetBlock(currGridCoord.x + 1, currGridCoord.y)->present)) ||
+		(!level->GetBlock(currGridCoord.x-1,currGridCoord.y+1)->present &&!level->GetBlock(currGridCoord.x+1,currGridCoord.y+1)->present)||
+		(level->GetBlock(currGridCoord.x-1,currGridCoord.y)->present && !level->GetBlock(currGridCoord.x+1,currGridCoord.y+1)->present) ||
+		(!level->GetBlock(currGridCoord.x-1,currGridCoord.y+1)->present && level->GetBlock(currGridCoord.x+1,currGridCoord.y)->present)
 		)) {
 		sprite->set_animation("Idle");
 		body.vel.x = 0;
@@ -44,5 +57,5 @@ void Snake::_process(float delta)
 			isFacingRight = !isFacingRight;
 		}
 	}
-	level->RegisterHitbox(body.aabb, 1, HitboxMask::Player);
+	level->RegisterHitbox(body.aabb, 1, HitboxMask::Player,Vector2(0,0),0);
 }

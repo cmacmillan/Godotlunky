@@ -4,7 +4,7 @@
 #include "Level.h"
 #include "Body.h"
 
-class Bomb : public Node2D
+class Bomb : public Node2D, IBody
 {
 	GODOT_CLASS(Bomb, Node2D);
 
@@ -14,6 +14,9 @@ public:
 	float lifetime = 0;
 	bool hasExploded = false;
 	Level* level;
+	
+	Body* GetBody();
+
 	static void _register_methods();
 	void _init();
 	void _ready();

@@ -3,7 +3,7 @@
 #include "Level.h"
 #include "Body.h"
 #include <AnimatedSprite.hpp>
-class Snake : public Node2D
+class Snake : public Node2D, IDamageReciever, IBody
 {
 	GODOT_CLASS(Snake, Node2D);
 public:
@@ -11,6 +11,11 @@ public:
 	Level* level;
 	Body body;
 	bool isFacingRight;
+
+	Body* GetBody();
+
+	bool TakeDamage(int damageAmount);
+
 	static void _register_methods();
 	void _init();
 	void _ready();

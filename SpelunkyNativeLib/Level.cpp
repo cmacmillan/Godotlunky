@@ -86,21 +86,21 @@ void Level::CopyLayoutIntoBlocks(string layout,int x, int y)
 		y++;
 	}
 }
-void Level::RegisterHurtbox(SpelAABB box, IDamageReciever* receiver, HitboxMask mask) 
-{
-	auto data= HurtboxData();
-	data.reciever = receiver;
-	data.aabb = box;
-	data.mask = mask;
-	hurtboxes->push_back(data);
-}
 
-void Level::RegisterHitbox(SpelAABB box, int damageAmount, HitboxMask mask) 
+void Level::RegisterHurtbox(Body* hurtbox) {
+	hurtboxes->insert(hurtbox);
+}
+void Level::UnregisterHurtbox(Body* hurtbox) {
+	hurtboxes->erase(hurtbox);
+}
+void Level::RegisterHitbox(SpelAABB box, int damageAmount, HitboxMask mask,Vector2 knockInDirectionAmount,float knockAwayAmount)
 {
 	auto data = HitboxData();
 	data.aabb = box;
 	data.damageAmount = damageAmount;
 	data.mask = mask;
+	data.knockAwayAmount = knockAwayAmount;
+	data.knockInDirectionAmount = knockInDirectionAmount;
 	hitboxes->push_back(data);
 }
 
@@ -217,7 +217,7 @@ void Level::_ready()
 	blocksYRes = 30;
 	worldBlockSize = 100;
 	hitboxes = new std::vector<HitboxData>();
-	hurtboxes = new std::vector<HurtboxData>();
+	hurtboxes = new std::set<Body*>();
 	blocks = (LevelBlock*)malloc(sizeof(LevelBlock) * blocksXRes*blocksYRes);
 	drawTypes = (DrawType*)malloc(sizeof(DrawType) * blocksXRes*blocksYRes);
 	for (int i = 0; i < blocksXRes; i++) {
@@ -302,19 +302,33 @@ void Level::UpdateMeshes() {
 	}
 }
 
+std::vector<Body*>* hurtboxesToRemove = nullptr;
 void Level::_process(float delta)
 {
+	if (hurtboxesToRemove == nullptr) {
+		hurtboxesToRemove = new std::vector<Body*>();
+	}
 	//process hit/hurt
 	for (auto hitbox : *hitboxes)
 	{
-		for (auto hurtbox : *hurtboxes) {
-			if (((hitbox.mask&hurtbox.mask)!=0)&&hitbox.aabb.overlaps(hurtbox.aabb)) {
-				hurtbox.reciever->TakeDamage(hitbox.damageAmount);
+		for (auto body : *hurtboxes) {
+			if (((hitbox.mask & body->takeDamageMask) != 0) && hitbox.aabb.overlaps(body->aabb)) {
+				if (body->damageReciever != nullptr) {
+					if (body->damageReciever->TakeDamage(hitbox.damageAmount)) {
+						hurtboxesToRemove->push_back(body);
+					}
+				}
+				body->vel += hitbox.knockInDirectionAmount;
+				Vector2 away = (body->aabb.center - hitbox.aabb.center).normalized();
+				body->vel += away * hitbox.knockAwayAmount;
 			}
 		}
 	}
+	for (auto remove : *hurtboxesToRemove) {
+		UnregisterHurtbox(remove);
+	}
+	hurtboxesToRemove->clear();
 	hitboxes->clear();
-	hurtboxes->clear();
 }
 
 LevelBlock* Level::GetBlock(int x, int y) {

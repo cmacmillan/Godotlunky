@@ -1,0 +1,15 @@
+[gd_resource type="ArrayMesh" format=2]
+
+[resource]
+custom_aabb = AABB( 0, 0, 0, 100000, 100000, 0 )
+surfaces/0 = {
+"aabb": AABB( -50, -50, 0, 100, 100, 0 ),
+"array_data": PoolByteArray( 0, 0, 72, 66, 0, 0, 72, 66, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 72, 194, 0, 0, 72, 66, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 72, 194, 0, 0, 72, 194, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 66, 0, 0, 72, 194, 0, 0, 128, 63, 0, 0, 0, 0 ),
+"array_index_data": PoolByteArray( 3, 0, 0, 0, 1, 0, 1, 0, 2, 0, 3, 0 ),
+"blend_shape_data": [  ],
+"format": 262417,
+"index_count": 6,
+"primitive": 4,
+"skeleton_aabb": [  ],
+"vertex_count": 4
+}

@@ -7,7 +7,7 @@
 #include "Body.h"
 
 
-class Spelunker : public Node2D, IDamageReciever
+class Spelunker : public Node2D, IDamageReciever, IBody
 {
 	GODOT_CLASS(Spelunker, Node2D);
 
@@ -37,9 +37,12 @@ public:
 	float stunTime = 0;
 	bool playedWhipSound;
 	float whipTime;
+	Body* pickedBody = nullptr;
 
 	void Die();
-	void TakeDamage(int damageAmount);
+	bool TakeDamage(int damageAmount);
+
+	Body* GetBody();
 
 	static void _register_methods();
 	void _init();

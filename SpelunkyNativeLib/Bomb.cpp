@@ -15,13 +15,17 @@ void Bomb::_init()
 {
 }
 
+Body* Bomb::GetBody() {
+	return &body;
+}
+
 void Bomb::_ready()
 {
 	AnimatedSprite* animator = get_node<AnimatedSprite>("AnimatedSprite");
 	animator->_set_playing(true);
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body = Body();
-	body.Init(Vector2(.5f, .5f), Vector2(0, 0), .3, 3000, this, level, startVelocity);
+	body.Init(Vector2(.5f, .5f), Vector2(0, 0), .3, 3000, this, level, startVelocity,true,true,1,HitboxMask::Nothing,nullptr);
 	auto audio = get_node<AudioStreamPlayer2D>("Audio");
 	audio->set_stream(level->bombTimerSFX);
 	audio->play();
@@ -42,6 +46,10 @@ void Bomb::_process(float delta)
 		audio->play();
 		hasExploded = true;
 		Vector2 coord = level->WorldToGrid(get_position());
+		SpelAABB damageBox = SpelAABB();
+		damageBox.center = coord;
+		damageBox.size = Vector2(4,4);
+		level->RegisterHitbox(damageBox,10,HitboxMask::Everything,Vector2(0,-800),2000);
 		for (int i = coord.x - 2; i <= coord.x + 2; i++) {
 			for (int j = coord.y - 2; j <= coord.y + 2; j++) {
 				auto block = level->GetBlock(i, j);
