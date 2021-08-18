@@ -56,7 +56,7 @@ void Spelunker::_ready()
 	health = 4;
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body = Body();
-	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player,this,nullptr);
+	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player,this,nullptr,false);
 	camera = Object::cast_to<Camera2D>(get_node("Camera2D"));
 	whipForward = get_node<Sprite>("WhipForward");
 	whipBack = get_node<Sprite>("WhipBack");
@@ -165,6 +165,7 @@ void Spelunker::_process(float delta)
 	else if (input->is_action_just_pressed("whip") && !holdingLedge && !isWhipping && !isStunned) {
 		if (pickedBody!=nullptr) {
 			if (pickedBody->throwAction==nullptr) {
+				pickedBody->moveFastHitbox.creatorToEscape = &body;
 				pickedBody->vel = Vector2(1300, -1300);
 				if (!facingRight) {
 					pickedBody->vel.x *= -1;

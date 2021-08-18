@@ -55,6 +55,9 @@ struct HitboxData {
 	HitboxMask mask;
 	Vector2 knockInDirectionAmount;
 	float knockAwayAmount;
+	Body* creatorToEscape;
+	bool autoUnregister;
+	void SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount);
 };
 
 class IDamageReciever {
@@ -92,8 +95,8 @@ public:
 	int blocksXRes;
 	int blocksYRes;
 	float worldBlockSize;
-	std::vector<HitboxData>* hitboxes;
 	std::set<Body*>* hurtboxes;
+	std::set<HitboxData*>* hitboxes;
 
 	static void _register_methods();
 	void _init();
@@ -104,7 +107,8 @@ public:
 	Vector2 GridToWorld(Vector2 v);
 	void RegisterHurtbox(Body* hurtbox);
 	void UnregisterHurtbox(Body* hurtbox);
-	void RegisterHitbox(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount);
+	void RegisterHitbox(HitboxData* hitbox);
+	void UnregisterHitbox(HitboxData* hitbox);
 	bool CheckCollisionWithTerrain(SpelAABB aabb,Vector2 previousPos,Vector2& endPos,Vector2& normal,bool& isGrounded);
 	float MarchVertical(float startY, float endY, float x1, float x2,bool& hit);
 	float MarchHorizontal(float startX, float endX, float y1, float y2,bool& hit);

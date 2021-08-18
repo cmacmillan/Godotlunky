@@ -16,8 +16,12 @@ void Snake::_ready()
 	sprite = get_node<AnimatedSprite>("AnimatedSprite");
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body = Body();
-	body.Init(Vector2(.8, .6), Vector2(0, .2), 0, 0, this, level, Vector2(0, 0),false,1,HitboxMask::Enemy,this,nullptr);
+	body.Init(Vector2(.8, .6), Vector2(0, .2), 0, 0, this, level, Vector2(0, 0),false,1,HitboxMask::Enemy,this,nullptr,false);
 	level->RegisterHurtbox(&body);
+	hitbox.SetValues(body.aabb, 1, HitboxMask::Player, Vector2(0, 0), 0);
+	hitbox.creatorToEscape = nullptr;
+	hitbox.autoUnregister = false;
+	level->RegisterHitbox(&hitbox);
 }
 
 bool Snake::TakeDamage(int damageAmount) {
@@ -54,5 +58,5 @@ void Snake::_process(float delta)
 			isFacingRight = !isFacingRight;
 		}
 	}
-	level->RegisterHitbox(body.aabb, 1, HitboxMask::Player,Vector2(0,0),0);
+	hitbox.aabb = body.aabb;
 }

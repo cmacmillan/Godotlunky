@@ -19,7 +19,7 @@ void Bomb::_ready()
 	animator->_set_playing(true);
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body = Body();
-	body.Init(Vector2(.5f, .5f), Vector2(0, 0), .3, 3000, this, level, startVelocity,true,1,HitboxMask::Everything,nullptr,nullptr);
+	body.Init(Vector2(.5f, .5f), Vector2(0, 0), .3, 3000, this, level, startVelocity,true,1,HitboxMask::Everything,nullptr,nullptr,true);
 	level->RegisterHurtbox(&body);
 	auto audio = get_node<AudioStreamPlayer2D>("Audio");
 	audio->set_stream(level->bombTimerSFX);
@@ -46,7 +46,10 @@ void Bomb::_process(float delta)
 		damageBox.center = coord;
 		damageBox.size = Vector2(4,4);
 		level->UnregisterHurtbox(&body);
-		level->RegisterHitbox(damageBox,10,HitboxMask::Everything,Vector2(0,-800),2000);
+		explosionHitbox.SetValues(damageBox, 10, HitboxMask::Everything, Vector2(0, -800), 2000);
+		explosionHitbox.creatorToEscape = nullptr;
+		explosionHitbox.autoUnregister = true;
+		level->RegisterHitbox(&explosionHitbox);
 		for (int i = coord.x - 2; i <= coord.x + 2; i++) {
 			for (int j = coord.y - 2; j <= coord.y + 2; j++) {
 				auto block = level->GetBlock(i, j);

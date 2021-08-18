@@ -12,6 +12,15 @@
 #include "Snake.h"
 #include "Rock.h"
 
+void HitboxData::SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount)
+{
+	this->aabb = box;
+	this->damageAmount = damageAmount;
+	this->mask = mask;
+	this->knockInDirectionAmount = knockInDirectionAmount;
+	this->knockAwayAmount = knockAwayAmount;
+	this->autoUnregister = false;
+}
 
 void Level::_register_methods()
 {
@@ -102,15 +111,15 @@ void Level::RegisterHurtbox(Body* hurtbox) {
 void Level::UnregisterHurtbox(Body* hurtbox) {
 	hurtboxes->erase(hurtbox);
 }
-void Level::RegisterHitbox(SpelAABB box, int damageAmount, HitboxMask mask,Vector2 knockInDirectionAmount,float knockAwayAmount)
+
+//gotta remember to unregister before freeing
+void Level::RegisterHitbox(HitboxData* hitbox) 
 {
-	auto data = HitboxData();
-	data.aabb = box;
-	data.damageAmount = damageAmount;
-	data.mask = mask;
-	data.knockAwayAmount = knockAwayAmount;
-	data.knockInDirectionAmount = knockInDirectionAmount;
-	hitboxes->push_back(data);
+	hitboxes->insert(hitbox);
+}
+void Level::UnregisterHitbox(HitboxData* hitbox) 
+{
+	hitboxes->erase(hitbox);
 }
 
 void Level::_init()
@@ -225,7 +234,7 @@ void Level::_ready()
 	blocksXRes = 30;
 	blocksYRes = 30;
 	worldBlockSize = 100;
-	hitboxes = new std::vector<HitboxData>();
+	hitboxes = new std::set<HitboxData*>();
 	hurtboxes = new std::set<Body*>();
 	blocks = (LevelBlock*)malloc(sizeof(LevelBlock) * blocksXRes*blocksYRes);
 	drawTypes = (DrawType*)malloc(sizeof(DrawType) * blocksXRes*blocksYRes);
@@ -314,32 +323,49 @@ void Level::UpdateMeshes() {
 }
 
 std::vector<Body*>* hurtboxesToRemove = nullptr;
+std::vector<HitboxData*>* hitboxesToRemove= nullptr;
 void Level::_process(float delta)
 {
+	printf("%d", hitboxes->size());
 	if (hurtboxesToRemove == nullptr) {
 		hurtboxesToRemove = new std::vector<Body*>();
 	}
+	if (hitboxesToRemove == nullptr) {
+		hitboxesToRemove = new std::vector<HitboxData*>();
+	}
 	//process hit/hurt
-	for (auto hitbox : *hitboxes)
-	{
+	for (auto hitbox : *hitboxes){
 		for (auto body : *hurtboxes) {
-			if (((hitbox.mask & body->takeDamageMask) != 0) && hitbox.aabb.overlaps(body->aabb)) {
+			if (hitbox->creatorToEscape!=body && ((hitbox->mask & body->takeDamageMask) != 0) && hitbox->aabb.overlaps(body->aabb)) {
 				if (body->damageReciever != nullptr) {
-					if (body->damageReciever->TakeDamage(hitbox.damageAmount)) {
+					if (body->damageReciever->TakeDamage(hitbox->damageAmount)) {
 						hurtboxesToRemove->push_back(body);
 					}
 				}
-				body->vel += hitbox.knockInDirectionAmount;
-				Vector2 away = (body->aabb.center - hitbox.aabb.center).normalized();
-				body->vel += away * hitbox.knockAwayAmount;
+				body->vel += hitbox->knockInDirectionAmount;
+				Vector2 away = (body->aabb.center - hitbox->aabb.center).normalized();
+				body->vel += away * hitbox->knockAwayAmount;
+			}
+		}
+	}
+	for (auto hitbox : *hitboxes) {
+		if (hitbox->autoUnregister) {
+			hitboxesToRemove->push_back(hitbox);
+		}
+		if (hitbox->creatorToEscape != nullptr) {
+			if (!hitbox->creatorToEscape->aabb.overlaps(hitbox->aabb)) {
+				hitbox->creatorToEscape = nullptr;
 			}
 		}
 	}
 	for (auto remove : *hurtboxesToRemove) {
 		UnregisterHurtbox(remove);
 	}
+	for (auto remove : *hitboxesToRemove) {
+		UnregisterHitbox(remove);
+	}
 	hurtboxesToRemove->clear();
-	hitboxes->clear();
+	hitboxesToRemove->clear();
 }
 
 LevelBlock* Level::GetBlock(int x, int y) {

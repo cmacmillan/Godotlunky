@@ -14,6 +14,7 @@ public:
 	float lifetime = 0;
 	bool hasExploded = false;
 	Level* level;
+	HitboxData explosionHitbox;
 
 	static void _register_methods();
 	void _init();
