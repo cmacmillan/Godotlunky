@@ -59,7 +59,6 @@ void Spelunker::_ready()
 {
 	health = 4;
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body = Body();
 	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player,this,nullptr,false);
 	camera = Object::cast_to<Camera2D>(get_node("Camera2D"));
 	whipForward = get_node<Sprite>("WhipForward");
@@ -126,8 +125,13 @@ void Spelunker::_process(float delta)
 		isStunned = true;
 		stunTime = 0;
 	}
+	if (isDead) {
+		holdingLedge = false;
+		holdingRope = false;
+	}
 	if (isStunned) {
 		stunTime += delta;
+		holdingLedge = false;
 		isWhipping = false;
 		holdingRope = false;
 		animator->set_animation("Stunned");
@@ -158,6 +162,7 @@ void Spelunker::_process(float delta)
 				if (body.aabb.overlaps(i->aabb) && i->pickable) {
 					pickedBody = i;
 					i->pickedBy = this;
+					break;
 				}
 			}
 		}
@@ -228,6 +233,7 @@ void Spelunker::_process(float delta)
 	if (!isWhipping && !isStunned) {
 		if (input->is_action_just_pressed("bomb")) {
 			Bomb* bomb = Object::cast_to<Bomb>(((Ref<PackedScene>)ResourceLoader::get_singleton()->load("res://Bomb.tscn"))->instance());
+			bomb->body.moveFastHitbox.creatorToEscape = &body;
 			bomb->startVelocity = Vector2(1300, -1300);
 			if (!facingRight) {
 				bomb->startVelocity.x *= -1;
@@ -241,6 +247,7 @@ void Spelunker::_process(float delta)
 		}
 		if (input->is_action_just_pressed("rope")) {
 			Rope* rope = Object::cast_to<Rope>(((Ref<PackedScene>)ResourceLoader::get_singleton()->load("res://Rope.tscn"))->instance());
+			rope->body.moveFastHitbox.creatorToEscape = &body;
 			rope->set_position(get_position());
 			level->add_child(rope);
 		}
