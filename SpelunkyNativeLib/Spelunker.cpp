@@ -23,8 +23,12 @@ void Spelunker::_init()
 }
 
 
-bool Spelunker::TakeDamage(int damageAmount) {
+bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) {
 	if (invulTime <= 0) {
+		if (stun) {
+			isStunned = true;
+			stunTime = 0;
+		}
 		health -= damageAmount;
 		if (health < 0) {
 			Die();
@@ -411,9 +415,7 @@ void Spelunker::_process(float delta)
 			audio->set_volume_db(0.0f);
 			audio->set_stream(level->hitSFX);
 			audio->play();
-			TakeDamage(1);
-			isStunned = true;
-			stunTime = 0;
+			TakeDamage(1,true,nullptr);
 		}
 		else {
 			auto audio = get_node<AudioStreamPlayer2D>("JumpAudio");

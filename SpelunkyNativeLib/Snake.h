@@ -13,7 +13,7 @@ public:
 	HitboxData hitbox;
 	bool isFacingRight;
 
-	bool TakeDamage(int damageAmount);
+	bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove);
 
 	static void _register_methods();
 	void _init();

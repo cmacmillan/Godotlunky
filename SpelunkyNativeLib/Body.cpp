@@ -23,12 +23,17 @@ void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, 
 	process(0, false, false);
 }
 
-void Body::OnDestroy() {
+void Body::OnDestroy(vector<HitboxData*>* hitboxesToRemove) {
 	if (pickedBy!=nullptr) {
 		pickedBy->PickedBodyDestroyed();
 	}
 	if (moveFastHitboxActive) {
-		level->UnregisterHitbox(&moveFastHitbox);
+		if (hitboxesToRemove == nullptr) {
+			level->UnregisterHitbox(&moveFastHitbox);
+		}
+		else {
+			hitboxesToRemove->push_back(&moveFastHitbox);
+		}
 	}
 }
 
@@ -61,7 +66,7 @@ bool Body::process(float delta, bool applyGravity, bool applyFriction)
 	bool shouldHitboxBeActive = dealDamageWhenMovingFast && vel.length() > 1000;
 	moveFastHitbox.aabb = aabb;
 	if (shouldHitboxBeActive && !moveFastHitboxActive) {
-		moveFastHitbox.SetValues(aabb, 1, HitboxMask::Everything, Vector2(0, 0), 0);
+		moveFastHitbox.SetValues(aabb, 1, HitboxMask::Everything, Vector2(0, 0), 0,true);
 		level->RegisterHitbox(&moveFastHitbox);
 		moveFastHitboxActive = true;
 	}

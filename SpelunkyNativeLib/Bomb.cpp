@@ -42,11 +42,11 @@ void Bomb::_process(float delta)
 		hasExploded = true;
 		Vector2 coord = level->WorldToGrid(get_position());
 		SpelAABB damageBox = SpelAABB();
-		body.OnDestroy();
+		body.OnDestroy(nullptr);
 		damageBox.center = coord;
 		damageBox.size = Vector2(4,4);
 		level->UnregisterHurtbox(&body);
-		explosionHitbox.SetValues(damageBox, 10, HitboxMask::Everything, Vector2(0, -800), 2000);
+		explosionHitbox.SetValues(damageBox, 10, HitboxMask::Everything, Vector2(0, -800), 2000,true);
 		explosionHitbox.creatorToEscape = nullptr;
 		explosionHitbox.autoUnregister = true;
 		level->RegisterHitbox(&explosionHitbox);

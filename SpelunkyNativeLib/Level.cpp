@@ -12,7 +12,7 @@
 #include "Snake.h"
 #include "Rock.h"
 
-void HitboxData::SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount)
+void HitboxData::SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount,bool stun)
 {
 	this->aabb = box;
 	this->damageAmount = damageAmount;
@@ -20,6 +20,7 @@ void HitboxData::SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vect
 	this->knockInDirectionAmount = knockInDirectionAmount;
 	this->knockAwayAmount = knockAwayAmount;
 	this->autoUnregister = false;
+	this->stun = stun;
 }
 
 void Level::_register_methods()
@@ -326,7 +327,6 @@ std::vector<Body*>* hurtboxesToRemove = nullptr;
 std::vector<HitboxData*>* hitboxesToRemove= nullptr;
 void Level::_process(float delta)
 {
-	printf("%d", hitboxes->size());
 	if (hurtboxesToRemove == nullptr) {
 		hurtboxesToRemove = new std::vector<Body*>();
 	}
@@ -338,7 +338,7 @@ void Level::_process(float delta)
 		for (auto body : *hurtboxes) {
 			if (hitbox->creatorToEscape!=body && ((hitbox->mask & body->takeDamageMask) != 0) && hitbox->aabb.overlaps(body->aabb)) {
 				if (body->damageReciever != nullptr) {
-					if (body->damageReciever->TakeDamage(hitbox->damageAmount)) {
+					if (body->damageReciever->TakeDamage(hitbox->damageAmount,hitbox->stun,hitboxesToRemove)) {
 						hurtboxesToRemove->push_back(body);
 					}
 				}

@@ -35,7 +35,7 @@ public:
 	float weight;
 	Vector2 endPos;//basically just out
 	Vector2 normal;//basically just out
-	void OnDestroy();
+	void OnDestroy(vector<HitboxData*>* hitboxesToRemove);
 	void Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level,Vector2 initialVelocity,bool pickable, float weight,HitboxMask mask,IDamageReciever* damageReciever,IThrowAction* throwAction,bool dealDamageWhenMovingFast);
 	bool process(float delta, bool applyGravity, bool applyFriction);
 };

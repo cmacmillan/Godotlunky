@@ -56,13 +56,14 @@ struct HitboxData {
 	Vector2 knockInDirectionAmount;
 	float knockAwayAmount;
 	Body* creatorToEscape;
+	bool stun;
 	bool autoUnregister;
-	void SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount);
+	void SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount,bool stun);
 };
 
 class IDamageReciever {
 public:
-	virtual bool TakeDamage(int damageAmount) { return false; }
+	virtual bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) { return false; }
 };
 
 class Level : public Node2D

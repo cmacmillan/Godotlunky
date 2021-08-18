@@ -18,15 +18,20 @@ void Snake::_ready()
 	body = Body();
 	body.Init(Vector2(.8, .6), Vector2(0, .2), 0, 0, this, level, Vector2(0, 0),false,1,HitboxMask::Enemy,this,nullptr,false);
 	level->RegisterHurtbox(&body);
-	hitbox.SetValues(body.aabb, 1, HitboxMask::Player, Vector2(0, 0), 0);
+	hitbox.SetValues(body.aabb, 1, HitboxMask::Player, Vector2(0, 0), 0,false);
 	hitbox.creatorToEscape = nullptr;
 	hitbox.autoUnregister = false;
 	level->RegisterHitbox(&hitbox);
 }
 
-bool Snake::TakeDamage(int damageAmount) {
+bool Snake::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) {
 	//no health so just die
-	body.OnDestroy();
+	if (hitboxesToRemove != nullptr) {
+		hitboxesToRemove->push_back(&hitbox);
+	} else {
+		level->UnregisterHitbox(&hitbox);
+	}
+	body.OnDestroy(hitboxesToRemove);
 	queue_free();
 	return true;
 }
