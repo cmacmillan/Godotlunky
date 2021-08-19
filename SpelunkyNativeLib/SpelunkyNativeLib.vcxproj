@@ -143,7 +143,6 @@
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Level.cpp" />
-    <ClCompile Include="OmniTemplate.cpp" />
     <ClCompile Include="Rock.cpp">
       <SubType>
       </SubType>
@@ -158,7 +157,10 @@
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Level.h" />
-    <ClInclude Include="OmniTemplate.h" />
+    <ClInclude Include="Rock.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Rope.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="Spelunker.h" />

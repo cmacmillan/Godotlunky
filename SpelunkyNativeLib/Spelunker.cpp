@@ -192,6 +192,10 @@ void Spelunker::_process(float delta)
 		}
 		else 
 		{
+			whipHitbox.SetValues(body.aabb, 1, HitboxMask::Enemy,Vector2(100*(facingRight?1:-1),-50) , 0, true);
+			whipHitbox.creatorToEscape = nullptr;
+			whipHitbox.autoUnregister = false;
+			level->RegisterHitbox(&whipHitbox);
 			isWhipping = true;
 			playedWhipSound = false;
 			animator->set_animation("Whip");
@@ -203,6 +207,16 @@ void Spelunker::_process(float delta)
 	}
 	whipTime += delta;
 	if (isWhipping) {
+		if (whipTime < .3f) 
+		{
+			whipHitbox.aabb.center = body.aabb.center+Vector2(.9*(facingRight?-1:1),-.7);
+			whipHitbox.aabb.size = Vector2(1, 1);
+		}
+		else 
+		{
+			whipHitbox.aabb.center = body.aabb.center+Vector2(.9*(facingRight?1:-1),.1);
+			whipHitbox.aabb.size = Vector2(1.3, .5);
+		}
 		if (whipTime < .1) {
 			whipBack->set_visible(false);
 			whipForward->set_visible(false);
@@ -222,7 +236,9 @@ void Spelunker::_process(float delta)
 			whipBack->set_visible(false);
 			whipForward->set_visible(true);
 		}
-		else {
+		else 
+		{
+			level->UnregisterHitbox(&whipHitbox);
 			isWhipping = false;
 		}
 	}

@@ -38,6 +38,7 @@ public:
 	bool playedWhipSound;
 	float whipTime;
 	Body* pickedBody = nullptr;
+	HitboxData whipHitbox;
 
 	Vector2 GetPickPosition();
 	void PickedBodyDestroyed();

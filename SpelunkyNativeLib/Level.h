@@ -66,6 +66,8 @@ public:
 	virtual bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) { return false; }
 };
 
+#define showDebugHitboxes
+
 class Level : public Node2D
 {
 	GODOT_CLASS(Level, Node2D);
@@ -91,6 +93,12 @@ public:
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;
 
+#ifdef showDebugHitboxes
+	RID GetRid(VisualServer* vs);
+	std::vector<RID>* allRids;
+	std::vector<RID>* freeRids;
+#endif
+
 	LevelBlock* blocks;
 	DrawType* drawTypes;
 	int blocksXRes;
@@ -106,6 +114,8 @@ public:
 	LevelBlock* GetBlock(int x, int y);
 	Vector2 WorldToGrid(Vector2 v);
 	Vector2 GridToWorld(Vector2 v);
+	Vector2 WorldToGridSize(Vector2 v);
+	Vector2 GridToWorldSize(Vector2 v);
 	void RegisterHurtbox(Body* hurtbox);
 	void UnregisterHurtbox(Body* hurtbox);
 	void RegisterHitbox(HitboxData* hitbox);

@@ -132,6 +132,13 @@ Vector2 Level::WorldToGrid(Vector2 v)
 	return (v - this->get_position())/(worldBlockSize);
 }
 
+Vector2 Level::WorldToGridSize(Vector2 v) 
+{
+	return v / worldBlockSize;
+}
+Vector2 Level::GridToWorldSize(Vector2 v) {
+	return (v * worldBlockSize);
+}
 Vector2 Level::GridToWorld(Vector2 v) 
 {
 	return (v*worldBlockSize)+this->get_position();
@@ -235,6 +242,11 @@ void Level::_ready()
 	blocksXRes = 30;
 	blocksYRes = 30;
 	worldBlockSize = 100;
+#ifdef showDebugHitboxes
+	allRids = new	std::vector<RID>();
+	freeRids = new std::vector<RID>();
+#endif // showDebugHitboxes
+
 	hitboxes = new std::set<HitboxData*>();
 	hurtboxes = new std::set<Body*>();
 	blocks = (LevelBlock*)malloc(sizeof(LevelBlock) * blocksXRes*blocksYRes);
@@ -323,6 +335,23 @@ void Level::UpdateMeshes() {
 	}
 }
 
+
+#ifdef showDebugHitboxes
+RID Level::GetRid(VisualServer* vs) {
+	if (freeRids->size() == 0) {
+		auto newRid = vs->canvas_item_create();
+		allRids->push_back(newRid);
+		return newRid;
+	}
+	else 
+	{
+		auto rid = freeRids->back();
+		freeRids->pop_back();
+		return rid;
+	}
+}
+#endif
+
 std::vector<Body*>* hurtboxesToRemove = nullptr;
 std::vector<HitboxData*>* hitboxesToRemove= nullptr;
 void Level::_process(float delta)
@@ -333,6 +362,35 @@ void Level::_process(float delta)
 	if (hitboxesToRemove == nullptr) {
 		hitboxesToRemove = new std::vector<HitboxData*>();
 	}
+#ifdef showDebugHitboxes
+	auto vs= VisualServer::get_singleton();
+	for (auto i : *allRids) {
+		vs->canvas_item_clear(i);
+	}
+	for (auto hitbox : *hitboxes) {
+		auto rid = GetRid(vs);
+		Rect2 r;
+		vs->canvas_item_set_parent(rid, get_canvas_item());
+		auto size = GridToWorldSize(hitbox->aabb.size);
+		r.set_position(GridToWorld(hitbox->aabb.center)-size/2);
+		r.set_size(size);
+		vs->canvas_item_add_rect(rid,r,Color(1,0,0.4));
+	}
+	for (auto hurtbox: *hurtboxes) {
+		auto rid = GetRid(vs);
+		Rect2 r;
+		vs->canvas_item_set_parent(rid, get_canvas_item());
+		auto size = GridToWorldSize(hurtbox->aabb.size);
+		r.set_position(GridToWorld(hurtbox->aabb.center)-size/2);
+		r.set_size(size);
+		vs->canvas_item_add_rect(rid,r,Color(0,0,1,.4));
+	}
+	freeRids->clear();
+	for (auto i : *allRids) {
+		freeRids->push_back(i);
+	}
+#endif // showDebugHitboxes
+
 	//process hit/hurt
 	for (auto hitbox : *hitboxes){
 		for (auto body : *hurtboxes) {
@@ -383,6 +441,10 @@ Level::Level()
 
 Level::~Level()
 {
+#ifdef showDebugHitboxes
+	delete allRids;
+	delete freeRids;
+#endif // showDebugHitboxes
 	_CSTDLIB_::free(blocks);
 	_CSTDLIB_::free(drawTypes);
 	delete hitboxes;
