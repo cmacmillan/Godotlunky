@@ -5,6 +5,7 @@
 #include "Rope.h"
 #include "Snake.h"
 #include "Rock.h"
+#include "Shotgun.h"
 
 extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
 	godot::Godot::gdnative_init(o);
@@ -23,4 +24,5 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 	godot::register_class<Rope>();
 	godot::register_class<Snake>();
 	godot::register_class<Rock>();
+	godot::register_class<Shotgun>();
 }

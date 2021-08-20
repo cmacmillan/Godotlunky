@@ -11,7 +11,7 @@
 #include <AudioStream.hpp>
 #include "Snake.h"
 #include "Rock.h"
-
+#include "Shotgun.h"
 
 void HitboxData::InitOrClearBodiesAlreadyDamagedList() {
 	if (bodiesAlreadyDamaged == nullptr) {
@@ -57,13 +57,14 @@ void Level::_register_methods()
 
 	register_property("snakeScene", &Level::snakeScene, Ref<PackedScene>());
 	register_property("rockScene", &Level::rockScene, Ref<PackedScene>());
+	register_property("shotgunScene", &Level::shotgunScene, Ref<PackedScene>());
 }
 
 const string layout1 = 
 "XXXXXXXXXXXXXXXXXXXXXX\n\
  X00000000000000000000X\n\
  X00XXX00X000000000000X\n\
- X00XXX000000000S00000X\n\
+ X00XXX000000000S00G00X\n\
  X00XXX000000000000000X\n\
  X00XXX000000000000000X\n\
  X00000S0X000000000000X\n\
@@ -83,7 +84,14 @@ void Level::CopyLayoutIntoBlocks(string layout,int x, int y)
 		int xCurr = x;
 		int len = line.length();
 		for (int i = 0; i < len; i++) {
-			if (line[i] == 'R') {
+			if (line[i] == 'G') {
+				auto shotgun =  cast_to<Shotgun>(shotgunScene->instance());
+				shotgun->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
+				get_node("/root/GameScene/SpawnRoot")->add_child(shotgun);
+				GetBlock(xCurr, y)->present = false;
+				xCurr++;
+			}
+			else if (line[i] == 'R') {
 				auto rock =  cast_to<Rock>(rockScene->instance());
 				rock->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
 				get_node("/root/GameScene/SpawnRoot")->add_child(rock);

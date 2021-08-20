@@ -94,6 +94,7 @@ public:
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;
+	Ref<PackedScene> shotgunScene;
 
 #ifdef showDebugHitboxes
 	RID GetRid(VisualServer* vs);
