@@ -58,6 +58,8 @@ struct HitboxData {
 	Body* creatorToEscape;
 	bool stun;
 	bool autoUnregister;
+	std::vector<Body*>* bodiesAlreadyDamaged=nullptr;
+	void InitOrClearBodiesAlreadyDamagedList();
 	void SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount,bool stun);
 };
 

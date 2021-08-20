@@ -192,7 +192,8 @@ void Spelunker::_process(float delta)
 		}
 		else 
 		{
-			whipHitbox.SetValues(body.aabb, 1, HitboxMask::Enemy,Vector2(100*(facingRight?1:-1),-50) , 0, true);
+			whipHitbox.SetValues(body.aabb, 1, HitboxMask::Enemy,Vector2(1000*(facingRight?1:-1),-500) , 0, true);
+			whipHitbox.InitOrClearBodiesAlreadyDamagedList();
 			whipHitbox.creatorToEscape = nullptr;
 			whipHitbox.autoUnregister = false;
 			level->RegisterHitbox(&whipHitbox);
@@ -468,5 +469,8 @@ Spelunker::Spelunker() {
 	printf("const");
 }
 Spelunker::~Spelunker() {
+	if (whipHitbox.bodiesAlreadyDamaged != nullptr) {
+		delete whipHitbox.bodiesAlreadyDamaged;
+	}
 	printf("dest");
 }
