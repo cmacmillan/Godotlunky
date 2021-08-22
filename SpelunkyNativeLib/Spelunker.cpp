@@ -121,6 +121,8 @@ void Spelunker::_process(float delta)
 		set_position(level->GridToWorld(ledgeCoords));
 	}
 
+	float accelSpeed=20000;
+
 	auto input = Input::get_singleton();
 	bool isRunning = false;
 	bool isIdle = true;
@@ -367,7 +369,7 @@ void Spelunker::_process(float delta)
 		if (!holdingRope) {
 			if (isCrouching && body.isGrounded)
 			{
-				body.vel.x = -walkSpeed / 2;
+				body.vel.x = move_toward(body.vel.x,-walkSpeed / 2,delta*accelSpeed);
 				if (!isWhipping) {
 					animator->set_speed_scale(2);
 					animator->set_animation("Crawl");
@@ -375,7 +377,8 @@ void Spelunker::_process(float delta)
 			}
 			else
 			{
-				body.vel.x = isRunning ? -walkSpeed * 2 : -walkSpeed;
+				float velTarget = isRunning ? -walkSpeed * 2 : -walkSpeed;
+				body.vel.x = move_toward(body.vel.x, velTarget, delta * accelSpeed);
 				if (body.isGrounded && !isWhipping) {
 					animator->set_animation("Walk");
 					if (!isRunning)
@@ -395,7 +398,7 @@ void Spelunker::_process(float delta)
 			isIdle = false;
 			if (isCrouching && body.isGrounded)
 			{
-				body.vel.x = walkSpeed / 2;
+				body.vel.x = move_toward(body.vel.x, walkSpeed / 2, delta*accelSpeed);
 				if (!isWhipping) {
 					animator->set_speed_scale(4);
 					animator->set_animation("Crawl");
@@ -403,7 +406,8 @@ void Spelunker::_process(float delta)
 			}
 			else
 			{
-				body.vel.x = isRunning ? walkSpeed * 2 : walkSpeed;
+				float velTarget = isRunning ? walkSpeed * 2 : walkSpeed;
+				body.vel.x = move_toward(body.vel.x, velTarget, delta * accelSpeed);
 				if (body.isGrounded && !isWhipping) {
 					animator->set_animation("Walk");
 					if (!isRunning)
@@ -416,8 +420,8 @@ void Spelunker::_process(float delta)
 	} 
 	else if (!holdingRope && !isStunned)
 	{
-		body.vel.x = 0;
-		if (body.isGrounded && isIdle &&!isWhipping) {
+		body.vel.x = move_toward(body.vel.x, 0, delta * accelSpeed);
+		if (body.isGrounded && isIdle && !isWhipping) {
 			if (input->is_action_pressed("lookup")) {
 				timeLookingUp += delta;
 				didSetLook = true;
@@ -470,8 +474,10 @@ void Spelunker::_process(float delta)
 	}
 	{
 		auto coord = level->WorldToGrid(get_position());
+		float footHeight = godot::Math::fmod((coord.y + body.aabb.center.y + body.aabb.size.y / 2),1.0f);
 		auto block = level->GetBlock(coord.x, coord.y);
-		if (block->hasSpikes && body.vel.y>0 && !isDead) {
+		if (block->hasSpikes && body.vel.y>0 && !isDead && footHeight>.5f) {
+			printf("%f", footHeight);
 			auto audio = get_node<AudioStreamPlayer2D>("JumpAudio");
 			audio->set_volume_db(0.0f);
 			audio->set_stream(level->skewerSFX);

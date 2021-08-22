@@ -70,7 +70,7 @@ public:
 	virtual bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) { return false; }
 };
 
-#define showDebugHitboxes
+//#define showDebugHitboxes
 
 class Level : public Node2D
 {

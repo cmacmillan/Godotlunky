@@ -46,6 +46,7 @@ void Shotgun::DoThrowAction()
 			float rand = Random()*2 - 1;
 			bullet->body.vel.y = rand * 100;
 		}
+		body.pickedBy->GetBody()->vel += Vector2(3000 * (body.pickedBy->GetBody()->isFacingRight ? -1 : 1), -300);
 		cooldownTime = 1;
 		auto audio = get_node<AudioStreamPlayer2D>("AudioSource");
 		audio->set_volume_db(0.0f);

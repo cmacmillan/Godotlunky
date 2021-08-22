@@ -142,12 +142,21 @@
   <ItemGroup>
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="Bullet.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="ObjectMaker.cpp" />
     <ClCompile Include="Rock.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="Rope.cpp" />
+    <ClCompile Include="Shotgun.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Spelunker.cpp" />
     <ClCompile Include="SpelunkyNativeLib.cpp" />
@@ -155,13 +164,22 @@
   <ItemGroup>
     <ClInclude Include="Body.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="Bullet.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Common.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="ObjectMaker.h" />
     <ClInclude Include="Rock.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="Rope.h" />
+    <ClInclude Include="Shotgun.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Snake.h" />
     <ClInclude Include="Spelunker.h" />
   </ItemGroup>
