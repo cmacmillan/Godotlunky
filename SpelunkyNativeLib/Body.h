@@ -7,6 +7,7 @@ class IPicker {
 public:
 	virtual Vector2 GetPickPosition()=0;
 	virtual void PickedBodyDestroyed()=0;
+	virtual Body* GetBody()=0;
 };
 class IThrowAction {
 public:
@@ -32,6 +33,7 @@ public:
 	bool isGrounded;
 	bool pickable;
 	bool dealDamageWhenMovingFast;
+	bool isFacingRight;
 	float weight;
 	Vector2 endPos;//basically just out
 	Vector2 normal;//basically just out

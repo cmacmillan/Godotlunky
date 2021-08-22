@@ -20,6 +20,7 @@ void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, 
 	this->dealDamageWhenMovingFast = dealDamageWhenMovingFast;
 	this->pickedBy = nullptr;
 	this->moveFastHitboxActive = false;
+	this->isFacingRight = false;
 	process(0, false, false);
 }
 
@@ -63,7 +64,7 @@ bool Body::process(float delta, bool applyGravity, bool applyFriction)
 	if (pickedBy != nullptr) {
 		vel = Vector2(0,0);
 	}
-	bool shouldHitboxBeActive = dealDamageWhenMovingFast && vel.length() > 1000;
+	bool shouldHitboxBeActive = dealDamageWhenMovingFast && vel.length() > 1200;
 	moveFastHitbox.aabb = aabb;
 	if (shouldHitboxBeActive && !moveFastHitboxActive) {
 		moveFastHitbox.SetValues(aabb, 1, HitboxMask::Everything, Vector2(0, 0), 0,true);

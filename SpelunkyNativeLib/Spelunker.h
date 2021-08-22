@@ -22,7 +22,6 @@ public:
 	bool holdingLedge = false;
 	bool holdingRope= false;
 	float grabRopeDisableTime = 0;
-	bool facingRight = true;
 	float timeLookingUp = 0;
 	float timeLookingDown = 0;
 	bool wasGrounded;
@@ -40,6 +39,7 @@ public:
 	Body* pickedBody = nullptr;
 	HitboxData whipHitbox;
 
+	Body* GetBody();
 	Vector2 GetPickPosition();
 	void PickedBodyDestroyed();
 

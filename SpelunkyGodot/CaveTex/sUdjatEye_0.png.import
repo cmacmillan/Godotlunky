@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/sUdjatEye_0.png-f378e11fe0e71f5d09106fb3e48ab083.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://CaveTex/sUdjatEye_0.png"
+dest_files=[ "res://.import/sUdjatEye_0.png-f378e11fe0e71f5d09106fb3e48ab083.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

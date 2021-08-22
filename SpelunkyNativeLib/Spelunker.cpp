@@ -7,6 +7,7 @@
 #include <ResourceLoader.hpp>
 #include <AudioStreamPlayer2D.hpp>
 #include <AudioStream.hpp>
+#include "ObjectMaker.h"
 using namespace godot::Math;
 
 void Spelunker::_register_methods()
@@ -30,7 +31,8 @@ bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitbo
 			stunTime = 0;
 		}
 		health -= damageAmount;
-		if (health < 0) {
+		if (health <= 0) {
+			health = 0;
 			Die();
 			return true;
 		}
@@ -45,14 +47,21 @@ void Spelunker::Die() {
 		isDead = true;
 		isStunned = true;
 		stunTime = -10000;
+		if (pickedBody != nullptr) {
+			pickedBody->pickedBy = nullptr;
+		}
+		pickedBody = nullptr;
 	}
 }
 
 void Spelunker::PickedBodyDestroyed() {
 	pickedBody = nullptr;
 }
+Body* Spelunker::GetBody() {
+	return &body;
+}
 Vector2 Spelunker::GetPickPosition() {
-	return get_position();
+	return get_position()+Vector2(0,20);
 }
 
 void Spelunker::_ready()
@@ -66,6 +75,7 @@ void Spelunker::_ready()
 	isWhipping = false;
 	isDead = false;
 	isStunned = false;
+	body.isFacingRight = true;
 	pickedBody = nullptr;
 	level->RegisterHurtbox(&body);
 }
@@ -88,9 +98,9 @@ void Spelunker::_process(float delta)
 	}
 	if (!holdingLedge) {
 		if (body.process(delta, !holdingLedge && !holdingRope, true)) {
-			Vector2 coordsAhead = body.endPos + Vector2((facingRight ? 1 : -1), 0);
+			Vector2 coordsAhead = body.endPos + Vector2((body.isFacingRight? 1 : -1), 0);
 			Vector2 coordsUp = coordsAhead - Vector2(0, 1);
-			if (!isStunned&&!isWhipping&&body.normal.x == (facingRight ? -1 : 1) && body.vel.y > 0 && level->GetBlock(coordsAhead.x,coordsAhead.y)->present && !level->GetBlock(coordsUp.x,coordsUp.y)->present && godot::Math::fmod(body.endPos.y,1)<.3f)
+			if (!isStunned&&!isWhipping&&body.normal.x == (body.isFacingRight? -1 : 1) && body.vel.y > 0 && level->GetBlock(coordsAhead.x,coordsAhead.y)->present && !level->GetBlock(coordsUp.x,coordsUp.y)->present && godot::Math::fmod(body.endPos.y,1)<.3f)
 			{
 				grabbedLedgeBlock = coordsAhead;
 				holdingLedge = true;
@@ -136,7 +146,7 @@ void Spelunker::_process(float delta)
 		holdingRope = false;
 		animator->set_animation("Stunned");
 		get_node<AnimatedSprite>("StunBirds")->set_visible(!isDead);
-		if (stunTime > 1.5) {
+		if (stunTime > 1.5 &&!isDead) {
 			isStunned = false;
 		}
 	}
@@ -144,7 +154,7 @@ void Spelunker::_process(float delta)
 	{
 		get_node<AnimatedSprite>("StunBirds")->set_visible(false);
 	}
-	if (facingRight) {
+	if (body.isFacingRight) {
 		whipForward->set_position(Vector2(100,30));
 		whipBack->set_position(Vector2(-100,-50));
 		whipForward->set_flip_h(false);
@@ -167,6 +177,7 @@ void Spelunker::_process(float delta)
 			}
 		}
 		else {
+			pickedBody->moveFastHitbox.creatorToEscape = &body;
 			pickedBody->pickedBy = nullptr;
 			pickedBody = nullptr;
 		}
@@ -176,11 +187,11 @@ void Spelunker::_process(float delta)
 			if (pickedBody->throwAction==nullptr) {
 				pickedBody->moveFastHitbox.creatorToEscape = &body;
 				pickedBody->vel = Vector2(1300, -1300);
-				if (!facingRight) {
+				if (!body.isFacingRight) {
 					pickedBody->vel.x *= -1;
 				}
 				if (isCrouching) {
-					pickedBody->vel = Vector2(400 * (facingRight ? 1 : -1), 0);
+					pickedBody->vel = Vector2(400 * (body.isFacingRight? 1 : -1), 0);
 				}
 				pickedBody->pickedBy = nullptr;
 				pickedBody = nullptr;
@@ -192,8 +203,9 @@ void Spelunker::_process(float delta)
 		}
 		else 
 		{
-			whipHitbox.SetValues(body.aabb, 1, HitboxMask::Enemy,Vector2(1000*(facingRight?1:-1),-500) , 0, true);
+			whipHitbox.SetValues(body.aabb, 1, HitboxMask::Enemy,Vector2(1000*(body.isFacingRight?1:-1),-500) , 0, true);
 			whipHitbox.InitOrClearBodiesAlreadyDamagedList();
+			whipHitbox.assignCreatorToEscapeToMoveFastHitbox = &body;
 			whipHitbox.creatorToEscape = nullptr;
 			whipHitbox.autoUnregister = false;
 			level->RegisterHitbox(&whipHitbox);
@@ -206,16 +218,24 @@ void Spelunker::_process(float delta)
 			whipTime = 0;
 		}
 	}
+	if (pickedBody != nullptr) {
+		pickedBody->isFacingRight = body.isFacingRight;
+	}
+	if (isStunned || isDead) {
+		level->UnregisterHitbox(&whipHitbox);
+		whipTime = 10;
+		isWhipping = false;
+	}
 	whipTime += delta;
 	if (isWhipping) {
 		if (whipTime < .3f) 
 		{
-			whipHitbox.aabb.center = body.aabb.center+Vector2(.9*(facingRight?-1:1),-.7);
+			whipHitbox.aabb.center = body.aabb.center+Vector2(.9*(body.isFacingRight?-1:1),-.7);
 			whipHitbox.aabb.size = Vector2(1, 1);
 		}
 		else 
 		{
-			whipHitbox.aabb.center = body.aabb.center+Vector2(.9*(facingRight?1:-1),.1);
+			whipHitbox.aabb.center = body.aabb.center+Vector2(.9*(body.isFacingRight?1:-1),.1);
 			whipHitbox.aabb.size = Vector2(1.3, .5);
 		}
 		if (whipTime < .1) {
@@ -249,21 +269,21 @@ void Spelunker::_process(float delta)
 	}
 	if (!isWhipping && !isStunned) {
 		if (input->is_action_just_pressed("bomb")) {
-			Bomb* bomb = Object::cast_to<Bomb>(((Ref<PackedScene>)ResourceLoader::get_singleton()->load("res://Bomb.tscn"))->instance());
+			Bomb* bomb = SpawnBomb(level);
 			bomb->body.moveFastHitbox.creatorToEscape = &body;
 			bomb->startVelocity = Vector2(1300, -1300);
-			if (!facingRight) {
+			if (!body.isFacingRight) {
 				bomb->startVelocity.x *= -1;
 			}
 			if (isCrouching) {
-				bomb->startVelocity = Vector2(400 * (facingRight ? 1 : -1), 0);
+				bomb->startVelocity = Vector2(400 * (body.isFacingRight? 1 : -1), 0);
 			}
 			//bomb->vel += vel;
 			bomb->set_position(get_position());
 			get_node("/root/GameScene/SpawnRoot")->add_child(bomb);
 		}
 		if (input->is_action_just_pressed("rope")) {
-			Rope* rope = Object::cast_to<Rope>(((Ref<PackedScene>)ResourceLoader::get_singleton()->load("res://Rope.tscn"))->instance());
+			Rope* rope = SpawnRope(level);
 			rope->body.moveFastHitbox.creatorToEscape = &body;
 			rope->set_position(get_position());
 			level->add_child(rope);
@@ -342,7 +362,7 @@ void Spelunker::_process(float delta)
 		isIdle = false;
 		if (!isWhipping) {
 			animator->set_flip_h(true);
-			facingRight = false;
+			body.isFacingRight= false;
 		}
 		if (!holdingRope) {
 			if (isCrouching && body.isGrounded)
@@ -369,7 +389,7 @@ void Spelunker::_process(float delta)
 	else if (input->is_action_pressed("right")&&!holdingLedge && !isStunned) {
 		if (!isWhipping) {
 			animator->set_flip_h(false);
-			facingRight = true;
+			body.isFacingRight = true;
 		}
 		if (!holdingRope) {
 			isIdle = false;

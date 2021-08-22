@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/sSilverTrophy_0.png-1d43734f810d1f251aa3ed6a457e7120.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://CaveTex/sSilverTrophy_0.png"
+dest_files=[ "res://.import/sSilverTrophy_0.png-1d43734f810d1f251aa3ed6a457e7120.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

@@ -10,6 +10,7 @@
 #include <AudioStreamPlayer2D.hpp>
 #include <vector>
 #include <set>
+
 enum DrawType {
 	Normal = 0,
 	Top = 1,
@@ -56,6 +57,7 @@ struct HitboxData {
 	Vector2 knockInDirectionAmount;
 	float knockAwayAmount;
 	Body* creatorToEscape;
+	Body* assignCreatorToEscapeToMoveFastHitbox;
 	bool stun;
 	bool autoUnregister;
 	std::vector<Body*>* bodiesAlreadyDamaged=nullptr;
@@ -91,10 +93,14 @@ public:
 	Ref<AudioStream> whipSFX;
 	Ref<AudioStream> hitSFX;
 	Ref<AudioStream> skewerSFX;
+	Ref<AudioStream> shotgunSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;
 	Ref<PackedScene> shotgunScene;
+	Ref<PackedScene> bulletScene;
+	Ref<PackedScene> ropeScene;
+	Ref<PackedScene> bombScene;
 
 #ifdef showDebugHitboxes
 	RID GetRid(VisualServer* vs);
@@ -114,6 +120,7 @@ public:
 	void _init();
 	void _ready();
 	void _process(float delta);
+
 	LevelBlock* GetBlock(int x, int y);
 	Vector2 WorldToGrid(Vector2 v);
 	Vector2 GridToWorld(Vector2 v);

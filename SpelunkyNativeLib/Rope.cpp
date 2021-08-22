@@ -71,7 +71,7 @@ void Rope::_process(float delta)
 	}
 }
 void Rope::SpawnSegment(float yOffset) {
-	Node2D* rope = Object::cast_to<Node2D>(((Ref<PackedScene>)ResourceLoader::get_singleton()->load("res://RopePiece.tscn"))->instance());
+	Node2D* rope = Object::cast_to<Node2D>(((Ref<PackedScene>)ResourceLoader::get_singleton()->load("res://Scenes/RopePiece.tscn"))->instance());
 	rope->set_position(level->GridToWorld(Vector2(baseX + .5, baseY+.2 +yOffset + currSegmentIndex)));
 	level->add_child(rope);
 }

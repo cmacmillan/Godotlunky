@@ -11,7 +11,6 @@ public:
 	Level* level;
 	Body body;
 	HitboxData hitbox;
-	bool isFacingRight;
 
 	bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove);
 

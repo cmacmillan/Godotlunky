@@ -12,6 +12,7 @@
 #include "Snake.h"
 #include "Rock.h"
 #include "Shotgun.h"
+#include "ObjectMaker.h"
 
 void HitboxData::InitOrClearBodiesAlreadyDamagedList() {
 	if (bodiesAlreadyDamaged == nullptr) {
@@ -30,6 +31,7 @@ void HitboxData::SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vect
 	this->knockAwayAmount = knockAwayAmount;
 	this->autoUnregister = false;
 	this->stun = stun;
+	this->assignCreatorToEscapeToMoveFastHitbox = nullptr;
 }
 
 void Level::_register_methods()
@@ -54,10 +56,14 @@ void Level::_register_methods()
 	register_property("whipSFX", &Level::whipSFX, Ref<AudioStream>());
 	register_property("hitSFX", &Level::hitSFX, Ref<AudioStream>());
 	register_property("skewerSFX", &Level::skewerSFX, Ref<AudioStream>());
+	register_property("shotgunSFX", &Level::shotgunSFX, Ref<AudioStream>());
 
 	register_property("snakeScene", &Level::snakeScene, Ref<PackedScene>());
 	register_property("rockScene", &Level::rockScene, Ref<PackedScene>());
 	register_property("shotgunScene", &Level::shotgunScene, Ref<PackedScene>());
+	register_property("bulletScene", &Level::bulletScene, Ref<PackedScene>());
+	register_property("ropeScene", &Level::ropeScene, Ref<PackedScene>());
+	register_property("bombScene", &Level::bombScene, Ref<PackedScene>());
 }
 
 const string layout1 = 
@@ -76,7 +82,7 @@ const string layout1 =
 //this should probably not be global
 ////////////////////////////////
 
-void Level::CopyLayoutIntoBlocks(string layout,int x, int y) 
+void Level::CopyLayoutIntoBlocks(string layout, int x, int y)
 {
 	std::istringstream iss(layout);
 	for (std::string line; std::getline(iss, line); )
@@ -85,21 +91,21 @@ void Level::CopyLayoutIntoBlocks(string layout,int x, int y)
 		int len = line.length();
 		for (int i = 0; i < len; i++) {
 			if (line[i] == 'G') {
-				auto shotgun =  cast_to<Shotgun>(shotgunScene->instance());
+				auto shotgun = SpawnShotgun(this);
 				shotgun->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
 				get_node("/root/GameScene/SpawnRoot")->add_child(shotgun);
 				GetBlock(xCurr, y)->present = false;
 				xCurr++;
 			}
 			else if (line[i] == 'R') {
-				auto rock =  cast_to<Rock>(rockScene->instance());
+				auto rock = SpawnRock(this);
 				rock->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
 				get_node("/root/GameScene/SpawnRoot")->add_child(rock);
 				GetBlock(xCurr, y)->present = false;
 				xCurr++;
 			}
 			else if (line[i] == 'S') {
-				auto snake= cast_to<Snake>(snakeScene->instance());
+				auto snake = SpawnSnake(this);
 				snake->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
 				this->add_child(snake);
 				GetBlock(xCurr, y)->present = false;
@@ -407,7 +413,16 @@ void Level::_process(float delta)
 		freeRids->push_back(i);
 	}
 #endif // showDebugHitboxes
-
+	for (auto hitbox : *hitboxes) {
+		if (hitbox->autoUnregister) {
+			hitboxesToRemove->push_back(hitbox);
+		}
+		if (hitbox->creatorToEscape != nullptr) {
+			if (!hitbox->creatorToEscape->aabb.overlaps(hitbox->aabb)) {
+				hitbox->creatorToEscape = nullptr;
+			}
+		}
+	}
 	//process hit/hurt
 	for (auto hitbox : *hitboxes){
 		for (auto body : *hurtboxes) {
@@ -430,20 +445,13 @@ void Level::_process(float delta)
 							hurtboxesToRemove->push_back(body);
 						}
 					}
+					if (hitbox->assignCreatorToEscapeToMoveFastHitbox != nullptr) {
+						body->moveFastHitbox.creatorToEscape = hitbox->assignCreatorToEscapeToMoveFastHitbox;
+					}
 					body->vel += hitbox->knockInDirectionAmount;
 					Vector2 away = (body->aabb.center - hitbox->aabb.center).normalized();
 					body->vel += away * hitbox->knockAwayAmount;
 				}
-			}
-		}
-	}
-	for (auto hitbox : *hitboxes) {
-		if (hitbox->autoUnregister) {
-			hitboxesToRemove->push_back(hitbox);
-		}
-		if (hitbox->creatorToEscape != nullptr) {
-			if (!hitbox->creatorToEscape->aabb.overlaps(hitbox->aabb)) {
-				hitbox->creatorToEscape = nullptr;
 			}
 		}
 	}

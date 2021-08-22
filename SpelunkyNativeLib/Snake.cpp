@@ -37,7 +37,7 @@ bool Snake::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesT
 
 void Snake::_process(float delta)
 {
-	sprite->set_flip_h(isFacingRight);
+	sprite->set_flip_h(body.isFacingRight);
 	auto currGridCoord = level->WorldToGrid(get_position());
 	if (!body.isGrounded || (((level->GetBlock(currGridCoord.x - 1, currGridCoord.y)->present && level->GetBlock(currGridCoord.x + 1, currGridCoord.y)->present)) ||
 		(!level->GetBlock(currGridCoord.x-1,currGridCoord.y+1)->present &&!level->GetBlock(currGridCoord.x+1,currGridCoord.y+1)->present)||
@@ -49,17 +49,17 @@ void Snake::_process(float delta)
 	}
 	else {
 		sprite->set_animation("Walk");
-		body.vel.x = 120*(isFacingRight?1:-1);
+		body.vel.x = 120*(body.isFacingRight?1:-1);
 	}
 	if (body.process(delta, true, false)) {
 		if (body.normal.x != 0) {
-			isFacingRight = body.normal.x > 0;
+			body.isFacingRight = body.normal.x > 0;
 		}
 	}
-	auto gridCoord = level->WorldToGrid(get_position()+Vector2(50*(isFacingRight?1:-1),0));
+	auto gridCoord = level->WorldToGrid(get_position()+Vector2(50*(body.isFacingRight?1:-1),0));
 	if (body.isGrounded) {
 		if (!level->GetBlock((int)gridCoord.x, 1 + (int)gridCoord.y)->present) {
-			isFacingRight = !isFacingRight;
+			body.isFacingRight = !body.isFacingRight;
 		}
 	}
 	hitbox.aabb = body.aabb;
