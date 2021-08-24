@@ -6,7 +6,6 @@
 #include <Sprite.hpp>
 #include "Body.h"
 
-
 class Spelunker : public Node2D, IDamageReciever, IPicker
 {
 	GODOT_CLASS(Spelunker, Node2D);

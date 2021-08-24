@@ -1,3 +1,4 @@
+#pragma once
 #include "Level.h"
 #include <Node2D.hpp>
 #include <stdlib.h>
@@ -64,11 +65,12 @@ void Level::_register_methods()
 	register_property("bulletScene", &Level::bulletScene, Ref<PackedScene>());
 	register_property("ropeScene", &Level::ropeScene, Ref<PackedScene>());
 	register_property("bombScene", &Level::bombScene, Ref<PackedScene>());
+	register_property("batScene", &Level::batScene, Ref<PackedScene>());
 }
 
 const string layout1 = 
 "XXXXXXXXXXXXXXXXXXXXXX\n\
- X00000000000000000000X\n\
+ X000000000000B0000000X\n\
  X00XXX00X000000000000X\n\
  X00XXX000000000S00G00X\n\
  X00XXX000000000000000X\n\
@@ -90,7 +92,14 @@ void Level::CopyLayoutIntoBlocks(string layout, int x, int y)
 		int xCurr = x;
 		int len = line.length();
 		for (int i = 0; i < len; i++) {
-			if (line[i] == 'G') {
+			if (line[i] == 'B') {
+				auto bat = SpawnBat(this);
+				bat->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
+				get_node("/root/GameScene/SpawnRoot")->add_child(bat);
+				GetBlock(xCurr, y)->present = false;
+				xCurr++;
+			}
+			else if (line[i] == 'G') {
 				auto shotgun = SpawnShotgun(this);
 				shotgun->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
 				get_node("/root/GameScene/SpawnRoot")->add_child(shotgun);

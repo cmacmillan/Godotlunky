@@ -1,3 +1,4 @@
+#pragma once
 #include "Spelunker.h"
 #include <Input.hpp>
 #include "Level.h"
@@ -78,6 +79,7 @@ void Spelunker::_ready()
 	body.isFacingRight = true;
 	pickedBody = nullptr;
 	level->RegisterHurtbox(&body);
+	level->spelunker = this;
 }
 
 void Spelunker::_process(float delta)
@@ -188,7 +190,7 @@ void Spelunker::_process(float delta)
 		if (pickedBody!=nullptr) {
 			if (pickedBody->throwAction==nullptr) {
 				pickedBody->moveFastHitbox.creatorToEscape = &body;
-				pickedBody->vel = Vector2(1300, -1300);
+				pickedBody->vel = Vector2(2000, -1300);
 				if (!body.isFacingRight) {
 					pickedBody->vel.x *= -1;
 				}
@@ -318,7 +320,9 @@ void Spelunker::_process(float delta)
 		audio->set_volume_db(0.0f);
 		audio->set_stream(level->jumpSFX);
 		audio->play();
-		body.vel.y = -jumpHeight;
+		if (!isCrouching) {
+			body.vel.y = -jumpHeight;
+		}
 		holdingLedge = false;
 		holdingRope = false;
 	}
@@ -477,7 +481,6 @@ void Spelunker::_process(float delta)
 		float footHeight = godot::Math::fmod((coord.y + body.aabb.center.y + body.aabb.size.y / 2),1.0f);
 		auto block = level->GetBlock(coord.x, coord.y);
 		if (block->hasSpikes && body.vel.y>0 && !isDead && footHeight>.5f) {
-			printf("%f", footHeight);
 			auto audio = get_node<AudioStreamPlayer2D>("JumpAudio");
 			audio->set_volume_db(0.0f);
 			audio->set_stream(level->skewerSFX);

@@ -1,3 +1,4 @@
+#pragma once
 #include "Rock.h"
 #include "Level.h"
 #include <AnimatedSprite.hpp>

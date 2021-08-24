@@ -7,6 +7,7 @@ Shotgun* SpawnShotgun(Level* level) { return level->cast_to<Shotgun>(level->shot
 Snake* SpawnSnake(Level* level) { return level->cast_to<Snake>(level->snakeScene->instance());}
 Bomb* SpawnBomb(Level* level) { return level->cast_to<Bomb>(level->bombScene->instance());}
 Rope* SpawnRope(Level* level) { return level->cast_to<Rope>(level->ropeScene->instance());}
+Bat* SpawnBat(Level* level) { return level->cast_to<Bat>(level->batScene->instance());}
 float Random() { return (std::rand() / (float)RAND_MAX); }
 
 

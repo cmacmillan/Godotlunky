@@ -1,4 +1,6 @@
+#pragma once
 #include "Body.h"
+#include "Level.h"
 using namespace godot::Math;
 
 void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level,Vector2 initialVelocity,bool pickable, float weight,HitboxMask takeDamageMask, IDamageReciever* damageReceiver, IThrowAction* throwAction,bool dealDamageWhenMovingFast)

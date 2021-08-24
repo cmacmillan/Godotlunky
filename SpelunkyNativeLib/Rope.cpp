@@ -1,3 +1,4 @@
+#pragma once
 #include "Rope.h"
 #include <ResourceLoader.hpp>
 #include <AudioStreamPlayer2D.hpp>

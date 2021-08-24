@@ -1,3 +1,4 @@
+#pragma once
 #include "Bullet.h"
 #include "Level.h"
 #include <AnimatedSprite.hpp>
