@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=2]
+[gd_scene load_steps=92 format=2]
 
 [ext_resource path="res://CaveTex/classicguy.png" type="Texture" id=1]
 [ext_resource path="res://Multimeshes/GroundMultimesh.tres" type="MultiMesh" id=2]
@@ -31,6 +31,9 @@
 [ext_resource path="res://Scenes/Bomb.tscn" type="PackedScene" id=29]
 [ext_resource path="res://Scenes/Rope.tscn" type="PackedScene" id=30]
 [ext_resource path="res://Scenes/Bat.tscn" type="PackedScene" id=31]
+[ext_resource path="res://Scenes/AudioSourceScene.tscn" type="PackedScene" id=32]
+[ext_resource path="res://SFX/rubble3.wav" type="AudioStream" id=34]
+[ext_resource path="res://SFX/metal_clank.wav" type="AudioStream" id=35]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -330,7 +333,7 @@ position = Vector2( 0, 1 )
 
 [node name="Background" type="Sprite" parent="."]
 material = SubResource( 2 )
-position = Vector2( 2169, 2283 )
+position = Vector2( 2175, 2301 )
 scale = Vector2( 300, 300 )
 texture = ExtResource( 9 )
 
@@ -364,6 +367,10 @@ whipSFX = ExtResource( 18 )
 hitSFX = ExtResource( 19 )
 skewerSFX = ExtResource( 24 )
 shotgunSFX = ExtResource( 27 )
+defaultImpactSFX = ExtResource( 13 )
+bulletImpactSFX = ExtResource( 34 )
+metalClankSFX = ExtResource( 35 )
+audioSourceScene = ExtResource( 32 )
 snakeScene = ExtResource( 25 )
 rockScene = ExtResource( 17 )
 shotgunScene = ExtResource( 26 )

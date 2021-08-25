@@ -15,7 +15,7 @@ void Snake::_ready()
 {
 	sprite = get_node<AnimatedSprite>("AnimatedSprite");
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.8, .6), Vector2(0, .2), 0, 0, this, level, Vector2(0, 0),false,1,HitboxMask::Enemy,this,nullptr,false);
+	body.Init(Vector2(.8, .6), Vector2(0, .2), 0, 0, this, level, Vector2(0, 0),false,1,HitboxMask::Enemy,this,nullptr,false,false,nullptr);
 	level->RegisterHurtbox(&body);
 	hitbox.SetValues(body.aabb, 1, HitboxMask::Player, Vector2(0, 0), 0,false);
 	hitbox.creatorToEscape = nullptr;

@@ -3,6 +3,8 @@
 #include "IDamageReciever.h"
 #include "HitboxData.h"
 #include <Node2D.hpp>
+#include <AudioStreamPlayer2D.hpp>
+#include <AudioStream.hpp>
 
 class Level;
 
@@ -27,10 +29,12 @@ public:
 	bool pickable;
 	bool dealDamageWhenMovingFast;
 	bool isFacingRight;
+	bool playHitSFX;
+	Ref<AudioStream> hitSFX;
 	float weight;
 	Vector2 endPos;//basically just out
 	Vector2 normal;//basically just out
 	void OnDestroy(vector<HitboxData*>* hitboxesToRemove);
-	void Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level,Vector2 initialVelocity,bool pickable, float weight,HitboxMask mask,IDamageReciever* damageReciever,IThrowAction* throwAction,bool dealDamageWhenMovingFast);
+	void Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level, Vector2 initialVelocity, bool pickable, float weight, HitboxMask takeDamageMask, IDamageReciever* damageReceiver, IThrowAction* throwAction, bool dealDamageWhenMovingFast, bool playHitSFX, Ref<AudioStream> hitSFX);
 	bool process(float delta, bool applyGravity, bool applyFriction);
 };

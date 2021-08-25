@@ -58,6 +58,10 @@ public:
 	Ref<AudioStream> skewerSFX;
 	Ref<AudioStream> shotgunSFX;
 
+	Ref<AudioStream> defaultImpactSFX;
+	Ref<AudioStream> bulletImpactSFX;
+	Ref<AudioStream> metalClankSFX;
+
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;
 	Ref<PackedScene> shotgunScene;
@@ -65,6 +69,7 @@ public:
 	Ref<PackedScene> ropeScene;
 	Ref<PackedScene> bombScene;
 	Ref<PackedScene> batScene;
+	Ref<PackedScene> audioSourceScene;
 
 #ifdef showDebugHitboxes
 	RID GetRid(VisualServer* vs);
@@ -81,11 +86,15 @@ public:
 	std::set<Body*>* hurtboxes;
 	std::set<HitboxData*>* hitboxes;
 
+	std::vector<AudioStreamPlayer2D*>* freeAudioSources;
+	std::vector<AudioStreamPlayer2D*>* outstandingAudioSources;
+
 	static void _register_methods();
 	void _init();
 	void _ready();
 	void _process(float delta);
 
+	void PlayAudio(Ref<AudioStream> sound, Vector2 gridCoordPos);
 	LevelBlock* GetBlock(int x, int y);
 	Vector2 WorldToGrid(Vector2 v);
 	Vector2 GridToWorld(Vector2 v);

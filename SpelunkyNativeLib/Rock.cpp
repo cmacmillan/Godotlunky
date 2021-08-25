@@ -17,7 +17,7 @@ void Rock::_init(){}
 void Rock::_ready()
 {
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.5,.5),Vector2(0,0),.3,10000,this,level,Vector2(0,0),true,1,HitboxMask::Everything,nullptr,nullptr,true);
+	body.Init(Vector2(.5,.5),Vector2(0,0),.3,10000,this,level,Vector2(0,0),true,1,HitboxMask::Everything,nullptr,nullptr,true,true,nullptr);
 	level->RegisterHurtbox(&body);
 }
 

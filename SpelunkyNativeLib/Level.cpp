@@ -59,6 +59,12 @@ void Level::_register_methods()
 	register_property("skewerSFX", &Level::skewerSFX, Ref<AudioStream>());
 	register_property("shotgunSFX", &Level::shotgunSFX, Ref<AudioStream>());
 
+	register_property("defaultImpactSFX", &Level::defaultImpactSFX, Ref<AudioStream>());
+	register_property("bulletImpactSFX", &Level::bulletImpactSFX, Ref<AudioStream>());
+	register_property("metalClankSFX", &Level::metalClankSFX, Ref<AudioStream>());
+
+	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
+
 	register_property("snakeScene", &Level::snakeScene, Ref<PackedScene>());
 	register_property("rockScene", &Level::rockScene, Ref<PackedScene>());
 	register_property("shotgunScene", &Level::shotgunScene, Ref<PackedScene>());
@@ -279,6 +285,8 @@ void Level::_ready()
 	freeRids = new std::vector<RID>();
 #endif // showDebugHitboxes
 
+	freeAudioSources = new std::vector<AudioStreamPlayer2D*>();
+	outstandingAudioSources = new std::vector<AudioStreamPlayer2D*>();
 	hitboxes = new std::set<HitboxData*>();
 	hurtboxes = new std::set<Body*>();
 	blocks = (LevelBlock*)malloc(sizeof(LevelBlock) * blocksXRes*blocksYRes);
@@ -388,6 +396,16 @@ std::vector<Body*>* hurtboxesToRemove = nullptr;
 std::vector<HitboxData*>* hitboxesToRemove= nullptr;
 void Level::_process(float delta)
 {
+	printf("%d\n", freeAudioSources->size());
+	for (int i = 0; i < outstandingAudioSources->size(); i++) 
+	{
+		AudioStreamPlayer2D* curr = (*outstandingAudioSources)[i];
+		if (curr->get_playback_position()>=curr->get_stream()->get_length()) {
+			outstandingAudioSources->erase(outstandingAudioSources->begin() + i);//kill me
+			freeAudioSources->push_back(curr);
+			i--;
+		}
+	}
 	if (hurtboxesToRemove == nullptr) {
 		hurtboxesToRemove = new std::vector<Body*>();
 	}
@@ -481,6 +499,25 @@ LevelBlock* Level::GetBlock(int x, int y) {
 	}
 	int index = x+y*blocksXRes;
 	return blocks + index;
+}
+
+void Level::PlayAudio(Ref<AudioStream> sound, Vector2 gridCoordPos) 
+{
+	AudioStreamPlayer2D* audioPlayer;
+	if (freeAudioSources->size() == 0) 
+	{
+		audioPlayer = cast_to<AudioStreamPlayer2D>(audioSourceScene->instance());
+		get_node("/root/GameScene/SpawnRoot")->add_child(audioPlayer);
+	}
+	else
+	{
+		audioPlayer = freeAudioSources->back();
+		freeAudioSources->pop_back();
+	}
+	outstandingAudioSources->push_back(audioPlayer);
+	audioPlayer->set_stream(sound);
+	audioPlayer->set_position(GridToWorld(gridCoordPos));
+	audioPlayer->play();
 }
 
 Level::Level()

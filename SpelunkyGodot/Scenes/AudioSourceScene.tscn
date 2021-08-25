@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://SFX/alienexplosion.wav" type="AudioStream" id=1]
+
+[node name="AudioSourceScene" type="AudioStreamPlayer2D"]
+stream = ExtResource( 1 )

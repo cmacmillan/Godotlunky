@@ -3,7 +3,7 @@
 #include "Level.h"
 using namespace godot::Math;
 
-void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level,Vector2 initialVelocity,bool pickable, float weight,HitboxMask takeDamageMask, IDamageReciever* damageReceiver, IThrowAction* throwAction,bool dealDamageWhenMovingFast)
+void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level,Vector2 initialVelocity,bool pickable, float weight,HitboxMask takeDamageMask, IDamageReciever* damageReceiver, IThrowAction* throwAction,bool dealDamageWhenMovingFast,bool playHitSFX, Ref<AudioStream> hitSFX)
 {
 	this->aabb = SpelAABB();
 	aabb.size = size;
@@ -24,6 +24,8 @@ void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, 
 	this->pickedBy = nullptr;
 	this->moveFastHitboxActive = false;
 	this->isFacingRight = false;
+	this->playHitSFX = playHitSFX;
+	this->hitSFX = hitSFX;
 	process(0, false, false);
 }
 
@@ -54,6 +56,12 @@ bool Body::process(float delta, bool applyGravity, bool applyFriction)
 	bool hitTerrain = level->CheckCollisionWithTerrain(aabb, startPos, endPos, normal, isGrounded);
 	if (hitTerrain)
 	{
+		if (playHitSFX) {
+			if ((normal.x != 0 || normal.y != 0) && (vel.dot(-normal) > 500))
+			{
+				level->PlayAudio(hitSFX==nullptr?level->defaultImpactSFX:hitSFX, aabb.center);
+			}
+		}
 		if (normal.x != 0 && sign(normal.x) != sign(vel.x)) {
 			vel.x = -vel.x * bounciness;
 		}
