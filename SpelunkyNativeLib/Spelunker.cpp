@@ -174,6 +174,7 @@ void Spelunker::_process(float delta)
 		if (pickedBody == nullptr) {
 			for (auto i : *level->hurtboxes) {
 				if (body.aabb.overlaps(i->aabb) && i->pickable) {
+					level->PlayAudio(level->pickUpSFX, body.aabb.center);
 					pickedBody = i;
 					i->pickedBy = this;
 					break;
@@ -191,6 +192,7 @@ void Spelunker::_process(float delta)
 			if (pickedBody->throwAction==nullptr) {
 				pickedBody->moveFastHitbox.creatorToEscape = &body;
 				pickedBody->vel = Vector2(2000, -1300);
+				level->PlayAudio(level->throwSFX, body.aabb.center);
 				if (!body.isFacingRight) {
 					pickedBody->vel.x *= -1;
 				}

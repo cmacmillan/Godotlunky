@@ -57,10 +57,11 @@ public:
 	Ref<AudioStream> hitSFX;
 	Ref<AudioStream> skewerSFX;
 	Ref<AudioStream> shotgunSFX;
-
 	Ref<AudioStream> defaultImpactSFX;
 	Ref<AudioStream> bulletImpactSFX;
 	Ref<AudioStream> metalClankSFX;
+	Ref<AudioStream> pickUpSFX;
+	Ref<AudioStream> throwSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;

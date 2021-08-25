@@ -58,10 +58,11 @@ void Level::_register_methods()
 	register_property("hitSFX", &Level::hitSFX, Ref<AudioStream>());
 	register_property("skewerSFX", &Level::skewerSFX, Ref<AudioStream>());
 	register_property("shotgunSFX", &Level::shotgunSFX, Ref<AudioStream>());
-
 	register_property("defaultImpactSFX", &Level::defaultImpactSFX, Ref<AudioStream>());
 	register_property("bulletImpactSFX", &Level::bulletImpactSFX, Ref<AudioStream>());
 	register_property("metalClankSFX", &Level::metalClankSFX, Ref<AudioStream>());
+	register_property("pickUpSFX", &Level::pickUpSFX, Ref<AudioStream>());
+	register_property("throwSFX", &Level::throwSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 
@@ -396,7 +397,6 @@ std::vector<Body*>* hurtboxesToRemove = nullptr;
 std::vector<HitboxData*>* hitboxesToRemove= nullptr;
 void Level::_process(float delta)
 {
-	printf("%d\n", freeAudioSources->size());
 	for (int i = 0; i < outstandingAudioSources->size(); i++) 
 	{
 		AudioStreamPlayer2D* curr = (*outstandingAudioSources)[i];
