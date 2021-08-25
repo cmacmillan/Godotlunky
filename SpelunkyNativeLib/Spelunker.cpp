@@ -170,7 +170,7 @@ void Spelunker::_process(float delta)
 		whipForward->set_flip_h(true);
 		whipBack->set_flip_h(true);
 	}
-	if (isCrouching && input->is_action_just_pressed("whip")&&!isStunned) {
+	if (isCrouching && input->is_action_just_pressed("whip")&&!isStunned&&!isWhipping&&!holdingLedge&&!holdingRope) {
 		if (pickedBody == nullptr) {
 			for (auto i : *level->hurtboxes) {
 				if (body.aabb.overlaps(i->aabb) && i->pickable) {

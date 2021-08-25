@@ -13,6 +13,7 @@ void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, 
 	this->node = node;
 	this->level = level;
 	this->startPos = level->WorldToGrid(node->get_position());
+	this->endPos= this->startPos;
 	this->vel = initialVelocity;
 	this->pickable = pickable;
 	this->weight = weight;
