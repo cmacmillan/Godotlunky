@@ -140,6 +140,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bat.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="BloodSpurt.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Bullet.cpp">
@@ -162,6 +170,14 @@
     <ClCompile Include="SpelunkyNativeLib.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bat.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="BloodSpurt.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Body.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Bullet.h">
@@ -169,6 +185,8 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="HitboxData.h" />
+    <ClInclude Include="IDamageReciever.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="ObjectMaker.h" />
     <ClInclude Include="Rock.h">

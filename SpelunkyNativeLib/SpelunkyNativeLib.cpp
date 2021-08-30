@@ -9,6 +9,7 @@
 #include "Shotgun.h"
 #include "Bullet.h"
 #include "Bat.h"
+#include "BloodSpurt.h"
 
 extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
 	godot::Godot::gdnative_init(o);
@@ -30,4 +31,5 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 	godot::register_class<Shotgun>();
 	godot::register_class<Bullet>();
 	godot::register_class<Bat>();
+	godot::register_class<BloodSpurt>();
 }

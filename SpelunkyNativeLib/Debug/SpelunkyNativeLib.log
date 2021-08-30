@@ -1,4 +1,8 @@
-﻿  Body.cpp
+﻿  Bat.cpp
+Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
+  BloodSpurt.cpp
+Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
+  Body.cpp
 Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
   Bomb.cpp
 Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory

@@ -63,6 +63,7 @@ void Level::_register_methods()
 	register_property("metalClankSFX", &Level::metalClankSFX, Ref<AudioStream>());
 	register_property("pickUpSFX", &Level::pickUpSFX, Ref<AudioStream>());
 	register_property("throwSFX", &Level::throwSFX, Ref<AudioStream>());
+	register_property("splatSFX", &Level::splatSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 
@@ -73,20 +74,21 @@ void Level::_register_methods()
 	register_property("ropeScene", &Level::ropeScene, Ref<PackedScene>());
 	register_property("bombScene", &Level::bombScene, Ref<PackedScene>());
 	register_property("batScene", &Level::batScene, Ref<PackedScene>());
+	register_property("bloodSpurtScene", &Level::bloodSpurtScene, Ref<PackedScene>());
 }
 
 const string layout1 = 
-"XXXXXXXXXXXXXXXXXXXXXX\n\
- X0000000000000000000BX\n\
- X00XXX00X000000000000X\n\
- X00XXX000000000S00G00X\n\
- X00XXX000000000000000X\n\
- X00XXX000000000000000X\n\
- X00000S0X000000000000X\n\
- XX0000X0X000000000000X\n\
- X0X00S00000000R0WW000X\n\
- XXXXX0XXXXXXXXXXXXXXXX\n\
- XXXXXXXXXXXXXXXXXXXXXX";
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n\
+ X0000000000000000000B0000000000000000000X\n\
+ X00XXX00X0000000000000000000000000000000X\n\
+ X00XXX000000000000G000000000000000000000X\n\
+ X00XXX000000000000000000SSSSSSSSSSSSSSSSX\n\
+ X00XXX0000000000000000000000000000000000X\n\
+ X00000S0X0000000000000000000000000000000X\n\
+ XX0000X0X0000000000000000000000000000000X\n\
+ X0X00S00000000R0WW0000000000000000000000X\n\
+ XXXXX0XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n\
+ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 //this should probably not be global
 ////////////////////////////////
@@ -150,6 +152,13 @@ void Level::RegisterHurtbox(Body* hurtbox) {
 }
 void Level::UnregisterHurtbox(Body* hurtbox) {
 	hurtboxes->erase(hurtbox);
+}
+
+void Level::SpawnBlood(Vector2 gridCoord) {
+	PlayAudio(splatSFX, gridCoord);
+	for (int i = 0; i < 10; i++) {
+		SpawnBloodSpurt(this,gridCoord);
+	}
 }
 
 //gotta remember to unregister before freeing
@@ -278,8 +287,8 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 
 void Level::_ready()
 {
-	blocksXRes = 30;
-	blocksYRes = 30;
+	blocksXRes = 50;
+	blocksYRes = 50;
 	worldBlockSize = 100;
 #ifdef showDebugHitboxes
 	allRids = new	std::vector<RID>();

@@ -18,6 +18,7 @@ public:
 	HitboxData hitbox;
 	AnimatedSprite* animatedSprite;
 	bool hasSpottedPlayer;
+	bool isDead;
 
 	bool TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove);
 

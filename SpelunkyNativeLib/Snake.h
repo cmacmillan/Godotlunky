@@ -11,6 +11,7 @@ public:
 	Level* level;
 	Body body;
 	HitboxData hitbox;
+	bool isDead;
 
 	bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove);
 

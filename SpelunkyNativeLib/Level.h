@@ -62,6 +62,7 @@ public:
 	Ref<AudioStream> metalClankSFX;
 	Ref<AudioStream> pickUpSFX;
 	Ref<AudioStream> throwSFX;
+	Ref<AudioStream> splatSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;
@@ -71,6 +72,7 @@ public:
 	Ref<PackedScene> bombScene;
 	Ref<PackedScene> batScene;
 	Ref<PackedScene> audioSourceScene;
+	Ref<PackedScene> bloodSpurtScene;
 
 #ifdef showDebugHitboxes
 	RID GetRid(VisualServer* vs);
@@ -101,6 +103,7 @@ public:
 	Vector2 GridToWorld(Vector2 v);
 	Vector2 WorldToGridSize(Vector2 v);
 	Vector2 GridToWorldSize(Vector2 v);
+	void SpawnBlood(Vector2 gridCoord);
 	void RegisterHurtbox(Body* hurtbox);
 	void UnregisterHurtbox(Body* hurtbox);
 	void RegisterHitbox(HitboxData* hitbox);

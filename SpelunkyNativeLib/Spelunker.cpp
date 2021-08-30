@@ -45,6 +45,7 @@ bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitbo
 }
 void Spelunker::Die() {
 	if (!isDead) {
+		level->SpawnBlood(body.aabb.center);
 		isDead = true;
 		isStunned = true;
 		stunTime = -10000;
