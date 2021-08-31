@@ -8,13 +8,15 @@
 #include "Bomb.h"
 #include "Bat.h"
 #include "BloodSpurt.h"
+#include "PrizeBox.h"
 
-Bullet* SpawnBullet(Level* level);
-Rock* SpawnRock(Level* level);
-Shotgun* SpawnShotgun(Level* level);
-Snake* SpawnSnake(Level* level);
-Rope* SpawnRope(Level* level);
-Bomb* SpawnBomb(Level* level);
-Bat* SpawnBat(Level* level);
+Bullet* SpawnBullet(Level* level,Vector2 gridCoord);
+Rock* SpawnRock(Level* level,Vector2 gridCoord);
+Shotgun* SpawnShotgun(Level* level,Vector2 gridCoord);
+Snake* SpawnSnake(Level* level,Vector2 gridCoord);
+Rope* SpawnRope(Level* level,Vector2 gridCoord);
+Bomb* SpawnBomb(Level* level,Vector2 gridCoord,Vector2 startVel);
+Bat* SpawnBat(Level* level,Vector2 gridCoord);
 BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord);
+PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord);
 float Random();

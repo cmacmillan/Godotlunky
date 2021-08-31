@@ -1,19 +1,29 @@
 #pragma once
 #include "ObjectMaker.h"
 
-Bullet* SpawnBullet(Level* level) { return level->cast_to<Bullet>(level->bulletScene->instance());}
-Rock* SpawnRock(Level* level) {return level->cast_to<Rock>(level->rockScene->instance());}
-Shotgun* SpawnShotgun(Level* level) { return level->cast_to<Shotgun>(level->shotgunScene->instance());}
-Snake* SpawnSnake(Level* level) { return level->cast_to<Snake>(level->snakeScene->instance());}
-Bomb* SpawnBomb(Level* level) { return level->cast_to<Bomb>(level->bombScene->instance());}
-Rope* SpawnRope(Level* level) { return level->cast_to<Rope>(level->ropeScene->instance());}
-Bat* SpawnBat(Level* level) { return level->cast_to<Bat>(level->batScene->instance());}
-BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord) { 
-	auto retr = level->cast_to<BloodSpurt>(level->bloodSpurtScene->instance());
-	retr->set_position(level->GridToWorld(gridCoord));
-	level->add_child(retr);
-	return retr;
+template <class T>
+T* PutAtAndChildToLevel(T* node,Vector2 gridCoord, Level* level,bool spawnInFront) {
+	node->set_position(level->GridToWorld(gridCoord));
+	if (spawnInFront)
+		level->frontSpawnRoot->add_child(node);
+	else
+		level->add_child(node);
+	return node;
 }
+
+Bullet* SpawnBullet(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Bullet>(level->bulletScene->instance()), gridCoord, level,true);}
+Rock* SpawnRock(Level* level,Vector2 gridCoord) {return PutAtAndChildToLevel(level->cast_to<Rock>(level->rockScene->instance()), gridCoord, level,true);}
+Shotgun* SpawnShotgun(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Shotgun>(level->shotgunScene->instance()), gridCoord, level,true);}
+Snake* SpawnSnake(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Snake>(level->snakeScene->instance()), gridCoord, level,false);}
+Bomb* SpawnBomb(Level* level,Vector2 gridCoord,Vector2 startVel) { 
+	auto bomb = level->cast_to<Bomb>(level->bombScene->instance());
+	bomb->startVelocity = startVel;
+	return PutAtAndChildToLevel(bomb, gridCoord, level,true);
+}
+Rope* SpawnRope(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Rope>(level->ropeScene->instance()), gridCoord, level,false);}
+Bat* SpawnBat(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Bat>(level->batScene->instance()), gridCoord, level,false);}
+BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord) {  return PutAtAndChildToLevel(level->cast_to<BloodSpurt>(level->bloodSpurtScene->instance()), gridCoord, level,false);}
+PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<PrizeBox>(level->prizeBoxScene->instance()), gridCoord, level,true);}
 float Random() { return (std::rand() / (float)RAND_MAX); }
 
 

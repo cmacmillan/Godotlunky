@@ -38,6 +38,10 @@ bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitbo
 			return true;
 		}
 		else {
+			level->PlayAudio(level->hitSFX, body.aabb.center);
+			for (int i = 0; i < 3; i++) {
+				SpawnBloodSpurt(level, body.aabb.center);
+			}
 			invulTime = 2;
 		}
 	}
@@ -45,7 +49,10 @@ bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitbo
 }
 void Spelunker::Die() {
 	if (!isDead) {
-		level->SpawnBlood(body.aabb.center);
+		level->PlayAudio(level->hitSFX, body.aabb.center);
+		for (int i = 0; i < 10; i++) {
+			SpawnBloodSpurt(level, body.aabb.center);
+		}
 		isDead = true;
 		isStunned = true;
 		stunTime = -10000;
@@ -210,7 +217,7 @@ void Spelunker::_process(float delta)
 		}
 		else 
 		{
-			whipHitbox.SetValues(body.aabb, 1, HitboxMask::Enemy,Vector2(1000*(body.isFacingRight?1:-1),-500) , 0, true);
+			whipHitbox.SetValues(body.aabb, 1, HitboxMask::Enemy,Vector2(1000*(body.isFacingRight?1:-1),-500) , 0, true,nullptr);
 			whipHitbox.InitOrClearBodiesAlreadyDamagedList();
 			whipHitbox.assignCreatorToEscapeToMoveFastHitbox = &body;
 			whipHitbox.creatorToEscape = nullptr;
@@ -276,23 +283,19 @@ void Spelunker::_process(float delta)
 	}
 	if (!isWhipping && !isStunned) {
 		if (input->is_action_just_pressed("bomb")) {
-			Bomb* bomb = SpawnBomb(level);
-			bomb->body.moveFastHitbox.creatorToEscape = &body;
-			bomb->startVelocity = Vector2(1300, -1300);
+			auto startVelocity = Vector2(1500, -1300);
 			if (!body.isFacingRight) {
-				bomb->startVelocity.x *= -1;
+				startVelocity.x *= -1;
 			}
 			if (isCrouching) {
-				bomb->startVelocity = Vector2(400 * (body.isFacingRight? 1 : -1), 0);
+				startVelocity = Vector2(400 * (body.isFacingRight? 1 : -1), 0);
 			}
-			//bomb->vel += vel;
-			bomb->set_position(get_position());
-			get_node("/root/GameScene/SpawnRoot")->add_child(bomb);
+			Bomb* bomb = SpawnBomb(level,body.aabb.center,startVelocity);
+			bomb->body.moveFastHitbox.creatorToEscape = &body;
 		}
 		if (input->is_action_just_pressed("rope")) {
-			Rope* rope = SpawnRope(level);
+			Rope* rope = SpawnRope(level,body.aabb.center);
 			rope->body.moveFastHitbox.creatorToEscape = &body;
-			rope->set_position(get_position());
 			level->add_child(rope);
 		}
 		grabRopeDisableTime -= delta;

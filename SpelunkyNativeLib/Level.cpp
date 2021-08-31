@@ -23,7 +23,7 @@ void HitboxData::InitOrClearBodiesAlreadyDamagedList() {
 		bodiesAlreadyDamaged->clear();
 	}
 }
-void HitboxData::SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount, bool stun)
+void HitboxData::SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount, bool stun,Body* self)
 {
 	this->aabb = box;
 	this->damageAmount = damageAmount;
@@ -33,6 +33,7 @@ void HitboxData::SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vect
 	this->autoUnregister = false;
 	this->stun = stun;
 	this->assignCreatorToEscapeToMoveFastHitbox = nullptr;
+	this->self = self;
 }
 
 void Level::_register_methods()
@@ -75,6 +76,7 @@ void Level::_register_methods()
 	register_property("bombScene", &Level::bombScene, Ref<PackedScene>());
 	register_property("batScene", &Level::batScene, Ref<PackedScene>());
 	register_property("bloodSpurtScene", &Level::bloodSpurtScene, Ref<PackedScene>());
+	register_property("prizeBoxScene", &Level::prizeBoxScene, Ref<PackedScene>());
 }
 
 const string layout1 = 
@@ -82,7 +84,7 @@ const string layout1 =
  X0000000000000000000B0000000000000000000X\n\
  X00XXX00X0000000000000000000000000000000X\n\
  X00XXX000000000000G000000000000000000000X\n\
- X00XXX000000000000000000SSSSSSSSSSSSSSSSX\n\
+ X00XXX0000000000000000000000000P0000000SX\n\
  X00XXX0000000000000000000000000000000000X\n\
  X00000S0X0000000000000000000000000000000X\n\
  XX0000X0X0000000000000000000000000000000X\n\
@@ -101,45 +103,32 @@ void Level::CopyLayoutIntoBlocks(string layout, int x, int y)
 		int xCurr = x;
 		int len = line.length();
 		for (int i = 0; i < len; i++) {
-			if (line[i] == 'B') {
-				auto bat = SpawnBat(this);
-				bat->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
-				get_node("/root/GameScene/SpawnRoot")->add_child(bat);
-				GetBlock(xCurr, y)->present = false;
+			GetBlock(xCurr, y)->present = false;
+			Vector2 gridCoord = Vector2(xCurr + .5f, y + .5f);
+			if (line[i] == 'P') {
+				SpawnPrizeBox(this,gridCoord);
 				xCurr++;
-			}
-			else if (line[i] == 'G') {
-				auto shotgun = SpawnShotgun(this);
-				shotgun->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
-				get_node("/root/GameScene/SpawnRoot")->add_child(shotgun);
-				GetBlock(xCurr, y)->present = false;
+			} else if (line[i] == 'B') {
+				SpawnBat(this,gridCoord);
 				xCurr++;
-			}
-			else if (line[i] == 'R') {
-				auto rock = SpawnRock(this);
-				rock->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
-				get_node("/root/GameScene/SpawnRoot")->add_child(rock);
-				GetBlock(xCurr, y)->present = false;
+			} else if (line[i] == 'G') {
+				SpawnShotgun(this,gridCoord);
 				xCurr++;
-			}
-			else if (line[i] == 'S') {
-				auto snake = SpawnSnake(this);
-				snake->set_position(GridToWorld(Vector2(xCurr+.5f,y+.5f)));
-				this->add_child(snake);
-				GetBlock(xCurr, y)->present = false;
+			} else if (line[i] == 'R') {
+				SpawnRock(this,gridCoord);
 				xCurr++;
-			}
-			else if (line[i] == 'W') {
+			} else if (line[i] == 'S') {
+				SpawnSnake(this,gridCoord);
+				xCurr++;
+			} else if (line[i] == 'W') {
 				GetBlock(xCurr,y)->hasSpikes=true;
-				GetBlock(xCurr,y)->present=false;
+				xCurr++;
+			} else if (line[i]=='0') {
 				xCurr++;
 			}
-			else if (line[i]=='X') {
+			/////////////////////////////////
+			if (line[i]=='X') {
 				GetBlock(xCurr,y)->present=true;
-				xCurr++;
-			}
-			else if (line[i]=='0') {
-				GetBlock(xCurr,y)->present=false;
 				xCurr++;
 			}
 		}
@@ -154,9 +143,9 @@ void Level::UnregisterHurtbox(Body* hurtbox) {
 	hurtboxes->erase(hurtbox);
 }
 
-void Level::SpawnBlood(Vector2 gridCoord) {
+void Level::SpawnBlood(Vector2 gridCoord,int count) {
 	PlayAudio(splatSFX, gridCoord);
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < count; i++) {
 		SpawnBloodSpurt(this,gridCoord);
 	}
 }
@@ -294,6 +283,8 @@ void Level::_ready()
 	allRids = new	std::vector<RID>();
 	freeRids = new std::vector<RID>();
 #endif // showDebugHitboxes
+
+	frontSpawnRoot = get_node("/root/GameScene/SpawnRoot");
 
 	freeAudioSources = new std::vector<AudioStreamPlayer2D*>();
 	outstandingAudioSources = new std::vector<AudioStreamPlayer2D*>();
@@ -474,6 +465,9 @@ void Level::_process(float delta)
 					if (isValid) {
 						hitbox->bodiesAlreadyDamaged->push_back(body);
 					}
+				}
+				if (hitbox->self == body) {
+					isValid = false;
 				}
 				if (isValid) {
 					if (body->damageReciever != nullptr) {

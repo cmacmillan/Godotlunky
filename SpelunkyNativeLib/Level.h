@@ -33,7 +33,7 @@ struct LevelBlock {
 class Body;
 class Spelunker;
 
-//#define showDebugHitboxes
+#define showDebugHitboxes
 
 class Level : public Node2D
 {
@@ -73,12 +73,15 @@ public:
 	Ref<PackedScene> batScene;
 	Ref<PackedScene> audioSourceScene;
 	Ref<PackedScene> bloodSpurtScene;
+	Ref<PackedScene> prizeBoxScene;
 
 #ifdef showDebugHitboxes
 	RID GetRid(VisualServer* vs);
 	std::vector<RID>* allRids;
 	std::vector<RID>* freeRids;
 #endif
+
+	Node* frontSpawnRoot;
 
 	Spelunker* spelunker;
 	LevelBlock* blocks;
@@ -103,7 +106,7 @@ public:
 	Vector2 GridToWorld(Vector2 v);
 	Vector2 WorldToGridSize(Vector2 v);
 	Vector2 GridToWorldSize(Vector2 v);
-	void SpawnBlood(Vector2 gridCoord);
+	void SpawnBlood(Vector2 gridCoord,int count=10);
 	void RegisterHurtbox(Body* hurtbox);
 	void UnregisterHurtbox(Body* hurtbox);
 	void RegisterHitbox(HitboxData* hitbox);

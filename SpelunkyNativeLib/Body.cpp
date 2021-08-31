@@ -78,7 +78,7 @@ bool Body::process(float delta, bool applyGravity, bool applyFriction)
 	bool shouldHitboxBeActive = dealDamageWhenMovingFast && vel.length() > 1200;
 	moveFastHitbox.aabb = aabb;
 	if (shouldHitboxBeActive && !moveFastHitboxActive) {
-		moveFastHitbox.SetValues(aabb, 1, HitboxMask::Everything, Vector2(0, 0), 0,true);
+		moveFastHitbox.SetValues(aabb, 1, HitboxMask::Everything, Vector2(0, 0), 0,true,this);
 		level->RegisterHitbox(&moveFastHitbox);
 		moveFastHitboxActive = true;
 	}

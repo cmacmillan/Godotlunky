@@ -38,10 +38,8 @@ void Shotgun::DoThrowAction()
 {
 	if (cooldownTime <= 0) {
 		for (int i = 0; i < 10; i++) {
-			auto bullet = SpawnBullet(level);
+			auto bullet = SpawnBullet(level, Vector2(body.endPos.x, body.endPos.y));
 			bullet->body.moveFastHitbox.creatorToEscape = this->body.pickedBy->GetBody();
-			bullet->set_position(level->GridToWorld(Vector2(body.endPos.x,body.endPos.y)));
-			get_node("/root/GameScene/SpawnRoot")->add_child(bullet);
 			bullet->body.vel.x = (2000+(Random()*1000)) * (body.isFacingRight ? 1 : -1);
 			float rand = Random()*2 - 1;
 			bullet->body.vel.y = rand * 100;
