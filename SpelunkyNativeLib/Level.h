@@ -63,6 +63,7 @@ public:
 	Ref<AudioStream> pickUpSFX;
 	Ref<AudioStream> throwSFX;
 	Ref<AudioStream> splatSFX;
+	Ref<AudioStream> boxOpenSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;

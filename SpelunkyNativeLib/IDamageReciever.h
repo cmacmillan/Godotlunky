@@ -5,7 +5,7 @@
 
 class IDamageReciever {
 public:
-	virtual bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) { return false; }//returns true if this hurtbox should unregister
+	virtual bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) { return false; }//returns true if this hurtbox should unregister aka if the thing died
 };
 
 class IPicker {

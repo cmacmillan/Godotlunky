@@ -22,6 +22,7 @@ void PrizeBox::_ready()
 
 void PrizeBox::OpenBox(vector<HitboxData*>* hitboxesToRemove) 
 {
+	level->PlayAudio(level->boxOpenSFX,body.aabb.center);
 	body.OnDestroy(hitboxesToRemove);
 	queue_free();
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=97 format=2]
+[gd_scene load_steps=98 format=2]
 
 [ext_resource path="res://CaveTex/classicguy.png" type="Texture" id=1]
 [ext_resource path="res://Multimeshes/GroundMultimesh.tres" type="MultiMesh" id=2]
@@ -39,6 +39,7 @@
 [ext_resource path="res://Scenes/BloodSpurt.tscn" type="PackedScene" id=37]
 [ext_resource path="res://SFX/splat.wav" type="AudioStream" id=38]
 [ext_resource path="res://Scenes/PrizeBox.tscn" type="PackedScene" id=39]
+[ext_resource path="res://SFX/crateopen.wav" type="AudioStream" id=40]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -84,135 +85,135 @@ region = Rect2( 1024, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 1 )
-region = Rect2( 256, 128, 128, 128 )
+region = Rect2( 0, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=12]
 atlas = ExtResource( 1 )
-region = Rect2( 1152, 896, 128, 128 )
+region = Rect2( 128, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=13]
 atlas = ExtResource( 1 )
-region = Rect2( 1024, 896, 128, 128 )
+region = Rect2( 640, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=14]
 atlas = ExtResource( 1 )
-region = Rect2( 896, 896, 128, 128 )
+region = Rect2( 768, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=15]
 atlas = ExtResource( 1 )
-region = Rect2( 768, 896, 128, 128 )
+region = Rect2( 896, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=16]
 atlas = ExtResource( 1 )
-region = Rect2( 640, 896, 128, 128 )
+region = Rect2( 1024, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 1 )
-region = Rect2( 512, 896, 128, 128 )
+region = Rect2( 1152, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=18]
 atlas = ExtResource( 1 )
-region = Rect2( 384, 896, 128, 128 )
+region = Rect2( 1280, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=19]
 atlas = ExtResource( 1 )
-region = Rect2( 256, 896, 128, 128 )
+region = Rect2( 1408, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=20]
 atlas = ExtResource( 1 )
-region = Rect2( 128, 896, 128, 128 )
+region = Rect2( 384, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=21]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 896, 128, 128 )
+region = Rect2( 512, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=22]
 atlas = ExtResource( 1 )
-region = Rect2( 384, 128, 128, 128 )
+region = Rect2( 1152, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=23]
 atlas = ExtResource( 1 )
-region = Rect2( 512, 128, 128, 128 )
+region = Rect2( 256, 1152, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=24]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 128, 128, 128 )
+region = Rect2( 0, 1024, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=25]
 atlas = ExtResource( 1 )
-region = Rect2( 128, 128, 128, 128 )
+region = Rect2( 0, 896, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=26]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 128, 128 )
+region = Rect2( 256, 128, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=27]
 atlas = ExtResource( 1 )
-region = Rect2( 640, 128, 128, 128 )
+region = Rect2( 0, 512, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=28]
 atlas = ExtResource( 1 )
-region = Rect2( 768, 128, 128, 128 )
+region = Rect2( 128, 512, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=29]
 atlas = ExtResource( 1 )
-region = Rect2( 896, 128, 128, 128 )
+region = Rect2( 256, 512, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=30]
 atlas = ExtResource( 1 )
-region = Rect2( 1024, 128, 128, 128 )
+region = Rect2( 384, 512, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=31]
 atlas = ExtResource( 1 )
-region = Rect2( 1152, 128, 128, 128 )
+region = Rect2( 512, 512, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=32]
 atlas = ExtResource( 1 )
-region = Rect2( 1280, 128, 128, 128 )
+region = Rect2( 640, 512, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=33]
 atlas = ExtResource( 1 )
-region = Rect2( 1408, 128, 128, 128 )
+region = Rect2( 0, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=34]
 atlas = ExtResource( 1 )
-region = Rect2( 256, 1152, 128, 128 )
+region = Rect2( 1152, 896, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=35]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 512, 128, 128 )
+region = Rect2( 1024, 896, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=36]
 atlas = ExtResource( 1 )
-region = Rect2( 128, 512, 128, 128 )
+region = Rect2( 896, 896, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 1 )
-region = Rect2( 256, 512, 128, 128 )
+region = Rect2( 768, 896, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=38]
 atlas = ExtResource( 1 )
-region = Rect2( 384, 512, 128, 128 )
+region = Rect2( 640, 896, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=39]
 atlas = ExtResource( 1 )
-region = Rect2( 512, 512, 128, 128 )
+region = Rect2( 512, 896, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=40]
 atlas = ExtResource( 1 )
-region = Rect2( 640, 512, 128, 128 )
+region = Rect2( 384, 896, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=41]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 1024, 128, 128 )
+region = Rect2( 256, 896, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=42]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 896, 128, 128 )
+region = Rect2( 128, 896, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=43]
 atlas = ExtResource( 1 )
-region = Rect2( 1152, 0, 128, 128 )
+region = Rect2( 0, 896, 128, 128 )
 
 [sub_resource type="SpriteFrames" id=44]
 animations = [ {
@@ -221,59 +222,59 @@ animations = [ {
 "name": "Walk",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 11 ) ],
-"loop": true,
-"name": "CrouchStill",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ) ],
-"loop": true,
-"name": "Climb",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 22 ), SubResource( 23 ) ],
-"loop": true,
-"name": "StandUp",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 24 ), SubResource( 25 ) ],
+"frames": [ SubResource( 11 ), SubResource( 12 ) ],
 "loop": true,
 "name": "Duck",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 26 ) ],
-"loop": true,
-"name": "StandStill",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ) ],
+"frames": [ SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ) ],
 "loop": true,
 "name": "Crawl",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 34 ) ],
+"frames": [ SubResource( 20 ), SubResource( 21 ) ],
+"loop": true,
+"name": "StandUp",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 22 ) ],
+"loop": true,
+"name": "Stunned",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 23 ) ],
 "loop": true,
 "name": "Jump",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 35 ), SubResource( 36 ), SubResource( 37 ), SubResource( 38 ), SubResource( 39 ), SubResource( 40 ) ],
-"loop": false,
-"name": "Whip",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 41 ) ],
+"frames": [ SubResource( 24 ) ],
 "loop": true,
 "name": "LookUp",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 42 ) ],
+"frames": [ SubResource( 25 ) ],
 "loop": true,
 "name": "ClimbStill",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 43 ) ],
+"frames": [ SubResource( 26 ) ],
 "loop": true,
-"name": "Stunned",
+"name": "CrouchStill",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ) ],
+"loop": false,
+"name": "Whip",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 33 ) ],
+"loop": true,
+"name": "StandStill",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 34 ), SubResource( 35 ), SubResource( 36 ), SubResource( 37 ), SubResource( 38 ), SubResource( 39 ), SubResource( 40 ), SubResource( 41 ), SubResource( 42 ), SubResource( 43 ) ],
+"loop": true,
+"name": "Climb",
 "speed": 5.0
 } ]
 
@@ -338,7 +339,7 @@ position = Vector2( 0, 1 )
 
 [node name="Background" type="Sprite" parent="."]
 material = SubResource( 2 )
-position = Vector2( 2175, 2301 )
+position = Vector2( 2123, 2241 )
 scale = Vector2( 300, 300 )
 texture = ExtResource( 9 )
 
@@ -355,7 +356,6 @@ multimesh = ExtResource( 5 )
 texture = ExtResource( 8 )
 
 [node name="Level" type="Node2D" parent="."]
-scale = Vector2( 1.00088, 0.996725 )
 script = ExtResource( 3 )
 groundMultimesh = ExtResource( 2 )
 topMultimesh = ExtResource( 7 )
@@ -379,6 +379,7 @@ metalClankSFX = ExtResource( 35 )
 pickUpSFX = ExtResource( 33 )
 throwSFX = ExtResource( 36 )
 splatSFX = ExtResource( 38 )
+boxOpenSFX = ExtResource( 40 )
 audioSourceScene = ExtResource( 32 )
 snakeScene = ExtResource( 25 )
 rockScene = ExtResource( 17 )
@@ -428,7 +429,7 @@ region_rect = Rect2( 1408, 1536, 128, 128 )
 [node name="StunBirds" type="AnimatedSprite" parent="Spelunker"]
 position = Vector2( 5, -34 )
 frames = SubResource( 57 )
-frame = 4
+frame = 8
 speed_scale = 3.0
 playing = true
 

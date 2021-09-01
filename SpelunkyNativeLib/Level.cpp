@@ -65,6 +65,7 @@ void Level::_register_methods()
 	register_property("pickUpSFX", &Level::pickUpSFX, Ref<AudioStream>());
 	register_property("throwSFX", &Level::throwSFX, Ref<AudioStream>());
 	register_property("splatSFX", &Level::splatSFX, Ref<AudioStream>());
+	register_property("boxOpenSFX", &Level::boxOpenSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 
@@ -276,8 +277,8 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 
 void Level::_ready()
 {
-	blocksXRes = 50;
-	blocksYRes = 50;
+	blocksXRes = 500;
+	blocksYRes = 500;
 	worldBlockSize = 100;
 #ifdef showDebugHitboxes
 	allRids = new	std::vector<RID>();
@@ -295,6 +296,7 @@ void Level::_ready()
 	for (int i = 0; i < blocksXRes; i++) {
 		for (int j = 0; j < blocksYRes; j++) {
 			GetBlock(i, j)->hasRope = false;
+			GetBlock(i, j)->present = i!=5 || j>200;
 			GetBlock(i, j)->indestructible= false;
 			GetBlock(i, j)->hasSpikes= false;
 			GetBlock(i, j)->bloody= false;
@@ -470,17 +472,21 @@ void Level::_process(float delta)
 					isValid = false;
 				}
 				if (isValid) {
+					bool shouldApplyForce = true;
 					if (body->damageReciever != nullptr) {
 						if (body->damageReciever->TakeDamage(hitbox->damageAmount, hitbox->stun, hitboxesToRemove)) {
 							hurtboxesToRemove->push_back(body);
+							shouldApplyForce = false;
 						}
 					}
 					if (hitbox->assignCreatorToEscapeToMoveFastHitbox != nullptr) {
 						body->moveFastHitbox.creatorToEscape = hitbox->assignCreatorToEscapeToMoveFastHitbox;
 					}
-					body->vel += hitbox->knockInDirectionAmount;
-					Vector2 away = (body->aabb.center - hitbox->aabb.center).normalized();
-					body->vel += away * hitbox->knockAwayAmount;
+					if (shouldApplyForce) {
+						body->vel += hitbox->knockInDirectionAmount;
+						Vector2 away = (body->aabb.center - hitbox->aabb.center).normalized();
+						body->vel += away * hitbox->knockAwayAmount;
+					}
 				}
 			}
 		}

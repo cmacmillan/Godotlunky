@@ -196,7 +196,7 @@ void Spelunker::_process(float delta)
 		}
 	}  
 	else if (input->is_action_just_pressed("whip") && !holdingLedge && !isWhipping && !isStunned) {
-		if (pickedBody!=nullptr) {
+		if (pickedBody != nullptr) {
 			if (pickedBody->throwAction==nullptr) {
 				pickedBody->moveFastHitbox.creatorToEscape = &body;
 				pickedBody->vel = Vector2(2000, -1300);
@@ -296,7 +296,6 @@ void Spelunker::_process(float delta)
 		if (input->is_action_just_pressed("rope")) {
 			Rope* rope = SpawnRope(level,body.aabb.center);
 			rope->body.moveFastHitbox.creatorToEscape = &body;
-			level->add_child(rope);
 		}
 		grabRopeDisableTime -= delta;
 		if (input->is_action_pressed("lookup") && !holdingRope && grabRopeDisableTime <= 0) {
