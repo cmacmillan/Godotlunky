@@ -18,7 +18,7 @@ void BloodSpurt::_init(){}
 void BloodSpurt::_ready()
 {
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.15f, .15f), Vector2(0, 0), .1f, 10000, this, level, Vector2((Random()-.5f)*500.0f, -1000*Random()-500), false, 1, HitboxMask::Everything, nullptr, nullptr, false, false, nullptr);
+	body.Init(Vector2(.15f, .15f), Vector2(0, 0), .1f, 10000, this, level, Vector2((Random()-.5f)*500.0f, -1000*Random()-500), false, 1, HitboxMask::Nothing, nullptr, nullptr, false, false, nullptr);
 	particles = get_node<Particles2D>("Particles2D");
 	//level->RegisterHurtbox(&body);
 	isDying = false;

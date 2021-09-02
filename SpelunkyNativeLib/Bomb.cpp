@@ -18,7 +18,7 @@ void Bomb::_ready()
 	AnimatedSprite* animator = get_node<AnimatedSprite>("AnimatedSprite");
 	animator->_set_playing(true);
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.5f, .5f), Vector2(0, 0), .3, 3000, this, level, startVelocity,true,1,HitboxMask::Everything,nullptr,nullptr,true,true,nullptr);
+	body.Init(Vector2(.5f, .5f), Vector2(0, 0), .3, 3000, this, level, startVelocity,true,1,HitboxMask::Item,nullptr,nullptr,true,true,nullptr);
 	level->RegisterHurtbox(&body);
 	auto audio = get_node<AudioStreamPlayer2D>("Audio");
 	audio->set_stream(level->bombTimerSFX);
@@ -49,13 +49,22 @@ void Bomb::_process(float delta)
 		explosionHitbox.creatorToEscape = nullptr;
 		explosionHitbox.autoUnregister = true;
 		level->RegisterHitbox(&explosionHitbox);
+		int yMin = coord.y - 3;
 		for (int i = coord.x - 2; i <= coord.x + 2; i++) {
-			for (int j = coord.y - 2; j <= coord.y + 2; j++) {
+			for (int j = yMin; j <= coord.y + 2; j++) {
 				auto block = level->GetBlock(i, j);
 				if (!block->indestructible) {
-					block->present = false;
-					block->hasSpikes = false;
-					block->bloody = false;
+					if (j == yMin) //remove spikes from block above
+					{
+						block->hasSpikes = false;
+						block->bloody = false;
+					}
+					else
+					{
+						block->present = false;
+						block->hasSpikes = false;
+						block->bloody = false;
+					}
 				}
 			}
 		}

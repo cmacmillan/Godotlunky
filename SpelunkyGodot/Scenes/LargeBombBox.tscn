@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://CaveTex/sBombBoxTile_0.png" type="Texture" id=1]
+[ext_resource path="res://NativeScripts/AutoPickup.gdns" type="Script" id=2]
+
+[node name="LargeBombBox" type="Node2D"]
+script = ExtResource( 2 )
+hitboxSize = Vector2( 0.5, 0.5 )
+amountOfStuff = 12
+typeInt = 1
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, -16 )
+scale = Vector2( 5, 5 )
+texture = ExtResource( 1 )

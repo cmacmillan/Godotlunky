@@ -24,6 +24,13 @@ Rope* SpawnRope(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(le
 Bat* SpawnBat(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Bat>(level->batScene->instance()), gridCoord, level,false);}
 BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord) {  return PutAtAndChildToLevel(level->cast_to<BloodSpurt>(level->bloodSpurtScene->instance()), gridCoord, level,false);}
 PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<PrizeBox>(level->prizeBoxScene->instance()), gridCoord, level,true);}
+
+//auto pickup
+AutoPickup* SpawnLargeGoldPile(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<AutoPickup>(level->largeGoldScene->instance()), gridCoord, level,false);}
+AutoPickup* SpawnLargeBombBox(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<AutoPickup>(level->largeBombBoxScene->instance()), gridCoord, level,false);}
+AutoPickup* SpawnSmallBombPile(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<AutoPickup>(level->smallBombPileScene->instance()), gridCoord, level,false);}
+AutoPickup* SpawnSmallRopePile(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<AutoPickup>(level->ropePileScene->instance()), gridCoord, level,false);}
+
 float Random() { return (std::rand() / (float)RAND_MAX); }
 
 

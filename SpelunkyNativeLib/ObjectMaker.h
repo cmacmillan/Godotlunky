@@ -9,6 +9,7 @@
 #include "Bat.h"
 #include "BloodSpurt.h"
 #include "PrizeBox.h"
+#include "AutoPickup.h"
 
 Bullet* SpawnBullet(Level* level,Vector2 gridCoord);
 Rock* SpawnRock(Level* level,Vector2 gridCoord);
@@ -19,4 +20,11 @@ Bomb* SpawnBomb(Level* level,Vector2 gridCoord,Vector2 startVel);
 Bat* SpawnBat(Level* level,Vector2 gridCoord);
 BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord);
 PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord);
+
+//AutoPickup
+AutoPickup* SpawnLargeGoldPile(Level* level, Vector2 gridCoord);
+AutoPickup* SpawnLargeBombBox(Level* level, Vector2 gridCoord);
+AutoPickup* SpawnSmallBombPile(Level* level, Vector2 gridCoord);
+AutoPickup* SpawnSmallRopePile(Level* level, Vector2 gridCoord);
+
 float Random();

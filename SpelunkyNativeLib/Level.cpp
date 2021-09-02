@@ -78,6 +78,12 @@ void Level::_register_methods()
 	register_property("batScene", &Level::batScene, Ref<PackedScene>());
 	register_property("bloodSpurtScene", &Level::bloodSpurtScene, Ref<PackedScene>());
 	register_property("prizeBoxScene", &Level::prizeBoxScene, Ref<PackedScene>());
+
+	//auto pickups
+	register_property("largeGoldScene", &Level::largeGoldScene, Ref<PackedScene>());
+	register_property("ropePileScene", &Level::ropePileScene, Ref<PackedScene>());
+	register_property("smallBombPileScene", &Level::smallBombPileScene, Ref<PackedScene>());
+	register_property("largeBombBoxScene", &Level::largeBombBoxScene, Ref<PackedScene>());
 }
 
 const string layout1 = 
@@ -85,7 +91,7 @@ const string layout1 =
  X0000000000000000000B0000000000000000000X\n\
  X00XXX00X0000000000000000000000000000000X\n\
  X00XXX000000000000G000000000000000000000X\n\
- X00XXX0000000000000000000000000P0000000SX\n\
+ X00XXX0000000000000000000000000P$kKr000SX\n\
  X00XXX0000000000000000000000000000000000X\n\
  X00000S0X0000000000000000000000000000000X\n\
  XX0000X0X0000000000000000000000000000000X\n\
@@ -106,7 +112,19 @@ void Level::CopyLayoutIntoBlocks(string layout, int x, int y)
 		for (int i = 0; i < len; i++) {
 			GetBlock(xCurr, y)->present = false;
 			Vector2 gridCoord = Vector2(xCurr + .5f, y + .5f);
-			if (line[i] == 'P') {
+			if (line[i]=='k') {
+				SpawnSmallBombPile(this, gridCoord);
+				xCurr++;
+			} else if(line[i] == 'K') {
+				SpawnLargeBombBox(this, gridCoord);
+				xCurr++;
+			} else if(line[i] == '$') {
+				SpawnLargeGoldPile(this, gridCoord);
+				xCurr++;
+			} else if(line[i] == 'r') {
+				SpawnSmallRopePile(this, gridCoord);
+				xCurr++;
+			} else if (line[i] == 'P') {
 				SpawnPrizeBox(this,gridCoord);
 				xCurr++;
 			} else if (line[i] == 'B') {
@@ -291,6 +309,7 @@ void Level::_ready()
 	outstandingAudioSources = new std::vector<AudioStreamPlayer2D*>();
 	hitboxes = new std::set<HitboxData*>();
 	hurtboxes = new std::set<Body*>();
+	autoPickups = new std::set<AutoPickup*>();
 	blocks = (LevelBlock*)malloc(sizeof(LevelBlock) * blocksXRes*blocksYRes);
 	drawTypes = (DrawType*)malloc(sizeof(DrawType) * blocksXRes*blocksYRes);
 	for (int i = 0; i < blocksXRes; i++) {
@@ -397,6 +416,7 @@ RID Level::GetRid(VisualServer* vs) {
 
 std::vector<Body*>* hurtboxesToRemove = nullptr;
 std::vector<HitboxData*>* hitboxesToRemove= nullptr;
+std::vector<AutoPickup*>* autopickupsToRemove= nullptr;
 void Level::_process(float delta)
 {
 	for (int i = 0; i < outstandingAudioSources->size(); i++) 
@@ -413,6 +433,9 @@ void Level::_process(float delta)
 	}
 	if (hitboxesToRemove == nullptr) {
 		hitboxesToRemove = new std::vector<HitboxData*>();
+	}
+	if (autopickupsToRemove == nullptr) {
+		autopickupsToRemove= new std::vector<AutoPickup*>();
 	}
 #ifdef showDebugHitboxes
 	auto vs= VisualServer::get_singleton();
@@ -491,14 +514,25 @@ void Level::_process(float delta)
 			}
 		}
 	}
+	//process auto pickups
+	for (auto autoPickup : *autoPickups) {
+		if (autoPickup->body.aabb.overlaps(spelunker->body.aabb)) {
+			autoPickup->PickedUp(spelunker);
+			autopickupsToRemove->push_back(autoPickup);
+		}
+	}
 	for (auto remove : *hurtboxesToRemove) {
 		UnregisterHurtbox(remove);
 	}
 	for (auto remove : *hitboxesToRemove) {
 		UnregisterHitbox(remove);
 	}
+	for (auto remove : *autopickupsToRemove) {
+		autoPickups->erase(remove);
+	}
 	hurtboxesToRemove->clear();
 	hitboxesToRemove->clear();
+	autopickupsToRemove->clear();
 }
 
 LevelBlock* Level::GetBlock(int x, int y) {
@@ -539,8 +573,9 @@ Level::~Level()
 	delete allRids;
 	delete freeRids;
 #endif // showDebugHitboxes
-	_CSTDLIB_::free(blocks);
-	_CSTDLIB_::free(drawTypes);
+	std::free(blocks);
+	std::free(drawTypes);
 	delete hitboxes;
 	delete hurtboxes;
+	delete autoPickups;
 }

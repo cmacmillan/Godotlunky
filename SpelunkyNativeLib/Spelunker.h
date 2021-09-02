@@ -38,6 +38,10 @@ public:
 	Body* pickedBody = nullptr;
 	HitboxData whipHitbox;
 
+	int ropeCount = 4;
+	int bombCount= 4;
+	int goldCollected = 0;
+
 	Body* GetBody();
 	Vector2 GetPickPosition();
 	void PickedBodyDestroyed();

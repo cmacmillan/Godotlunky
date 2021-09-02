@@ -13,6 +13,7 @@
 #include <set>
 #include "HitboxData.h"
 #include "Spelunker.h"
+#include "AutoPickup.h"
 
 enum DrawType {
 	Normal = 0,
@@ -32,6 +33,7 @@ struct LevelBlock {
 
 class Body;
 class Spelunker;
+class AutoPickup;
 
 #define showDebugHitboxes
 
@@ -76,6 +78,12 @@ public:
 	Ref<PackedScene> bloodSpurtScene;
 	Ref<PackedScene> prizeBoxScene;
 
+	//auto pickups
+	Ref<PackedScene> largeGoldScene;
+	Ref<PackedScene> ropePileScene;
+	Ref<PackedScene> smallBombPileScene;
+	Ref<PackedScene> largeBombBoxScene;
+
 #ifdef showDebugHitboxes
 	RID GetRid(VisualServer* vs);
 	std::vector<RID>* allRids;
@@ -92,6 +100,7 @@ public:
 	float worldBlockSize;
 	std::set<Body*>* hurtboxes;
 	std::set<HitboxData*>* hitboxes;
+	std::set<AutoPickup*>* autoPickups;
 
 	std::vector<AudioStreamPlayer2D*>* freeAudioSources;
 	std::vector<AudioStreamPlayer2D*>* outstandingAudioSources;

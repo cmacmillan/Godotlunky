@@ -217,7 +217,7 @@ void Spelunker::_process(float delta)
 		}
 		else 
 		{
-			whipHitbox.SetValues(body.aabb, 1, HitboxMask::Enemy,Vector2(1000*(body.isFacingRight?1:-1),-500) , 0, true,nullptr);
+			whipHitbox.SetValues(body.aabb, 1, HitboxMask::ItemAndEnemy,Vector2(1000*(body.isFacingRight?1:-1),-500) , 0, true,nullptr);
 			whipHitbox.InitOrClearBodiesAlreadyDamagedList();
 			whipHitbox.assignCreatorToEscapeToMoveFastHitbox = &body;
 			whipHitbox.creatorToEscape = nullptr;
@@ -283,19 +283,25 @@ void Spelunker::_process(float delta)
 	}
 	if (!isWhipping && !isStunned) {
 		if (input->is_action_just_pressed("bomb")) {
-			auto startVelocity = Vector2(1500, -1300);
-			if (!body.isFacingRight) {
-				startVelocity.x *= -1;
+			if (bombCount > 0) {
+				bombCount--;
+				auto startVelocity = Vector2(1500, -1300);
+				if (!body.isFacingRight) {
+					startVelocity.x *= -1;
+				}
+				if (isCrouching) {
+					startVelocity = Vector2(400 * (body.isFacingRight ? 1 : -1), 0);
+				}
+				Bomb* bomb = SpawnBomb(level, body.aabb.center, startVelocity);
+				bomb->body.moveFastHitbox.creatorToEscape = &body;
 			}
-			if (isCrouching) {
-				startVelocity = Vector2(400 * (body.isFacingRight? 1 : -1), 0);
-			}
-			Bomb* bomb = SpawnBomb(level,body.aabb.center,startVelocity);
-			bomb->body.moveFastHitbox.creatorToEscape = &body;
 		}
 		if (input->is_action_just_pressed("rope")) {
-			Rope* rope = SpawnRope(level,body.aabb.center);
-			rope->body.moveFastHitbox.creatorToEscape = &body;
+			if (ropeCount > 0) {
+				ropeCount--;
+				Rope* rope = SpawnRope(level, body.aabb.center);
+				rope->body.moveFastHitbox.creatorToEscape = &body;
+			}
 		}
 		grabRopeDisableTime -= delta;
 		if (input->is_action_pressed("lookup") && !holdingRope && grabRopeDisableTime <= 0) {

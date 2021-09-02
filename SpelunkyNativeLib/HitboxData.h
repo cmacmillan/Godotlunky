@@ -22,8 +22,11 @@ enum HitboxMask : unsigned int {
 	Nothing = 0,
 	Player = 1,
 	Enemy = 2,
-	Everything = 4294967295,
+	Item = 4,
+	Everything = 0xFFFF,
+	ItemAndEnemy = Item | Enemy,
 };
+
 
 class Body;
 

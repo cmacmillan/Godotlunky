@@ -16,7 +16,7 @@ void PrizeBox::_init(){}
 void PrizeBox::_ready()
 {
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.8f,.5f),Vector2(0,0),.1,5000,this,level,Vector2(0,0),true,1,HitboxMask::Enemy,this,this,true,true,nullptr);
+	body.Init(Vector2(.8f,.5f),Vector2(0,0),.1,5000,this,level,Vector2(0,0),true,1,HitboxMask::Item,this,this,true,true,nullptr);
 	level->RegisterHurtbox(&body);
 }
 
