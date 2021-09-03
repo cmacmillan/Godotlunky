@@ -66,6 +66,8 @@ void Level::_register_methods()
 	register_property("throwSFX", &Level::throwSFX, Ref<AudioStream>());
 	register_property("splatSFX", &Level::splatSFX, Ref<AudioStream>());
 	register_property("boxOpenSFX", &Level::boxOpenSFX, Ref<AudioStream>());
+	register_property("goldPickupSFX", &Level::goldPickupSFX, Ref<AudioStream>());
+	register_property("itemPickupSFX", &Level::itemPickupSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 

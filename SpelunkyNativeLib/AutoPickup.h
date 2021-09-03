@@ -33,5 +33,6 @@ public:
 	void _ready();
 	void _process(float delta);
 	void PickedUp(Spelunker* spelunker);
+	Ref<AudioStream> GetPickupSFX();
 };
 

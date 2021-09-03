@@ -34,9 +34,19 @@ void AutoPickup::PickedUp(Spelunker* spelunker) {
 		printf("NOT IMPLEMENTED!");
 		break;
 	}
+	level->PlayAudio(GetPickupSFX(), body.aabb.center);
 	level->UnregisterHurtbox(&body);
 	body.OnDestroy(nullptr);
 	queue_free();
+}
+
+Ref<AudioStream> AutoPickup::GetPickupSFX() {
+	switch (type) {
+	case AutoPickupType::Gold:
+		return level->goldPickupSFX;
+	default:
+		return level->itemPickupSFX;
+	}
 }
 
 void AutoPickup::_ready()
