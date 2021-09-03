@@ -68,6 +68,7 @@ void Level::_register_methods()
 	register_property("boxOpenSFX", &Level::boxOpenSFX, Ref<AudioStream>());
 	register_property("goldPickupSFX", &Level::goldPickupSFX, Ref<AudioStream>());
 	register_property("itemPickupSFX", &Level::itemPickupSFX, Ref<AudioStream>());
+	register_property("noneLeftSFX", &Level::noneLeftSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 
@@ -306,6 +307,10 @@ void Level::_ready()
 #endif // showDebugHitboxes
 
 	frontSpawnRoot = get_node("/root/GameScene/SpawnRoot");
+	uiRoot = get_node<Control>("/root/GameScene/Spelunker/Camera2D/CanvasLayer/Control");
+	bombCountLabel = uiRoot->get_node<Label>("TopLeftContainer/BombCountContainer/Label");
+	ropeCountLabel= uiRoot->get_node<Label>("TopLeftContainer/RopeCountContainer/Label");
+	healthCountLabel= uiRoot->get_node<Label>("TopLeftContainer/HealthCountContainer/Label");
 
 	freeAudioSources = new std::vector<AudioStreamPlayer2D*>();
 	outstandingAudioSources = new std::vector<AudioStreamPlayer2D*>();

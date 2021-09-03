@@ -9,6 +9,7 @@
 #include <AudioStreamPlayer2D.hpp>
 #include <AudioStream.hpp>
 #include "ObjectMaker.h"
+#include <string>
 using namespace godot::Math;
 
 void Spelunker::_register_methods()
@@ -293,7 +294,12 @@ void Spelunker::_process(float delta)
 					startVelocity = Vector2(400 * (body.isFacingRight ? 1 : -1), 0);
 				}
 				Bomb* bomb = SpawnBomb(level, body.aabb.center, startVelocity);
+				level->PlayAudio(level->throwSFX, body.aabb.center);
 				bomb->body.moveFastHitbox.creatorToEscape = &body;
+			}
+			else 
+			{
+				level->PlayAudio(level->noneLeftSFX, body.aabb.center);
 			}
 		}
 		if (input->is_action_just_pressed("rope")) {
@@ -301,6 +307,10 @@ void Spelunker::_process(float delta)
 				ropeCount--;
 				Rope* rope = SpawnRope(level, body.aabb.center);
 				rope->body.moveFastHitbox.creatorToEscape = &body;
+			} 
+			else
+			{
+				level->PlayAudio(level->noneLeftSFX, body.aabb.center);
 			}
 		}
 		grabRopeDisableTime -= delta;
@@ -504,6 +514,10 @@ void Spelunker::_process(float delta)
 		}
 	}
 	wasGrounded = body.isGrounded;
+
+	level->healthCountLabel->set_text(String(std::to_string(this->health).c_str()));
+	level->bombCountLabel->set_text(String(std::to_string(this->bombCount).c_str()));
+	level->ropeCountLabel->set_text(String(std::to_string(this->ropeCount).c_str()));
 }
 Spelunker::Spelunker() {
 	printf("const");

@@ -14,6 +14,8 @@
 #include "HitboxData.h"
 #include "Spelunker.h"
 #include "AutoPickup.h"
+#include <Control.hpp>
+#include <Label.hpp>
 
 enum DrawType {
 	Normal = 0,
@@ -68,6 +70,7 @@ public:
 	Ref<AudioStream> boxOpenSFX;
 	Ref<AudioStream> goldPickupSFX;
 	Ref<AudioStream> itemPickupSFX;
+	Ref<AudioStream> noneLeftSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;
@@ -93,6 +96,10 @@ public:
 #endif
 
 	Node* frontSpawnRoot;
+	Control* uiRoot;
+	Label* bombCountLabel;
+	Label* ropeCountLabel;
+	Label* healthCountLabel;
 
 	Spelunker* spelunker;
 	LevelBlock* blocks;

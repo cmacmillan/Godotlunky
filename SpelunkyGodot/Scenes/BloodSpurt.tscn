@@ -23,7 +23,7 @@ script = ExtResource( 2 )
 [node name="Particles2D" type="Particles2D" parent="."]
 amount = 40
 lifetime = 0.1
-visibility_rect = Rect2( 0, 0, 1000, 1000 )
+visibility_rect = Rect2( 0, 0, 100000, 100000 )
 local_coords = false
 draw_order = 1
 process_material = SubResource( 3 )
