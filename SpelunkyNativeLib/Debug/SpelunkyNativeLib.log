@@ -1,4 +1,6 @@
-﻿  Bat.cpp
+﻿  AutoPickup.cpp
+Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
+  Bat.cpp
 Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
   BloodSpurt.cpp
 Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
@@ -12,6 +14,8 @@ Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot op
 Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
   ObjectMaker.cpp
 Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
+  PrizeBox.cpp
+Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
   Rock.cpp
 Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
   Rope.cpp
@@ -23,5 +27,7 @@ Z:\Godot\godot-cpp\include\gen\Node2D.hpp(8,10): fatal error C1083: Cannot open 
   Spelunker.cpp
 Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
   SpelunkyNativeLib.cpp
+Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
+  Spider.cpp
 Z:\Godot\godot-cpp\include\gen\Reference.hpp(8,10): fatal error C1083: Cannot open include file: 'core/CoreTypes.hpp': No such file or directory
   Generating Code...

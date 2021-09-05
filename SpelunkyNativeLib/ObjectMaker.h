@@ -10,6 +10,7 @@
 #include "BloodSpurt.h"
 #include "PrizeBox.h"
 #include "AutoPickup.h"
+#include "Spider.h"
 
 class PrizeBox;
 
@@ -22,6 +23,7 @@ Bomb* SpawnBomb(Level* level,Vector2 gridCoord,Vector2 startVel);
 Bat* SpawnBat(Level* level,Vector2 gridCoord);
 BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord);
 PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord);
+Spider* SpawnSpider(Level* level, Vector2 gridCoord);
 
 //AutoPickup
 AutoPickup* SpawnLargeGoldPile(Level* level, Vector2 gridCoord,float timeUntilActive);

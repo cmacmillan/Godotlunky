@@ -76,6 +76,7 @@ public:
 	Ref<AudioStream> goldPickupSFX;
 	Ref<AudioStream> itemPickupSFX;
 	Ref<AudioStream> noneLeftSFX;
+	Ref<AudioStream> spiderJumpSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;
@@ -87,6 +88,7 @@ public:
 	Ref<PackedScene> audioSourceScene;
 	Ref<PackedScene> bloodSpurtScene;
 	Ref<PackedScene> prizeBoxScene;
+	Ref<PackedScene> spiderScene;
 
 	//auto pickups
 	Ref<PackedScene> largeGoldScene;

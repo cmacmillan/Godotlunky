@@ -12,6 +12,7 @@
 #include "BloodSpurt.h"
 #include "PrizeBox.h"
 #include "AutoPickup.h"
+#include "Spider.h"
 
 extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
 	godot::Godot::gdnative_init(o);
@@ -36,4 +37,5 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 	godot::register_class<BloodSpurt>();
 	godot::register_class<PrizeBox>();
 	godot::register_class<AutoPickup>();
+	godot::register_class<Spider>();
 }

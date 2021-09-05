@@ -140,6 +140,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AutoPickup.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Bat.cpp">
       <SubType>
       </SubType>
@@ -156,6 +160,10 @@
     </ClCompile>
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="ObjectMaker.cpp" />
+    <ClCompile Include="PrizeBox.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Rock.cpp">
       <SubType>
       </SubType>
@@ -168,8 +176,16 @@
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Spelunker.cpp" />
     <ClCompile Include="SpelunkyNativeLib.cpp" />
+    <ClCompile Include="Spider.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AutoPickup.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Bat.h">
       <SubType>
       </SubType>
@@ -188,7 +204,15 @@
     <ClInclude Include="HitboxData.h" />
     <ClInclude Include="IDamageReciever.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="LevelLayouts.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ObjectMaker.h" />
+    <ClInclude Include="PrizeBox.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Rock.h">
       <SubType>
       </SubType>
@@ -200,6 +224,10 @@
     </ClInclude>
     <ClInclude Include="Snake.h" />
     <ClInclude Include="Spelunker.h" />
+    <ClInclude Include="Spider.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

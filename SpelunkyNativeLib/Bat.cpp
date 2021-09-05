@@ -49,7 +49,9 @@ void Bat::_process(float delta)
 		body.process(delta,false,false);
 	}
 	else {
-		if (level->spelunker->body.endPos.y>body.endPos.y && level->spelunker->body.endPos.distance_to(body.endPos)<8) {
+		Vector2 block = body.aabb.center;
+		block.y -= 1;
+		if ((level->spelunker->body.endPos.y>body.endPos.y && level->spelunker->body.endPos.distance_to(body.endPos)<8) || !level->GetBlock(block.x,block.y)->present) {
 			animatedSprite->set_animation("Flap");
 			hasSpottedPlayer = true;
 		}

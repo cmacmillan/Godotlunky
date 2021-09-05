@@ -54,6 +54,15 @@
     <ClCompile Include="BloodSpurt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PrizeBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoPickup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Spider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -99,6 +108,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BloodSpurt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PrizeBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoPickup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelLayouts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Spider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

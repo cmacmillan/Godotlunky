@@ -71,6 +71,7 @@ void Level::_register_methods()
 	register_property("goldPickupSFX", &Level::goldPickupSFX, Ref<AudioStream>());
 	register_property("itemPickupSFX", &Level::itemPickupSFX, Ref<AudioStream>());
 	register_property("noneLeftSFX", &Level::noneLeftSFX, Ref<AudioStream>());
+	register_property("spiderJumpSFX", &Level::spiderJumpSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 
@@ -83,6 +84,7 @@ void Level::_register_methods()
 	register_property("batScene", &Level::batScene, Ref<PackedScene>());
 	register_property("bloodSpurtScene", &Level::bloodSpurtScene, Ref<PackedScene>());
 	register_property("prizeBoxScene", &Level::prizeBoxScene, Ref<PackedScene>());
+	register_property("spiderScene", &Level::spiderScene, Ref<PackedScene>());
 
 	//auto pickups
 	register_property("largeGoldScene", &Level::largeGoldScene, Ref<PackedScene>());
@@ -131,6 +133,8 @@ void Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 			}
 			if (line[i]=='k') {
 				SpawnSmallBombPile(this, gridCoord,0.0f);
+			} else if(line[i] == 'M') {
+				SpawnSpider(this, gridCoord);
 			} else if(line[i] == 'K') {
 				SpawnLargeBombBox(this, gridCoord,0.0f);
 			} else if(line[i] == '$') {
