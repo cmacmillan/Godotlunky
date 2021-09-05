@@ -16,6 +16,7 @@
 #include "AutoPickup.h"
 #include <Control.hpp>
 #include <Label.hpp>
+#include "LevelLayouts.h"
 
 enum DrawType {
 	Normal = 0,
@@ -100,6 +101,7 @@ public:
 	Label* bombCountLabel;
 	Label* ropeCountLabel;
 	Label* healthCountLabel;
+	Label* moneyCountLabel;
 
 	Spelunker* spelunker;
 	LevelBlock* blocks;

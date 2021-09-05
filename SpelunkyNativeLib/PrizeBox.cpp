@@ -11,6 +11,24 @@ void PrizeBox::_register_methods()
 	register_method("_process", &PrizeBox::_process);
 }
 
+
+#define prizeBoxProbabilitiesLength 3
+constexpr float prizeBoxProbabilities[prizeBoxProbabilitiesLength] = {
+	10.0f,//rope
+	10.0f,//small bomb
+	2.0f,//big bomb
+};
+
+constexpr float PrizeBoxProbSum() {
+	float sum = 0.0f;
+	for (int i = 0; i < prizeBoxProbabilitiesLength; i++) {
+		sum += prizeBoxProbabilities[i];
+	}
+	return sum;
+}
+
+constexpr float prizeBoxProbSum = PrizeBoxProbSum();
+
 void PrizeBox::_init(){}
 
 void PrizeBox::_ready()
@@ -22,6 +40,24 @@ void PrizeBox::_ready()
 
 void PrizeBox::OpenBox(vector<HitboxData*>* hitboxesToRemove) 
 {
+	float rand = Random() * prizeBoxProbSum;
+	int SpawnIndex=0;
+	for (;rand>prizeBoxProbabilities[SpawnIndex]; SpawnIndex++) {
+		rand -= prizeBoxProbabilities[SpawnIndex];
+	}
+	Vector2 pos=body.aabb.center;
+	switch (SpawnIndex) {
+	case 0:
+		SpawnSmallRopePile(level,pos);
+		break;
+	case 1:
+		SpawnSmallBombPile(level, pos);
+		break;
+	case 2:
+		SpawnLargeBombBox(level, pos);
+		break;
+	}
+	///////////////
 	level->PlayAudio(level->boxOpenSFX,body.aabb.center);
 	body.OnDestroy(hitboxesToRemove);
 	queue_free();

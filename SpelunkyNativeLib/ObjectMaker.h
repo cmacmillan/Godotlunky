@@ -11,6 +11,8 @@
 #include "PrizeBox.h"
 #include "AutoPickup.h"
 
+class PrizeBox;
+
 Bullet* SpawnBullet(Level* level,Vector2 gridCoord);
 Rock* SpawnRock(Level* level,Vector2 gridCoord);
 Shotgun* SpawnShotgun(Level* level,Vector2 gridCoord);

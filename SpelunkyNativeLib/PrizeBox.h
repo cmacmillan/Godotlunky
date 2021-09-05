@@ -3,6 +3,7 @@
 #include <Node2D.hpp>
 #include "Level.h"
 #include "Body.h"
+#include "ObjectMaker.h"
 
 class PrizeBox : public Node2D, IDamageReciever, IThrowAction
 {
@@ -21,4 +22,3 @@ public:
 	virtual void DoThrowAction();
 	virtual bool TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove);
 };
-

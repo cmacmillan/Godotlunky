@@ -27,6 +27,7 @@ void Spelunker::_init()
 
 
 bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) {
+	printf("took damage");
 	if (invulTime <= 0) {
 		if (stun) {
 			isStunned = true;
@@ -132,6 +133,12 @@ void Spelunker::_process(float delta)
 		set_position(level->GridToWorld(ledgeCoords));
 	}
 
+	auto footAABB = SpelAABB();
+	float ogHeight = body.aabb.size.y;
+	footAABB.center = body.aabb.center + Vector2(0, ogHeight / 4);
+	footAABB.size = body.aabb.size + Vector2(0, -ogHeight / 2);
+	footHitbox.SetValues(footAABB, 1, HitboxMask::Enemy, Vector2(0, 0), 0, true, &body);
+
 	float accelSpeed=20000;
 
 	auto input = Input::get_singleton();
@@ -179,6 +186,8 @@ void Spelunker::_process(float delta)
 		whipForward->set_flip_h(true);
 		whipBack->set_flip_h(true);
 	}
+
+
 	if (isCrouching && input->is_action_just_pressed("whip")&&!isStunned&&!isWhipping&&!holdingLedge&&!holdingRope) {
 		if (pickedBody == nullptr) {
 			for (auto i : *level->hurtboxes) {
@@ -518,6 +527,7 @@ void Spelunker::_process(float delta)
 	level->healthCountLabel->set_text(String(std::to_string(this->health).c_str()));
 	level->bombCountLabel->set_text(String(std::to_string(this->bombCount).c_str()));
 	level->ropeCountLabel->set_text(String(std::to_string(this->ropeCount).c_str()));
+	level->moneyCountLabel->set_text(String(std::to_string(this->goldCollected).c_str()));
 }
 Spelunker::Spelunker() {
 	printf("const");

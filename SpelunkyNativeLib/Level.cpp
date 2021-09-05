@@ -298,8 +298,8 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 
 void Level::_ready()
 {
-	blocksXRes = 500;
-	blocksYRes = 500;
+	blocksXRes = metaBlockWidth*numMetaBlocksWidth;
+	blocksYRes = metaBlockHeight*numMetaBlocksHeight;
 	worldBlockSize = 100;
 #ifdef showDebugHitboxes
 	allRids = new	std::vector<RID>();
@@ -311,6 +311,7 @@ void Level::_ready()
 	bombCountLabel = uiRoot->get_node<Label>("TopLeftContainer/BombCountContainer/Label");
 	ropeCountLabel= uiRoot->get_node<Label>("TopLeftContainer/RopeCountContainer/Label");
 	healthCountLabel= uiRoot->get_node<Label>("TopLeftContainer/HealthCountContainer/Label");
+	moneyCountLabel = uiRoot->get_node<Label>("TopLeftContainer/MoneyCountContainer/Label");
 
 	freeAudioSources = new std::vector<AudioStreamPlayer2D*>();
 	outstandingAudioSources = new std::vector<AudioStreamPlayer2D*>();
@@ -328,9 +329,7 @@ void Level::_ready()
 			GetBlock(i, j)->bloody= false;
 		}
 	}
-	printf("start copying layout");
-	CopyLayoutIntoBlocks(layout1, 0, 0);
-	printf("done copying layout");
+	//CopyLayoutIntoBlocks(layout1, 0, 0);
 	UpdateMeshes();
 }
 void Level::UpdateMeshes() {
@@ -472,6 +471,30 @@ void Level::_process(float delta)
 		freeRids->push_back(i);
 	}
 #endif // showDebugHitboxes
+	//process foot hitbox
+	if (!spelunker->body.isGrounded && spelunker->body.vel.y>0) {
+		auto hitbox = spelunker->footHitbox;
+		for (auto body : *hurtboxes) {
+			if (((hitbox.mask & body->takeDamageMask) != 0) && hitbox.aabb.overlaps(body->aabb)) {
+				if (body->damageReciever != nullptr) {
+					if (body->damageReciever->TakeDamage(hitbox.damageAmount, hitbox.stun, hitboxesToRemove)) {
+						hurtboxesToRemove->push_back(body);
+					}
+					printf("%d", hitboxesToRemove->size());
+					spelunker->body.vel.y = -1500;
+					break;
+				}
+			}
+		}
+	}
+	for (auto remove : *hurtboxesToRemove) {
+		UnregisterHurtbox(remove);
+	}
+	for (auto remove : *hitboxesToRemove) {
+		UnregisterHitbox(remove);
+	}
+	hurtboxesToRemove->clear();
+	hitboxesToRemove->clear();
 	for (auto hitbox : *hitboxes) {
 		if (hitbox->autoUnregister) {
 			hitboxesToRemove->push_back(hitbox);

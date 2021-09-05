@@ -37,6 +37,7 @@ public:
 	float whipTime;
 	Body* pickedBody = nullptr;
 	HitboxData whipHitbox;
+	HitboxData footHitbox;
 
 	int ropeCount = 4;
 	int bombCount= 4;
