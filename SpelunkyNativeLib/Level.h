@@ -136,7 +136,7 @@ public:
 	float MarchVertical(float startY, float endY, float x1, float x2,bool& hit);
 	float MarchHorizontal(float startX, float endX, float y1, float y2,bool& hit);
 	bool IsOverlappingTerrain(Vector2 pos);
-	void CopyLayoutIntoBlocks(string layout, int x, int y);
+	void CopyLayoutIntoBlocks(string layout, int x, int y, bool flipX);
 	void UpdateMeshes();
 	Level();
 	~Level();

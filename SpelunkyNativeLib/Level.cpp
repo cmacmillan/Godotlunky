@@ -105,56 +105,59 @@ const string layout1 =
 //this should probably not be global
 ////////////////////////////////
 
-void Level::CopyLayoutIntoBlocks(string layout, int x, int y)
+void Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 {
 	std::istringstream iss(layout);
 	for (std::string line; std::getline(iss, line); )
 	{
-		int xCurr = x;
+		int xCurr = 0;
+		int yCurr = 0;
 		int len = line.length();
 		for (int i = 0; i < len; i++) {
-			GetBlock(xCurr, y)->present = false;
-			Vector2 gridCoord = Vector2(xCurr + .5f, y + .5f);
+			auto block = GetBlock(xCurr + x, yCurr + y);
+			bool valid = true;
+			bool setPresent = false;
+			Vector2 gridCoord;
+			if (flipX) {
+				gridCoord = Vector2(((metaBlockWidth-1)-xCurr)+x+.5f, yCurr+ y + .5f);
+	 		}
+			else 
+			{
+				gridCoord = Vector2(xCurr+x+.5f, yCurr+ y + .5f);
+			}
 			if (line[i]=='k') {
 				SpawnSmallBombPile(this, gridCoord);
-				xCurr++;
 			} else if(line[i] == 'K') {
 				SpawnLargeBombBox(this, gridCoord);
-				xCurr++;
 			} else if(line[i] == '$') {
 				SpawnLargeGoldPile(this, gridCoord);
-				xCurr++;
 			} else if(line[i] == 'r') {
 				SpawnSmallRopePile(this, gridCoord);
-				xCurr++;
 			} else if (line[i] == 'P') {
 				SpawnPrizeBox(this,gridCoord);
-				xCurr++;
 			} else if (line[i] == 'B') {
 				SpawnBat(this,gridCoord);
-				xCurr++;
 			} else if (line[i] == 'G') {
 				SpawnShotgun(this,gridCoord);
-				xCurr++;
 			} else if (line[i] == 'R') {
 				SpawnRock(this,gridCoord);
-				xCurr++;
 			} else if (line[i] == 'S') {
 				SpawnSnake(this,gridCoord);
-				xCurr++;
 			} else if (line[i] == 'W') {
-				GetBlock(xCurr,y)->hasSpikes=true;
-				xCurr++;
+				block->hasSpikes=true;
 			} else if (line[i]=='0') {
-				xCurr++;
+			} else if (line[i]=='X') {
+				setPresent = true;
 			}
-			/////////////////////////////////
-			if (line[i]=='X') {
-				GetBlock(xCurr,y)->present=true;
+			else {
+				valid = false;
+			}
+			if (valid) {
+				block->present = setPresent;
 				xCurr++;
 			}
 		}
-		y++;
+		yCurr++;
 	}
 }
 
@@ -296,6 +299,10 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 	return retr;
 }
 
+template <typename T> int sign(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+
 void Level::_ready()
 {
 	blocksXRes = metaBlockWidth*numMetaBlocksWidth;
@@ -323,12 +330,76 @@ void Level::_ready()
 	for (int i = 0; i < blocksXRes; i++) {
 		for (int j = 0; j < blocksYRes; j++) {
 			GetBlock(i, j)->hasRope = false;
-			GetBlock(i, j)->present = i!=5 || j>200;
+			GetBlock(i, j)->present = true;
 			GetBlock(i, j)->indestructible= false;
 			GetBlock(i, j)->hasSpikes= false;
 			GetBlock(i, j)->bloody= false;
 		}
 	}
+	bool metaBlockMask[numMetaBlocks];
+	for (int i = 0; i < numMetaBlocks; i++) {
+		metaBlockMask[i] = false;
+	}
+	printf("start generating");
+	int startIndex = 0;//(Random() * numMetaBlocksWidth);
+	for (int j = 0; j < 1; j++) {
+		int endIndex = startIndex;
+		while (endIndex == startIndex) {
+			endIndex = (Random() * numMetaBlocksWidth);
+		}
+		int direction = sign(endIndex-startIndex);
+		//for (int i = startIndex; i != endIndex+direction; i+=direction) {
+		for (int i=0;i<4;i++){
+			string metaBlock;
+			bool flip = false;
+			metaBlock = startingPlatform1;
+			/*
+			if (i == startIndex && j==0) //starting platform
+			{
+				metaBlock = startingPlatforms[(int)(startingPlatforms->length() * Random())];
+				flip = Random() > .5f;//randomly flip
+			}
+			else if (i == startIndex) //do drop
+			{
+				metaBlock = dropRecievers[(int)(dropRecievers->length() * Random())];
+				flip = startIndex>endIndex;
+			}
+			else if (i == endIndex) //recieve drop
+			{
+				int count = hallwayDrop->length() + rightRecieverDrop->length();
+				int rand = count * Random();
+				if (rand < hallwayDrop->length()) 
+				{
+					metaBlock = hallwayDrop[rand];
+					flip = Random() > .5f;//randomly flip
+				}
+				else 
+				{
+					metaBlock = rightRecieverDrop[rand-hallwayDrop->length()];
+					flip = endIndex > startIndex;
+				}
+			}
+			else //hallway
+			{
+				int count = hallway->length() + hallwayDrop->length();
+				int rand = count * Random();
+				flip = Random() > .5f;//randomly flip
+				if (rand < hallway->length()) 
+				{
+					metaBlock = hallway[rand];
+				}
+				else 
+				{
+					metaBlock = hallwayDrop[rand-hallway->length()];
+				}
+			}
+			*/
+			//CopyLayoutIntoBlocks(metaBlock, i * metaBlockWidth, j * metaBlockHeight, flip);
+			CopyLayoutIntoBlocks(metaBlock, 0, 0, false);
+		}
+		startIndex = endIndex;
+	}
+	printf("done generating");
 	//CopyLayoutIntoBlocks(layout1, 0, 0);
 	UpdateMeshes();
 }
@@ -480,7 +551,6 @@ void Level::_process(float delta)
 					if (body->damageReciever->TakeDamage(hitbox.damageAmount, hitbox.stun, hitboxesToRemove)) {
 						hurtboxesToRemove->push_back(body);
 					}
-					printf("%d", hitboxesToRemove->size());
 					spelunker->body.vel.y = -1500;
 					break;
 				}

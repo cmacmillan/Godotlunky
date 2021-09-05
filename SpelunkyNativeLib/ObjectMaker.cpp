@@ -31,6 +31,6 @@ AutoPickup* SpawnLargeBombBox(Level* level, Vector2 gridCoord) { return PutAtAnd
 AutoPickup* SpawnSmallBombPile(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<AutoPickup>(level->smallBombPileScene->instance()), gridCoord, level,false);}
 AutoPickup* SpawnSmallRopePile(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<AutoPickup>(level->ropePileScene->instance()), gridCoord, level,false);}
 
-float Random() { return (std::rand() / (float)RAND_MAX); }
+float Random() { return (std::rand() / (float)(RAND_MAX+1)); }
 
 

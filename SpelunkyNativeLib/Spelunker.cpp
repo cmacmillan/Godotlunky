@@ -27,7 +27,6 @@ void Spelunker::_init()
 
 
 bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) {
-	printf("took damage");
 	if (invulTime <= 0) {
 		if (stun) {
 			isStunned = true;
