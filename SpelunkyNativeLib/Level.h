@@ -17,6 +17,7 @@
 #include <Control.hpp>
 #include <Label.hpp>
 #include "LevelLayouts.h"
+#include <RandomNumberGenerator.hpp>
 
 enum DrawType {
 	Normal = 0,
@@ -49,6 +50,7 @@ class Level : public Node2D
 	Ref<MultiMesh> bottomMultimesh;
 	Ref<MultiMesh> spikeMultimesh;
 	Ref<MultiMesh> bloodySpikesMultimesh;
+	Ref<MultiMesh> edgeWallMultimesh;
 
 public:
 	float g;
@@ -121,6 +123,8 @@ public:
 	void _ready();
 	void _process(float delta);
 
+	RandomNumberGenerator* rng;//free me?
+
 	void PlayAudio(Ref<AudioStream> sound, Vector2 gridCoordPos);
 	LevelBlock* GetBlock(int x, int y);
 	Vector2 WorldToGrid(Vector2 v);
@@ -137,6 +141,7 @@ public:
 	float MarchHorizontal(float startX, float endX, float y1, float y2,bool& hit);
 	bool IsOverlappingTerrain(Vector2 pos);
 	void CopyLayoutIntoBlocks(string layout, int x, int y, bool flipX);
+	float Random();
 	void UpdateMeshes();
 	Level();
 	~Level();

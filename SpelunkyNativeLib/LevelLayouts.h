@@ -79,15 +79,20 @@ const string startingPlatform1 =
  0XXXXXXXXXXX0\n\
  XXXXXXXXXXXXX";
 
-const string rightRecieverDrop[1] = { rightRecieverDrop1 };
+#define rightRecieverDropLength 1
+const string rightRecieverDrop[rightRecieverDropLength] = { rightRecieverDrop1 };
 
-const string dropRecievers[2] = { dropRecieverRight1,dropRecieverBi1 };
+#define dropRecieverLength 2
+const string dropRecievers[dropRecieverLength] = { dropRecieverRight1,dropRecieverBi1 };
 
-const string startingPlatforms[1] = { startingPlatform1 };
+#define startingPlatformsLength 1
+const string startingPlatforms[startingPlatformsLength] = { startingPlatform1 };
 
-const string hallway[1] = { hallway1 };
+#define hallwayLength 1
+const string hallway[hallwayLength] = { hallway1 };
 
-const string hallwayDrop[1] = { hallwayDrop1};
+#define hallwayDropLength 1
+const string hallwayDrop[hallwayDropLength] = { hallwayDrop1};
 
 
 //0 Nothing

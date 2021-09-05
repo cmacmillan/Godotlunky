@@ -40,7 +40,7 @@ void PrizeBox::_ready()
 
 void PrizeBox::OpenBox(vector<HitboxData*>* hitboxesToRemove) 
 {
-	float rand = Random() * prizeBoxProbSum;
+	float rand = level->Random() * prizeBoxProbSum;
 	int SpawnIndex=0;
 	for (;rand>prizeBoxProbabilities[SpawnIndex]; SpawnIndex++) {
 		rand -= prizeBoxProbabilities[SpawnIndex];

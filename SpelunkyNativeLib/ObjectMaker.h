@@ -29,4 +29,4 @@ AutoPickup* SpawnLargeBombBox(Level* level, Vector2 gridCoord);
 AutoPickup* SpawnSmallBombPile(Level* level, Vector2 gridCoord);
 AutoPickup* SpawnSmallRopePile(Level* level, Vector2 gridCoord);
 
-float Random();
+//float Random();

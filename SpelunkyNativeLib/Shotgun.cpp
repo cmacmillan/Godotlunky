@@ -40,8 +40,8 @@ void Shotgun::DoThrowAction()
 		for (int i = 0; i < 10; i++) {
 			auto bullet = SpawnBullet(level, Vector2(body.endPos.x, body.endPos.y));
 			bullet->body.moveFastHitbox.creatorToEscape = this->body.pickedBy->GetBody();
-			bullet->body.vel.x = (2000+(Random()*1000)) * (body.isFacingRight ? 1 : -1);
-			float rand = Random()*2 - 1;
+			bullet->body.vel.x = (2000+(level->Random()*1000)) * (body.isFacingRight ? 1 : -1);
+			float rand = level->Random()*2 - 1;
 			bullet->body.vel.y = rand * 100;
 		}
 		body.pickedBy->GetBody()->vel += Vector2(3000 * (body.pickedBy->GetBody()->isFacingRight ? -1 : 1), -300);

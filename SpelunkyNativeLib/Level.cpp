@@ -46,6 +46,7 @@ void Level::_register_methods()
 	register_property("bottomMultimesh", &Level::bottomMultimesh, Ref<MultiMesh>());
 	register_property("spikeMultimesh", &Level::spikeMultimesh, Ref<MultiMesh>());
 	register_property("bloodySpikeMultimesh", &Level::bloodySpikesMultimesh, Ref<MultiMesh>());
+	register_property("edgeWallMultimesh", &Level::edgeWallMultimesh, Ref<MultiMesh>());
 
 	register_property("g", &Level::g, 0.0f);
 
@@ -108,22 +109,24 @@ const string layout1 =
 void Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 {
 	std::istringstream iss(layout);
+	int yCurr = 0;
 	for (std::string line; std::getline(iss, line); )
 	{
 		int xCurr = 0;
-		int yCurr = 0;
 		int len = line.length();
 		for (int i = 0; i < len; i++) {
-			auto block = GetBlock(xCurr + x, yCurr + y);
+			LevelBlock* block;
 			bool valid = true;
 			bool setPresent = false;
 			Vector2 gridCoord;
 			if (flipX) {
 				gridCoord = Vector2(((metaBlockWidth-1)-xCurr)+x+.5f, yCurr+ y + .5f);
+				block = GetBlock(((metaBlockWidth-1)-xCurr)+x+.5f, yCurr + y);
 	 		}
 			else 
 			{
 				gridCoord = Vector2(xCurr+x+.5f, yCurr+ y + .5f);
+				block = GetBlock(xCurr + x, yCurr + y);
 			}
 			if (line[i]=='k') {
 				SpawnSmallBombPile(this, gridCoord);
@@ -245,6 +248,16 @@ float Level::MarchHorizontal(float startX, float endX, float y1, float y2, bool&
 	}
 	return endX;
 }
+
+float Level::Random() {
+	float retr = rng->randf();
+	if (retr == 1.0f) 
+	{
+		return .9999f;
+	}
+	return retr;
+}
+
 bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector2& endPos, Vector2& normal,bool& isGrounded)
 {
 	Vector2 size = aabb.size;
@@ -305,8 +318,10 @@ template <typename T> int sign(T val) {
 
 void Level::_ready()
 {
-	blocksXRes = metaBlockWidth*numMetaBlocksWidth;
-	blocksYRes = metaBlockHeight*numMetaBlocksHeight;
+	rng = RandomNumberGenerator::_new();
+	rng->randomize();
+	blocksXRes = metaBlockWidth*numMetaBlocksWidth+2;
+	blocksYRes = metaBlockHeight*numMetaBlocksHeight+2;
 	worldBlockSize = 100;
 #ifdef showDebugHitboxes
 	allRids = new	std::vector<RID>();
@@ -331,7 +346,7 @@ void Level::_ready()
 		for (int j = 0; j < blocksYRes; j++) {
 			GetBlock(i, j)->hasRope = false;
 			GetBlock(i, j)->present = true;
-			GetBlock(i, j)->indestructible= false;
+			GetBlock(i, j)->indestructible= i==0||j==0||i==blocksXRes||j==blocksYRes;
 			GetBlock(i, j)->hasSpikes= false;
 			GetBlock(i, j)->bloody= false;
 		}
@@ -342,64 +357,87 @@ void Level::_ready()
 	}
 	printf("start generating");
 	int startIndex = 0;//(Random() * numMetaBlocksWidth);
-	for (int j = 0; j < 1; j++) {
+	for (int j = 0; j < 4; j++) {
+	//for (int j = 0; j < metaBlockHeight; j++) {
 		int endIndex = startIndex;
 		while (endIndex == startIndex) {
 			endIndex = (Random() * numMetaBlocksWidth);
 		}
 		int direction = sign(endIndex-startIndex);
-		//for (int i = startIndex; i != endIndex+direction; i+=direction) {
-		for (int i=0;i<4;i++){
+		for (int i = startIndex; i != endIndex+direction; i+=direction) {
 			string metaBlock;
 			bool flip = false;
-			metaBlock = startingPlatform1;
-			/*
 			if (i == startIndex && j==0) //starting platform
 			{
-				metaBlock = startingPlatforms[(int)(startingPlatforms->length() * Random())];
+				metaBlock = startingPlatforms[(int)(startingPlatformsLength * Random())];
 				flip = Random() > .5f;//randomly flip
 			}
-			else if (i == startIndex) //do drop
+			else if (i == startIndex) //recieve drop
 			{
-				metaBlock = dropRecievers[(int)(dropRecievers->length() * Random())];
+				metaBlock = dropRecievers[(int)(dropRecieverLength * Random())];
 				flip = startIndex>endIndex;
 			}
-			else if (i == endIndex) //recieve drop
+			else if (i == endIndex) //do drop
 			{
-				int count = hallwayDrop->length() + rightRecieverDrop->length();
+				int count = hallwayDropLength + rightRecieverDropLength;
 				int rand = count * Random();
-				if (rand < hallwayDrop->length()) 
+				if (rand < hallwayDropLength) 
 				{
 					metaBlock = hallwayDrop[rand];
 					flip = Random() > .5f;//randomly flip
 				}
 				else 
 				{
-					metaBlock = rightRecieverDrop[rand-hallwayDrop->length()];
+					metaBlock = rightRecieverDrop[rand-hallwayDropLength];
 					flip = endIndex > startIndex;
 				}
 			}
 			else //hallway
 			{
-				int count = hallway->length() + hallwayDrop->length();
+				int count = hallwayLength + hallwayDropLength;
 				int rand = count * Random();
 				flip = Random() > .5f;//randomly flip
-				if (rand < hallway->length()) 
+				if (rand < hallwayLength) 
 				{
 					metaBlock = hallway[rand];
 				}
 				else 
 				{
-					metaBlock = hallwayDrop[rand-hallway->length()];
+					metaBlock = hallwayDrop[rand-hallwayLength];
 				}
 			}
-			*/
-			//CopyLayoutIntoBlocks(metaBlock, i * metaBlockWidth, j * metaBlockHeight, flip);
-			CopyLayoutIntoBlocks(metaBlock, 0, 0, false);
+			CopyLayoutIntoBlocks(metaBlock, i * metaBlockWidth+1, j * metaBlockHeight+1, flip);
 		}
 		startIndex = endIndex;
 	}
 	printf("done generating");
+	//////////////
+	int edgeThickness = 15;
+	int expectedCount = 2 * edgeThickness * (blocksXRes-1) + 2 * edgeThickness * (blocksYRes-1) + edgeThickness * edgeThickness * 4;
+	edgeWallMultimesh->set_instance_count(expectedCount);
+	int edgeWallIndex = 0;
+	//edgeWallMultimesh->set_instance_transform_2d(edgeWallIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
+	for (int j = -edgeThickness+1; j < 1; j++) {
+		for (int i = -edgeThickness+1; i < blocksXRes + edgeThickness; i++) {
+			edgeWallMultimesh->set_instance_transform_2d(edgeWallIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
+		}
+	}
+	for (int j = blocksYRes; j < blocksYRes+edgeThickness; j++) {
+		for (int i = -edgeThickness+1; i < blocksXRes + edgeThickness; i++) {
+			edgeWallMultimesh->set_instance_transform_2d(edgeWallIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
+		}
+	}
+	for (int j = 1; j<blocksYRes; j++) {
+		for (int i = -edgeThickness+1; i < 1; i++) {
+			edgeWallMultimesh->set_instance_transform_2d(edgeWallIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
+		}
+	}
+	for (int j = 1; j<blocksYRes; j++) {
+		for (int i = blocksXRes; i < blocksXRes+edgeThickness; i++) {
+			edgeWallMultimesh->set_instance_transform_2d(edgeWallIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
+		}
+	}
+	printf("expected %d, actual %d ", expectedCount, edgeWallIndex);
 	//CopyLayoutIntoBlocks(layout1, 0, 0);
 	UpdateMeshes();
 }
@@ -419,7 +457,7 @@ void Level::UpdateMeshes() {
 				drawTypes[j * blocksXRes + i] = DrawType::Spikes;
 				spikeCount++;
 			}
-			else if (!GetBlock(i, j)->present) {
+			else if (!GetBlock(i, j)->present || GetBlock(i, j)->indestructible) {
 				drawTypes[j * blocksXRes + i] = DrawType::None;
 			}
 			else if (j > 0 && !GetBlock(i, j - 1)->present) {
@@ -552,7 +590,6 @@ void Level::_process(float delta)
 						hurtboxesToRemove->push_back(body);
 					}
 					spelunker->body.vel.y = -1500;
-					break;
 				}
 			}
 		}
@@ -675,6 +712,7 @@ Level::~Level()
 #endif // showDebugHitboxes
 	std::free(blocks);
 	std::free(drawTypes);
+	this->rng->free();
 	delete hitboxes;
 	delete hurtboxes;
 	delete autoPickups;

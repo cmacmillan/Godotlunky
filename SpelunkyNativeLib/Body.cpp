@@ -56,7 +56,7 @@ bool Body::process(float delta, bool applyGravity, bool applyFriction)
 	bool hitTerrain = level->CheckCollisionWithTerrain(aabb, startPos, endPos, normal, isGrounded);
 	if (hitTerrain)
 	{
-		if (playHitSFX) {
+		if (playHitSFX && pickedBy==nullptr) {
 			if ((normal.x != 0 || normal.y != 0) && (vel.dot(-normal) > 500))
 			{
 				level->PlayAudio(hitSFX==nullptr?level->defaultImpactSFX:hitSFX, aabb.center);
