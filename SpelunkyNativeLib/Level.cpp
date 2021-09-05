@@ -47,6 +47,7 @@ void Level::_register_methods()
 	register_property("spikeMultimesh", &Level::spikeMultimesh, Ref<MultiMesh>());
 	register_property("bloodySpikeMultimesh", &Level::bloodySpikesMultimesh, Ref<MultiMesh>());
 	register_property("edgeWallMultimesh", &Level::edgeWallMultimesh, Ref<MultiMesh>());
+	register_property("biMultimesh", &Level::biMultimesh, Ref<MultiMesh>());
 
 	register_property("g", &Level::g, 0.0f);
 
@@ -129,13 +130,13 @@ void Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 				block = GetBlock(xCurr + x, yCurr + y);
 			}
 			if (line[i]=='k') {
-				SpawnSmallBombPile(this, gridCoord);
+				SpawnSmallBombPile(this, gridCoord,0.0f);
 			} else if(line[i] == 'K') {
-				SpawnLargeBombBox(this, gridCoord);
+				SpawnLargeBombBox(this, gridCoord,0.0f);
 			} else if(line[i] == '$') {
-				SpawnLargeGoldPile(this, gridCoord);
+				SpawnLargeGoldPile(this, gridCoord,0.0f);
 			} else if(line[i] == 'r') {
-				SpawnSmallRopePile(this, gridCoord);
+				SpawnSmallRopePile(this, gridCoord,0.0f);
 			} else if (line[i] == 'P') {
 				SpawnPrizeBox(this,gridCoord);
 			} else if (line[i] == 'B') {
@@ -357,8 +358,7 @@ void Level::_ready()
 	}
 	printf("start generating");
 	int startIndex = 0;//(Random() * numMetaBlocksWidth);
-	for (int j = 0; j < 4; j++) {
-	//for (int j = 0; j < metaBlockHeight; j++) {
+	for (int j = 0; j < numMetaBlocksHeight; j++) {
 		int endIndex = startIndex;
 		while (endIndex == startIndex) {
 			endIndex = (Random() * numMetaBlocksWidth);
@@ -447,6 +447,7 @@ void Level::UpdateMeshes() {
 	int normalCount = 0;
 	int spikeCount = 0;
 	int bloodySpikeCount= 0;
+	int biCount=0;
 	for (int i = 0; i < blocksXRes; i++) {
 		for (int j = 0; j < blocksYRes; j++) {
 			if (GetBlock(i, j)->bloody) {
@@ -456,6 +457,10 @@ void Level::UpdateMeshes() {
 			else if (GetBlock(i, j)->hasSpikes) {
 				drawTypes[j * blocksXRes + i] = DrawType::Spikes;
 				spikeCount++;
+			}
+			else if (j>0 && !GetBlock(i, j - 1)->present && j<blocksYRes-1 && !GetBlock(i,j+1)->present && GetBlock(i, j)->present) {
+				drawTypes[j * blocksXRes + i] = DrawType::Bi;
+				biCount++;
 			}
 			else if (!GetBlock(i, j)->present || GetBlock(i, j)->indestructible) {
 				drawTypes[j * blocksXRes + i] = DrawType::None;
@@ -481,11 +486,13 @@ void Level::UpdateMeshes() {
 	bottomMultimesh->set_instance_count(bottomCount);
 	spikeMultimesh->set_instance_count(spikeCount);
 	bloodySpikesMultimesh->set_instance_count(bloodySpikeCount);
+	biMultimesh->set_instance_count(biCount);
 	int normalIndex = 0;
 	int topIndex = 0;
 	int bottomIndex= 0;
 	int spikeIndex= 0;
 	int bloodySpikeIndex= 0;
+	int biCountIndex = 0;
 	for (int i = 0; i < blocksXRes; i++) {
 		for (int j = 0; j < blocksYRes; j++) {
 			switch (drawTypes[j*blocksXRes+i])
@@ -504,6 +511,9 @@ void Level::UpdateMeshes() {
 				break;
 			case DrawType::Normal:
 				groundMultimesh->set_instance_transform_2d(normalIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
+				break;
+			case DrawType::Bi:
+				biMultimesh->set_instance_transform_2d(biCountIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
 				break;
 			default:
 				break;

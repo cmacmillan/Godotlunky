@@ -3,8 +3,8 @@
 
 #define metaBlockWidth 13
 #define metaBlockHeight 10
-#define numMetaBlocksWidth 4
-#define numMetaBlocksHeight 4
+#define numMetaBlocksWidth 5
+#define numMetaBlocksHeight 5
 #define numMetaBlocks (numMetaBlocksHeight*numMetaBlocksHeight)
 
 const string dropRecieverBi1 = 

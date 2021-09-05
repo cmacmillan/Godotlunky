@@ -45,16 +45,17 @@ void PrizeBox::OpenBox(vector<HitboxData*>* hitboxesToRemove)
 	for (;rand>prizeBoxProbabilities[SpawnIndex]; SpawnIndex++) {
 		rand -= prizeBoxProbabilities[SpawnIndex];
 	}
+	float startupDelay = .75f;
 	Vector2 pos=body.aabb.center;
 	switch (SpawnIndex) {
 	case 0:
-		SpawnSmallRopePile(level,pos);
+		SpawnSmallRopePile(level, pos, startupDelay);
 		break;
 	case 1:
-		SpawnSmallBombPile(level, pos);
+		SpawnSmallBombPile(level, pos, startupDelay);
 		break;
 	case 2:
-		SpawnLargeBombBox(level, pos);
+		SpawnLargeBombBox(level, pos, startupDelay);
 		break;
 	}
 	///////////////

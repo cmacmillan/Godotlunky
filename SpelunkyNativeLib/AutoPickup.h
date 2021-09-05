@@ -20,6 +20,8 @@ public:
 	Body body;
 	Level* level;
 	AutoPickupType type;
+	float timeUntilActive = 0;
+	bool isRegistered = false;
 
 	//exposed
 	Vector2 hitboxSize;

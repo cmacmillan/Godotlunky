@@ -27,7 +27,7 @@ void Spelunker::_init()
 
 
 bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) {
-	if (invulTime <= 0) {
+	if (invulTime <= 0 && !isDead) {
 		if (stun) {
 			isStunned = true;
 			stunTime = 0;
@@ -36,7 +36,7 @@ bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitbo
 		if (health <= 0) {
 			health = 0;
 			Die();
-			return true;
+			return false;//keep the hitbox active even after death
 		}
 		else {
 			level->PlayAudio(level->hitSFX, body.aabb.center);

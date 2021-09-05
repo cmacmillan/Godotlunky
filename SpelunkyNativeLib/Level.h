@@ -26,6 +26,7 @@ enum DrawType {
 	None = 3,
 	Spikes = 4,
 	BloodySpikes = 5,
+	Bi = 6,
 };
 struct LevelBlock {
 	bool present;
@@ -51,6 +52,7 @@ class Level : public Node2D
 	Ref<MultiMesh> spikeMultimesh;
 	Ref<MultiMesh> bloodySpikesMultimesh;
 	Ref<MultiMesh> edgeWallMultimesh;
+	Ref<MultiMesh> biMultimesh;
 
 public:
 	float g;

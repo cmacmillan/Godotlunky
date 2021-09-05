@@ -26,10 +26,26 @@ BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord) {  return PutAtAndCh
 PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<PrizeBox>(level->prizeBoxScene->instance()), gridCoord, level,true);}
 
 //auto pickup
-AutoPickup* SpawnLargeGoldPile(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<AutoPickup>(level->largeGoldScene->instance()), gridCoord, level,false);}
-AutoPickup* SpawnLargeBombBox(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<AutoPickup>(level->largeBombBoxScene->instance()), gridCoord, level,false);}
-AutoPickup* SpawnSmallBombPile(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<AutoPickup>(level->smallBombPileScene->instance()), gridCoord, level,false);}
-AutoPickup* SpawnSmallRopePile(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<AutoPickup>(level->ropePileScene->instance()), gridCoord, level,false);}
+AutoPickup* SpawnLargeGoldPile(Level* level, Vector2 gridCoord,float timeUntilActive) { 
+	auto pickup = level->cast_to<AutoPickup>(level->largeGoldScene->instance());
+	pickup->timeUntilActive = timeUntilActive;
+	return PutAtAndChildToLevel(pickup, gridCoord, level,true);
+}
+AutoPickup* SpawnLargeBombBox(Level* level, Vector2 gridCoord,float timeUntilActive) { 
+	auto pickup = level->cast_to<AutoPickup>(level->largeBombBoxScene->instance());
+	pickup->timeUntilActive = timeUntilActive;
+	return PutAtAndChildToLevel(pickup, gridCoord, level,true);
+}
+AutoPickup* SpawnSmallBombPile(Level* level, Vector2 gridCoord,float timeUntilActive) { 
+	auto pickup = level->cast_to<AutoPickup>(level->smallBombPileScene->instance());
+	pickup->timeUntilActive = timeUntilActive;
+	return PutAtAndChildToLevel(pickup, gridCoord, level,true);
+}
+AutoPickup* SpawnSmallRopePile(Level* level, Vector2 gridCoord,float timeUntilActive) { 
+	auto pickup = level->cast_to<AutoPickup>(level->ropePileScene->instance());
+	pickup->timeUntilActive = timeUntilActive;
+	return PutAtAndChildToLevel(pickup, gridCoord, level,true);
+}
 //float Random() { return (std::rand() / (float)(RAND_MAX+1)); }
 
 

@@ -24,9 +24,9 @@ BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord);
 PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord);
 
 //AutoPickup
-AutoPickup* SpawnLargeGoldPile(Level* level, Vector2 gridCoord);
-AutoPickup* SpawnLargeBombBox(Level* level, Vector2 gridCoord);
-AutoPickup* SpawnSmallBombPile(Level* level, Vector2 gridCoord);
-AutoPickup* SpawnSmallRopePile(Level* level, Vector2 gridCoord);
+AutoPickup* SpawnLargeGoldPile(Level* level, Vector2 gridCoord,float timeUntilActive);
+AutoPickup* SpawnLargeBombBox(Level* level, Vector2 gridCoord,float timeUntilActive);
+AutoPickup* SpawnSmallBombPile(Level* level, Vector2 gridCoord,float timeUntilActive);
+AutoPickup* SpawnSmallRopePile(Level* level, Vector2 gridCoord,float timeUntilActive);
 
 //float Random();
