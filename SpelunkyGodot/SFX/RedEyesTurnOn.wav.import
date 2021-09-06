@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/RedEyesTurnOn.wav-2852a9bca2f71deb205f0570c4b19227.sample"
+
+[deps]
+
+source_file="res://SFX/RedEyesTurnOn.wav"
+dest_files=[ "res://.import/RedEyesTurnOn.wav-2852a9bca2f71deb205f0570c4b19227.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

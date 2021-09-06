@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Godolmec/GodolmecBombSpots.png" type="Texture" id=1]
 [ext_resource path="res://Godolmec/GodolmecRedEyes.png" type="Texture" id=2]
@@ -11,6 +11,296 @@
 [ext_resource path="res://Godolmec/GodolmecFragment3.png" type="Texture" id=9]
 [ext_resource path="res://Godolmec/GodolmecFragment2.png" type="Texture" id=10]
 [ext_resource path="res://Godolmec/GodolmecFragment4.png" type="Texture" id=11]
+[ext_resource path="res://SFX/boulderhit.wav" type="AudioStream" id=12]
+[ext_resource path="res://SFX/boulderhit3.wav" type="AudioStream" id=13]
+[ext_resource path="res://SFX/boulderhit2.wav" type="AudioStream" id=14]
+[ext_resource path="res://SFX/RedEyesTurnOn.wav" type="AudioStream" id=15]
+[ext_resource path="res://SFX/rocklaugh.wav" type="AudioStream" id=16]
+[ext_resource path="res://SFX/rockloop.wav" type="AudioStream" id=17]
+
+[sub_resource type="Animation" id=1]
+resource_name = "BreakFree"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("WholeRock1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("WholeRock2:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.8, 2.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("WholeRock3:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 2.3, 4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Fragment1:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Fragment2:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 2.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Fragment3:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Fragment4:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/7/type = "bezier"
+tracks/7/path = NodePath("Fragment1:position:x")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"points": PoolRealArray( 34, -0.25, 0, 0.25, 0, 500, 0, 0, 0.25, 0 ),
+"times": PoolRealArray( 0.8, 3 )
+}
+tracks/8/type = "bezier"
+tracks/8/path = NodePath("Fragment1:position:y")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"points": PoolRealArray( -30, -0.25, 0, 1.91507, -977.096, 3003.05, -0.00502324, -22.6287, 0.25, 0 ),
+"times": PoolRealArray( 0.8, 3.6 )
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("Fragment1:rotation_degrees")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0.8, 3.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1300.0 ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("Jaw/Face/RedEyes:self_modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0, 5.4, 6.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/11/type = "bezier"
+tracks/11/path = NodePath("Fragment2:position:x")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"points": PoolRealArray( -38, -0.25, 0, 0.0372016, 5.76141, -500, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 2.3, 4.5 )
+}
+tracks/12/type = "bezier"
+tracks/12/path = NodePath("Fragment2:position:y")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"points": PoolRealArray( -32, -0.25, 0, 1.34342, -954.281, 3000, -0.033731, -16.8354, 0.25, 0 ),
+"times": PoolRealArray( 2.3, 5.1 )
+}
+tracks/13/type = "value"
+tracks/13/path = NodePath("Fragment2:rotation_degrees")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
+"times": PoolRealArray( 2.3, 5.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, -1300.0 ]
+}
+tracks/14/type = "bezier"
+tracks/14/path = NodePath("Fragment3:position:x")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/keys = {
+"points": PoolRealArray( -29, -0.25, 0, 0.0119624, -0.394836, -500, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 4, 6.8 )
+}
+tracks/15/type = "bezier"
+tracks/15/path = NodePath("Fragment3:position:y")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/keys = {
+"points": PoolRealArray( 29, -0.25, 0, 1.68206, -704.728, 3000, -0.0169845, -11.3687, 0.25, 0 ),
+"times": PoolRealArray( 4, 6.8 )
+}
+tracks/16/type = "bezier"
+tracks/16/path = NodePath("Fragment4:position:x")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/keys = {
+"points": PoolRealArray( 36, -0.25, 0, 0.0399528, -9.49602, 500, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 4, 6.8 )
+}
+tracks/17/type = "bezier"
+tracks/17/path = NodePath("Fragment4:position:y")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/keys = {
+"points": PoolRealArray( 32, -0.25, 0, 2.57775, -862.494, 3000, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 4, 6.8 )
+}
+tracks/18/type = "value"
+tracks/18/path = NodePath("Fragment3:rotation_degrees")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/keys = {
+"times": PoolRealArray( 4, 6.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, -1300.0 ]
+}
+tracks/19/type = "value"
+tracks/19/path = NodePath("Fragment4:rotation_degrees")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/keys = {
+"times": PoolRealArray( 4, 6.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1300.0 ]
+}
+tracks/20/type = "audio"
+tracks/20/path = NodePath("AudioStreamPlayer2D")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 12 )
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 13 )
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 14 )
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 15 )
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 16 )
+} ],
+"times": PoolRealArray( 0.8, 2.3, 4, 5.4, 7.5 )
+}
+tracks/21/type = "audio"
+tracks/21/path = NodePath("RockLoop")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 17 )
+} ],
+"times": PoolRealArray( 0 )
+}
+tracks/22/type = "value"
+tracks/22/path = NodePath("Jaw/Face:position")
+tracks/22/interp = 2
+tracks/22/loop_wrap = true
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/keys = {
+"times": PoolRealArray( 0, 7.5, 7.6, 7.7, 8, 8.1, 8.3, 8.4, 8.6, 8.7, 8.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, 0 ), Vector2( 0, 0 ), Vector2( 0, -25 ), Vector2( 0, 0 ), Vector2( 0, -20 ), Vector2( 0, 0 ), Vector2( 0, -14 ), Vector2( 0, 0 ), Vector2( 0, -8 ), Vector2( 0, 0 ) ]
+}
 
 [node name="Godolmec" type="Node2D"]
 
@@ -39,17 +329,34 @@ visible = false
 texture = ExtResource( 5 )
 
 [node name="Fragment1" type="Sprite" parent="."]
-visible = false
+position = Vector2( 500, 3003.05 )
+rotation = 22.6893
 texture = ExtResource( 8 )
+offset = Vector2( -34.358, 29.7552 )
 
 [node name="Fragment2" type="Sprite" parent="."]
-visible = false
+position = Vector2( -500, 3000 )
+rotation = -22.6893
 texture = ExtResource( 10 )
+offset = Vector2( 38, 32 )
 
 [node name="Fragment3" type="Sprite" parent="."]
-visible = false
+position = Vector2( -500, 3000 )
+rotation = -22.6893
 texture = ExtResource( 9 )
+offset = Vector2( 29, -29 )
 
 [node name="Fragment4" type="Sprite" parent="."]
-visible = false
+position = Vector2( 500, 3000 )
+rotation = 22.6893
 texture = ExtResource( 11 )
+offset = Vector2( -36, -32 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/BreakFree = SubResource( 1 )
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 16 )
+
+[node name="RockLoop" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 17 )
