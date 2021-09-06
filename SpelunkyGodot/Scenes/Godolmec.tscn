@@ -1,0 +1,55 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Godolmec/GodolmecBombSpots.png" type="Texture" id=1]
+[ext_resource path="res://Godolmec/GodolmecRedEyes.png" type="Texture" id=2]
+[ext_resource path="res://Godolmec/GodolmecFace.png" type="Texture" id=3]
+[ext_resource path="res://Godolmec/GodolmecJaw.png" type="Texture" id=4]
+[ext_resource path="res://Godolmec/GodolmecWholeRock3.png" type="Texture" id=5]
+[ext_resource path="res://Godolmec/GodolmecWholeRock.png" type="Texture" id=6]
+[ext_resource path="res://Godolmec/GodolmecWholeRock2.png" type="Texture" id=7]
+[ext_resource path="res://Godolmec/GodolmecFragment1.png" type="Texture" id=8]
+[ext_resource path="res://Godolmec/GodolmecFragment3.png" type="Texture" id=9]
+[ext_resource path="res://Godolmec/GodolmecFragment2.png" type="Texture" id=10]
+[ext_resource path="res://Godolmec/GodolmecFragment4.png" type="Texture" id=11]
+
+[node name="Godolmec" type="Node2D"]
+
+[node name="Jaw" type="Sprite" parent="."]
+texture = ExtResource( 4 )
+
+[node name="Face" type="Sprite" parent="Jaw"]
+texture = ExtResource( 3 )
+
+[node name="RedEyes" type="Sprite" parent="Jaw/Face"]
+texture = ExtResource( 2 )
+
+[node name="BombSpots" type="Sprite" parent="Jaw/Face"]
+texture = ExtResource( 1 )
+
+[node name="WholeRock1" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 6 )
+
+[node name="WholeRock2" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 7 )
+
+[node name="WholeRock3" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 5 )
+
+[node name="Fragment1" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 8 )
+
+[node name="Fragment2" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 10 )
+
+[node name="Fragment3" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 9 )
+
+[node name="Fragment4" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 11 )

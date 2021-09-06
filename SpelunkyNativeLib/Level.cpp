@@ -78,6 +78,7 @@ void Level::_register_methods()
 	register_property("fadeInSFX", &Level::fadeInSFX, Ref<AudioStream>());
 	register_property("fadeOutSFX", &Level::fadeOutSFX, Ref<AudioStream>());
 	register_property("walkThroughDoorSFX", &Level::walkThroughDoorSFX, Ref<AudioStream>());
+	register_property("batStartFlapSFX", &Level::batStartFlapSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 

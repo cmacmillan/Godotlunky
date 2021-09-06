@@ -53,6 +53,7 @@ void Bat::_process(float delta)
 		block.y -= 1;
 		if ((level->spelunker->body.endPos.y>body.endPos.y && level->spelunker->body.endPos.distance_to(body.endPos)<8) || !level->GetBlock(block.x,block.y)->present) {
 			animatedSprite->set_animation("Flap");
+			level->PlayAudio(level->batStartFlapSFX, body.aabb.center);
 			hasSpottedPlayer = true;
 		}
 	}

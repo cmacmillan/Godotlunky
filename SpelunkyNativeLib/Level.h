@@ -80,6 +80,7 @@ public:
 	Ref<AudioStream> fadeInSFX;
 	Ref<AudioStream> fadeOutSFX;
 	Ref<AudioStream> walkThroughDoorSFX;
+	Ref<AudioStream> batStartFlapSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;

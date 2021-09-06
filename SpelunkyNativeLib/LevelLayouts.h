@@ -57,7 +57,7 @@ const string hallway1 =
 
 const string rightRecieverDrop1= 
 "XXXXXXXXXXXXX\n\
- X000000000000\n\
+ X00000B000000\n\
  X000000000000\n\
  X000000000000\n\
  X000000000000\n\
