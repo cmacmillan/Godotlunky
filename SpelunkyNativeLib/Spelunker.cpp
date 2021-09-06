@@ -152,7 +152,7 @@ void Spelunker::_process(float delta)
 
 	auto input = Input::get_singleton();
 
-	if (input->is_action_pressed("EnterDoor") && body.isGrounded && !isStunned && !isDead && body.aabb.overlaps(level->exitPosition)) {
+	if (input->is_action_pressed("EnterDoor") && body.isGrounded && !isStunned && !isDead && body.aabb.overlaps(level->exitPosition) && level->isDoorOpen) {
 		body.aabb.center = level->exitPosition.center;
 		set_position(level->GridToWorld(body.aabb.center));
 		isEnteringDoor = true;

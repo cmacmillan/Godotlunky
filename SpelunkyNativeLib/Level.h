@@ -81,6 +81,8 @@ public:
 	Ref<AudioStream> fadeOutSFX;
 	Ref<AudioStream> walkThroughDoorSFX;
 	Ref<AudioStream> batStartFlapSFX;
+	Ref<AudioStream> switchHitSFX;
+	Ref<AudioStream> doorOpenSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;
@@ -94,6 +96,7 @@ public:
 	Ref<PackedScene> prizeBoxScene;
 	Ref<PackedScene> spiderScene;
 	Ref<PackedScene> doorScene;
+	Ref<PackedScene> doorSwitchScene;
 
 	//auto pickups
 	Ref<PackedScene> largeGoldScene;
@@ -129,11 +132,14 @@ public:
 	std::set<HitboxData*>* hitboxes;
 	std::set<AutoPickup*>* autoPickups;
 
+	bool isDoorOpen;
 	bool isFadingOut;
 	float fadeOutLerp;
 
 	std::vector<AudioStreamPlayer2D*>* freeAudioSources;
 	std::vector<AudioStreamPlayer2D*>* outstandingAudioSources;
+
+	Node2D* exitDoor;
 
 	static void _register_methods();
 	void _init();
@@ -148,6 +154,7 @@ public:
 	Vector2 GridToWorld(Vector2 v);
 	Vector2 WorldToGridSize(Vector2 v);
 	Vector2 GridToWorldSize(Vector2 v);
+	void DoorSwitchHit();
 	void SpawnBlood(Vector2 gridCoord,int count=10);
 	void RegisterHurtbox(Body* hurtbox);
 	void UnregisterHurtbox(Body* hurtbox);

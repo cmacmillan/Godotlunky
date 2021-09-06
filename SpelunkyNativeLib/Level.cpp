@@ -79,6 +79,8 @@ void Level::_register_methods()
 	register_property("fadeOutSFX", &Level::fadeOutSFX, Ref<AudioStream>());
 	register_property("walkThroughDoorSFX", &Level::walkThroughDoorSFX, Ref<AudioStream>());
 	register_property("batStartFlapSFX", &Level::batStartFlapSFX, Ref<AudioStream>());
+	register_property("switchHitSFX", &Level::switchHitSFX, Ref<AudioStream>());
+	register_property("doorOpenSFX", &Level::doorOpenSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 
@@ -93,12 +95,24 @@ void Level::_register_methods()
 	register_property("prizeBoxScene", &Level::prizeBoxScene, Ref<PackedScene>());
 	register_property("spiderScene", &Level::spiderScene, Ref<PackedScene>());
 	register_property("doorScene", &Level::doorScene, Ref<PackedScene>());
+	register_property("doorSwitchScene", &Level::doorSwitchScene, Ref<PackedScene>());
 
 	//auto pickups
 	register_property("largeGoldScene", &Level::largeGoldScene, Ref<PackedScene>());
 	register_property("ropePileScene", &Level::ropePileScene, Ref<PackedScene>());
 	register_property("smallBombPileScene", &Level::smallBombPileScene, Ref<PackedScene>());
 	register_property("largeBombBoxScene", &Level::largeBombBoxScene, Ref<PackedScene>());
+}
+
+void Level::DoorSwitchHit() {
+	{//if not final boss
+		if (!isDoorOpen) {
+			isDoorOpen = true;
+			PlayAudio(doorOpenSFX, exitPosition.center);
+			exitDoor->get_node<Sprite>("ClosedDoor")->set_visible(false);
+			exitDoor->get_node<Sprite>("OpenDoor")->set_visible(true);
+		}
+	}
 }
 
 const string layout1 = 
@@ -137,8 +151,10 @@ Vector2 Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 				gridCoord = Vector2(xCurr+x+.5f, yCurr+ y + .5f);
 				block = GetBlock(xCurr + x, yCurr + y);
 			}
-			if (line[i]=='k') {
-				SpawnSmallBombPile(this, gridCoord,0.0f);
+			if (line[i] == 'k') {
+				SpawnSmallBombPile(this, gridCoord, 0.0f);
+			} else if (line[i] == 'O') {
+				SpawnDoorOpener(this, gridCoord);
 			} else if(line[i] == 'M') {
 				SpawnSpider(this, gridCoord);
 			} else if(line[i] == 'K') {
@@ -353,6 +369,7 @@ void Level::_ready()
 	this->fullscreenWipeMaterial = fullscreenWipe->get_material();
 	fullscreenWipePercent = 0;
 	isFadingOut = false;
+	isDoorOpen = false;
 
 	freeAudioSources = new std::vector<AudioStreamPlayer2D*>();
 	outstandingAudioSources = new std::vector<AudioStreamPlayer2D*>();
@@ -431,9 +448,9 @@ void Level::_ready()
 				node->set_position(GridToWorld(retr));
 			}
 			else if (j == numMetaBlocksHeight-1 && i == endIndex) {
-				auto node = cast_to<Node2D>(doorScene->instance());
-				this->add_child(node);
-				node->set_position(GridToWorld(retr));
+				exitDoor = cast_to<Node2D>(doorScene->instance());
+				this->add_child(exitDoor);
+				exitDoor->set_position(GridToWorld(retr));
 				this->exitPosition.center = retr;
 				this->exitPosition.size = Vector2(1,1);
 			}
