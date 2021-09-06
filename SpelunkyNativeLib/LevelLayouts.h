@@ -71,7 +71,7 @@ const string startingPlatform1 =
 "XXXXXXXXXXXXX\n\
  0000000000000\n\
  0000000000000\n\
- 000000X000000\n\
+ 000000Q000000\n\
  00000XXX00000\n\
  0000XXXXX0000\n\
  000XXXXXXX000\n\
@@ -107,3 +107,4 @@ const string hallwayDrop[hallwayDropLength] = { hallwayDrop1};
 //$ LargeGoldPile
 //B Bat
 //M Spider
+//Q entrance/exit

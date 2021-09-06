@@ -27,7 +27,7 @@ void Spelunker::_init()
 
 
 bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) {
-	if (invulTime <= 0 && !isDead) {
+	if (invulTime <= 0 && !isDead && !isEnteringDoor) {
 		if (stun) {
 			isStunned = true;
 			stunTime = 0;
@@ -49,7 +49,7 @@ bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitbo
 	return false;
 }
 void Spelunker::Die() {
-	if (!isDead) {
+	if (!isDead && !isEnteringDoor) {
 		level->PlayAudio(level->hitSFX, body.aabb.center);
 		for (int i = 0; i < 10; i++) {
 			SpawnBloodSpurt(level, body.aabb.center);
@@ -94,6 +94,16 @@ void Spelunker::_ready()
 void Spelunker::_process(float delta)
 {
 	auto animator = get_node<AnimatedSprite>(".");
+	if (isEnteringDoor) {
+		enterDoorOpacity = godot::Math::move_toward(enterDoorOpacity,0,delta);
+		animator->set_modulate(Color(1, 1, 1, enterDoorOpacity));
+		if (enterDoorOpacity == 0 && !level->isFadingOut) {
+			level->isFadingOut = true;
+			level->fadeOutLerp = 1;
+			level->PlayAudio(level->fadeOutSFX,body.aabb.center);
+		}
+		return;
+	}
 	if (invulTime > 0) {
 		invulTime -= delta;
 		invulFlicker = !invulFlicker;
@@ -141,6 +151,17 @@ void Spelunker::_process(float delta)
 	float accelSpeed=20000;
 
 	auto input = Input::get_singleton();
+
+	if (input->is_action_pressed("EnterDoor") && body.isGrounded && !isStunned && !isDead && body.aabb.overlaps(level->exitPosition)) {
+		body.aabb.center = level->exitPosition.center;
+		set_position(level->GridToWorld(body.aabb.center));
+		isEnteringDoor = true;
+		animator->set_animation("EnterDoor");
+		animator->set_speed_scale(2);
+		level->PlayAudio(level->walkThroughDoorSFX,body.aabb.center);
+		return;
+	}
+
 	bool isRunning = false;
 	bool isIdle = true;
 	bool isCrouching = false;

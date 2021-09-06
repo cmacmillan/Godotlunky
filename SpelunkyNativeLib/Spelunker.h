@@ -20,6 +20,8 @@ public:
 	Level* level=nullptr;
 	bool holdingLedge = false;
 	bool holdingRope= false;
+	bool isEnteringDoor = false;
+	float enterDoorOpacity = 1;
 	float grabRopeDisableTime = 0;
 	float timeLookingUp = 0;
 	float timeLookingDown = 0;

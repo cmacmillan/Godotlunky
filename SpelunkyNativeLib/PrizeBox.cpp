@@ -12,11 +12,12 @@ void PrizeBox::_register_methods()
 }
 
 
-#define prizeBoxProbabilitiesLength 3
+#define prizeBoxProbabilitiesLength 4
 constexpr float prizeBoxProbabilities[prizeBoxProbabilitiesLength] = {
 	10.0f,//rope
 	10.0f,//small bomb
 	2.0f,//big bomb
+	2.0f,//shotgun
 };
 
 constexpr float PrizeBoxProbSum() {
@@ -36,10 +37,14 @@ void PrizeBox::_ready()
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body.Init(Vector2(.8f,.5f),Vector2(0,0),.1,5000,this,level,Vector2(0,0),true,1,HitboxMask::Item,this,this,true,true,nullptr);
 	level->RegisterHurtbox(&body);
+	hasOpened = false;
 }
 
 void PrizeBox::OpenBox(vector<HitboxData*>* hitboxesToRemove) 
 {
+	if (hasOpened)
+		return;
+	hasOpened = true;
 	float rand = level->Random() * prizeBoxProbSum;
 	int SpawnIndex=0;
 	for (;rand>prizeBoxProbabilities[SpawnIndex]; SpawnIndex++) {
@@ -56,6 +61,9 @@ void PrizeBox::OpenBox(vector<HitboxData*>* hitboxesToRemove)
 		break;
 	case 2:
 		SpawnLargeBombBox(level, pos, startupDelay);
+		break;
+	case 3:
+		SpawnShotgun(level, pos);
 		break;
 	}
 	///////////////

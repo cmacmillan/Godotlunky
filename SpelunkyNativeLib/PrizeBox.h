@@ -12,6 +12,7 @@ class PrizeBox : public Node2D, IDamageReciever, IThrowAction
 public:
 	Body body;
 	Level* level;
+	bool hasOpened;
 
 	static void _register_methods();
 	void _init();

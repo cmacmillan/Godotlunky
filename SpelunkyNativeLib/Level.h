@@ -77,6 +77,9 @@ public:
 	Ref<AudioStream> itemPickupSFX;
 	Ref<AudioStream> noneLeftSFX;
 	Ref<AudioStream> spiderJumpSFX;
+	Ref<AudioStream> fadeInSFX;
+	Ref<AudioStream> fadeOutSFX;
+	Ref<AudioStream> walkThroughDoorSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;
@@ -89,6 +92,7 @@ public:
 	Ref<PackedScene> bloodSpurtScene;
 	Ref<PackedScene> prizeBoxScene;
 	Ref<PackedScene> spiderScene;
+	Ref<PackedScene> doorScene;
 
 	//auto pickups
 	Ref<PackedScene> largeGoldScene;
@@ -109,6 +113,11 @@ public:
 	Label* healthCountLabel;
 	Label* moneyCountLabel;
 
+	SpelAABB exitPosition;
+
+	bool hasPlayedFadeInSound;
+	float fullscreenWipePercent = 0;
+	Ref<Material> fullscreenWipeMaterial;
 	Spelunker* spelunker;
 	LevelBlock* blocks;
 	DrawType* drawTypes;
@@ -118,6 +127,9 @@ public:
 	std::set<Body*>* hurtboxes;
 	std::set<HitboxData*>* hitboxes;
 	std::set<AutoPickup*>* autoPickups;
+
+	bool isFadingOut;
+	float fadeOutLerp;
 
 	std::vector<AudioStreamPlayer2D*>* freeAudioSources;
 	std::vector<AudioStreamPlayer2D*>* outstandingAudioSources;
@@ -144,7 +156,7 @@ public:
 	float MarchVertical(float startY, float endY, float x1, float x2,bool& hit);
 	float MarchHorizontal(float startX, float endX, float y1, float y2,bool& hit);
 	bool IsOverlappingTerrain(Vector2 pos);
-	void CopyLayoutIntoBlocks(string layout, int x, int y, bool flipX);
+	Vector2 CopyLayoutIntoBlocks(string layout, int x, int y, bool flipX);
 	float Random();
 	void UpdateMeshes();
 	Level();

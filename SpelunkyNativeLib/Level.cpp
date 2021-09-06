@@ -14,6 +14,9 @@
 #include "Rock.h"
 #include "Shotgun.h"
 #include "ObjectMaker.h"
+#include <ColorRect.hpp>
+#include <CanvasItemMaterial.hpp>
+#include <ShaderMaterial.hpp>
 
 void HitboxData::InitOrClearBodiesAlreadyDamagedList() {
 	if (bodiesAlreadyDamaged == nullptr) {
@@ -72,6 +75,9 @@ void Level::_register_methods()
 	register_property("itemPickupSFX", &Level::itemPickupSFX, Ref<AudioStream>());
 	register_property("noneLeftSFX", &Level::noneLeftSFX, Ref<AudioStream>());
 	register_property("spiderJumpSFX", &Level::spiderJumpSFX, Ref<AudioStream>());
+	register_property("fadeInSFX", &Level::fadeInSFX, Ref<AudioStream>());
+	register_property("fadeOutSFX", &Level::fadeOutSFX, Ref<AudioStream>());
+	register_property("walkThroughDoorSFX", &Level::walkThroughDoorSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 
@@ -85,6 +91,7 @@ void Level::_register_methods()
 	register_property("bloodSpurtScene", &Level::bloodSpurtScene, Ref<PackedScene>());
 	register_property("prizeBoxScene", &Level::prizeBoxScene, Ref<PackedScene>());
 	register_property("spiderScene", &Level::spiderScene, Ref<PackedScene>());
+	register_property("doorScene", &Level::doorScene, Ref<PackedScene>());
 
 	//auto pickups
 	register_property("largeGoldScene", &Level::largeGoldScene, Ref<PackedScene>());
@@ -106,13 +113,11 @@ const string layout1 =
  XXXXX0XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n\
  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
-//this should probably not be global
-////////////////////////////////
-
-void Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
+Vector2 Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 {
 	std::istringstream iss(layout);
 	int yCurr = 0;
+	Vector2 entranceExit=Vector2(0,0);
 	for (std::string line; std::getline(iss, line); )
 	{
 		int xCurr = 0;
@@ -152,7 +157,9 @@ void Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 			} else if (line[i] == 'S') {
 				SpawnSnake(this,gridCoord);
 			} else if (line[i] == 'W') {
-				block->hasSpikes=true;
+				block->hasSpikes = true;
+			} else if (line[i] == 'Q') {
+				entranceExit = gridCoord;
 			} else if (line[i]=='0') {
 			} else if (line[i]=='X') {
 				setPresent = true;
@@ -167,6 +174,7 @@ void Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 		}
 		yCurr++;
 	}
+	return entranceExit;
 }
 
 void Level::RegisterHurtbox(Body* hurtbox) {
@@ -340,6 +348,11 @@ void Level::_ready()
 	healthCountLabel= uiRoot->get_node<Label>("TopLeftContainer/HealthCountContainer/Label");
 	moneyCountLabel = uiRoot->get_node<Label>("TopLeftContainer/MoneyCountContainer/Label");
 
+	auto fullscreenWipe = get_node<ColorRect>("/root/GameScene/Spelunker/Camera2D/CanvasLayer/FullscreenWipe");
+	this->fullscreenWipeMaterial = fullscreenWipe->get_material();
+	fullscreenWipePercent = 0;
+	isFadingOut = false;
+
 	freeAudioSources = new std::vector<AudioStreamPlayer2D*>();
 	outstandingAudioSources = new std::vector<AudioStreamPlayer2D*>();
 	hitboxes = new std::set<HitboxData*>();
@@ -371,7 +384,7 @@ void Level::_ready()
 		for (int i = startIndex; i != endIndex+direction; i+=direction) {
 			string metaBlock;
 			bool flip = false;
-			if (i == startIndex && j==0) //starting platform
+			if ((i == startIndex && j==0) || i==endIndex && j==numMetaBlocksHeight-1) //starting platform
 			{
 				metaBlock = startingPlatforms[(int)(startingPlatformsLength * Random())];
 				flip = Random() > .5f;//randomly flip
@@ -410,7 +423,19 @@ void Level::_ready()
 					metaBlock = hallwayDrop[rand-hallwayLength];
 				}
 			}
-			CopyLayoutIntoBlocks(metaBlock, i * metaBlockWidth+1, j * metaBlockHeight+1, flip);
+			Vector2 retr = CopyLayoutIntoBlocks(metaBlock, i * metaBlockWidth+1, j * metaBlockHeight+1, flip);
+			if (j == 0 && i==startIndex) {
+				auto node = cast_to<Node2D>(doorScene->instance());
+				this->add_child(node);
+				node->set_position(GridToWorld(retr));
+			}
+			else if (j == numMetaBlocksHeight-1 && i == endIndex) {
+				auto node = cast_to<Node2D>(doorScene->instance());
+				this->add_child(node);
+				node->set_position(GridToWorld(retr));
+				this->exitPosition.center = retr;
+				this->exitPosition.size = Vector2(1,1);
+			}
 		}
 		startIndex = endIndex;
 	}
@@ -444,6 +469,7 @@ void Level::_ready()
 	printf("expected %d, actual %d ", expectedCount, edgeWallIndex);
 	//CopyLayoutIntoBlocks(layout1, 0, 0);
 	UpdateMeshes();
+	hasPlayedFadeInSound = false;
 }
 void Level::UpdateMeshes() {
 	int topCount = 0;
@@ -548,6 +574,21 @@ std::vector<HitboxData*>* hitboxesToRemove= nullptr;
 std::vector<AutoPickup*>* autopickupsToRemove= nullptr;
 void Level::_process(float delta)
 {
+	if (!hasPlayedFadeInSound) {
+		hasPlayedFadeInSound = true;
+		PlayAudio(fadeInSFX, spelunker->body.aabb.center);
+	}
+	if (fullscreenWipePercent < 1) {
+		fullscreenWipePercent += delta;
+		((ShaderMaterial*)fullscreenWipeMaterial.ptr())->set_shader_param("C", fullscreenWipePercent);
+	}
+	if (isFadingOut) {
+		fadeOutLerp -= delta;
+		((ShaderMaterial*)fullscreenWipeMaterial.ptr())->set_shader_param("C", fadeOutLerp);
+		if (fadeOutLerp == 0) {
+			//do load
+		}
+	}
 	for (int i = 0; i < outstandingAudioSources->size(); i++) 
 	{
 		AudioStreamPlayer2D* curr = (*outstandingAudioSources)[i];
