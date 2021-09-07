@@ -76,6 +76,7 @@ Vector2 Spelunker::GetPickPosition() {
 
 void Spelunker::_ready()
 {
+	spaceTextLerp = 0;
 	health = 4;
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player,this,nullptr,false,false,nullptr);
@@ -152,15 +153,27 @@ void Spelunker::_process(float delta)
 
 	auto input = Input::get_singleton();
 
-	if (input->is_action_pressed("EnterDoor") && body.isGrounded && !isStunned && !isDead && body.aabb.overlaps(level->exitPosition) && level->isDoorOpen) {
-		body.aabb.center = level->exitPosition.center;
-		set_position(level->GridToWorld(body.aabb.center));
-		isEnteringDoor = true;
-		animator->set_animation("EnterDoor");
-		animator->set_speed_scale(2);
-		level->PlayAudio(level->walkThroughDoorSFX,body.aabb.center);
-		return;
+	if (body.isGrounded && !isStunned && !isDead && body.aabb.overlaps(level->exitPosition) && level->isDoorOpen) {
+		if (input->is_action_pressed("EnterDoor")) {
+			body.aabb.center = level->exitPosition.center;
+			set_position(level->GridToWorld(body.aabb.center));
+			isEnteringDoor = true;
+			animator->set_animation("EnterDoor");
+			animator->set_speed_scale(2);
+			level->PlayAudio(level->walkThroughDoorSFX, body.aabb.center);
+			return;
+		}
+		else
+		{
+			spaceTextLerp = godot::Math::move_toward(spaceTextLerp, 1, delta * 8);
+		}
 	}
+	else
+	{
+		spaceTextLerp = godot::Math::move_toward(spaceTextLerp, 0, delta * 8);
+	}
+	level->exitDoor->get_node<Label>("LabelParent/Label")->set_modulate(Color(1,1,1,spaceTextLerp));
+	level->exitDoor->get_node<Node2D>("LabelParent")->set_position(Vector2(0,godot::Math::lerp(-80,-100,spaceTextLerp)));
 
 	bool isRunning = false;
 	bool isIdle = true;

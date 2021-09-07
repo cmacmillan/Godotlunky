@@ -303,6 +303,18 @@ tracks/22/keys = {
 "update": 0,
 "values": [ Vector2( 0, 0 ), Vector2( 0, 0 ), Vector2( 0, 0 ), Vector2( 0, -25 ), Vector2( 0, 0 ), Vector2( 0, -20 ), Vector2( 0, 0 ), Vector2( 0, -14 ), Vector2( 0, 0 ), Vector2( 0, -8 ), Vector2( 0, 0 ) ]
 }
+tracks/23/type = "value"
+tracks/23/path = NodePath("RockLoop:volume_db")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/keys = {
+"times": PoolRealArray( 0, 6.55, 9.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 0.0, -80.0 ]
+}
 
 [node name="Godolmec" type="Node2D"]
 
@@ -368,3 +380,4 @@ stream = ExtResource( 16 )
 
 [node name="RockLoop" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 17 )
+volume_db = -80.0

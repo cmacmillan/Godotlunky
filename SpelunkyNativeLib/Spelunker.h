@@ -41,6 +41,8 @@ public:
 	HitboxData whipHitbox;
 	HitboxData footHitbox;
 
+	float spaceTextLerp;
+
 	int ropeCount = 4;
 	int bombCount= 4;
 	int goldCollected = 0;

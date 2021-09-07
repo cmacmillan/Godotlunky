@@ -402,9 +402,13 @@ void Level::_ready()
 		for (int i = startIndex; i != endIndex+direction; i+=direction) {
 			string metaBlock;
 			bool flip = false;
-			if ((i == startIndex && j==0) || i==endIndex && j==numMetaBlocksHeight-1) //starting platform
+			if (i == startIndex && j==0) //starting platform
 			{
 				metaBlock = startingPlatforms[(int)(startingPlatformsLength * Random())];
+				flip = Random() > .5f;//randomly flip
+			}
+			else if (i == endIndex && j == numMetaBlocksHeight - 1) {//ending platform
+				metaBlock = endingPlatforms[(int)(endingPlatformsLength * Random())];
 				flip = Random() > .5f;//randomly flip
 			}
 			else if (i == startIndex) //recieve drop

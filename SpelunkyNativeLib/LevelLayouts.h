@@ -72,8 +72,20 @@ const string startingPlatform1 =
  0000000000000\n\
  0000000000000\n\
  000000Q000000\n\
- 00000XXXO0000\n\
+ 00000XXX00000\n\
  0000XXXXX0000\n\
+ 000XXXXXXX000\n\
+ 00XXXXXXXXX00\n\
+ 0XXXXXXXXXXX0\n\
+ XXXXXXXXXXXXX";
+
+const string endingPlatform1= 
+"XXXXXXXXXXXXX\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 000000Q0O0000\n\
  000XXXXXXX000\n\
  00XXXXXXXXX00\n\
  0XXXXXXXXXXX0\n\
@@ -87,6 +99,9 @@ const string dropRecievers[dropRecieverLength] = { dropRecieverRight1,dropReciev
 
 #define startingPlatformsLength 1
 const string startingPlatforms[startingPlatformsLength] = { startingPlatform1 };
+
+#define endingPlatformsLength 1
+const string endingPlatforms[endingPlatformsLength] = { endingPlatform1 };
 
 #define hallwayLength 1
 const string hallway[hallwayLength] = { hallway1 };
@@ -108,3 +123,4 @@ const string hallwayDrop[hallwayDropLength] = { hallwayDrop1};
 //B Bat
 //M Spider
 //Q entrance/exit
+//O door button
