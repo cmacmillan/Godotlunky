@@ -18,6 +18,7 @@
 #include <Label.hpp>
 #include "LevelLayouts.h"
 #include <RandomNumberGenerator.hpp>
+#include <SceneTree.hpp>
 
 enum DrawType {
 	Normal = 0,
@@ -97,6 +98,7 @@ public:
 	Ref<PackedScene> spiderScene;
 	Ref<PackedScene> doorScene;
 	Ref<PackedScene> doorSwitchScene;
+	//Ref<PackedScene> mainScene;
 
 	//auto pickups
 	Ref<PackedScene> largeGoldScene;

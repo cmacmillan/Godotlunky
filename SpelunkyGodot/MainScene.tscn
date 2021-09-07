@@ -512,7 +512,7 @@ position = Vector2( 0, 1 )
 
 [node name="Background" type="Sprite" parent="."]
 material = SubResource( 2 )
-position = Vector2( 2114, 2243 )
+position = Vector2( 2115, 2246 )
 scale = Vector2( 300, 300 )
 texture = ExtResource( 9 )
 
@@ -596,7 +596,7 @@ largeBombBoxScene = ExtResource( 44 )
 position = Vector2( 990, 219 )
 frames = SubResource( 50 )
 animation = "EnterDoor"
-frame = 2
+frame = 5
 speed_scale = 2.5
 playing = true
 script = ExtResource( 10 )
@@ -712,7 +712,6 @@ region_rect = Rect2( 1408, 1536, 128, 128 )
 [node name="StunBirds" type="AnimatedSprite" parent="Spelunker"]
 position = Vector2( 5, -34 )
 frames = SubResource( 73 )
-frame = 4
 speed_scale = 3.0
 playing = true
 

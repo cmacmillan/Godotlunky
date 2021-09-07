@@ -96,6 +96,7 @@ void Level::_register_methods()
 	register_property("spiderScene", &Level::spiderScene, Ref<PackedScene>());
 	register_property("doorScene", &Level::doorScene, Ref<PackedScene>());
 	register_property("doorSwitchScene", &Level::doorSwitchScene, Ref<PackedScene>());
+	//register_property("mainScene", &Level::mainScene, Ref<PackedScene>());
 
 	//auto pickups
 	register_property("largeGoldScene", &Level::largeGoldScene, Ref<PackedScene>());
@@ -245,16 +246,19 @@ bool Level::IsOverlappingTerrain(Vector2 pos) {
 
 float Level::MarchVertical(float startY, float endY, float x1, float x2,bool& hit) {
 	int dir = endY > startY ? 1 : -1;
-	for (int i = startY; i != (int)endY+dir; i+=dir) {
-		if (GetBlock(x1, i)->present || GetBlock(x2, i)->present) {
-			hit = true;
-			if (dir > 0)
-			{
-				return i - .0001f;
-			}
-			else
-			{
-				return i+1.0 + .0001f;
+	float xDir = x2>x1 ? 1.0 : -1.0;
+	for (int i = startY; i != (int)endY + dir; i += dir) {
+		for (int j = x1; j != (int)(x2 + xDir); j += xDir) {
+			if (GetBlock(j, i)->present) {
+				hit = true;
+				if (dir > 0)
+				{
+					return i - .0001f;
+				}
+				else
+				{
+					return i + 1.0 + .0001f;
+				}
 			}
 		}
 	}
@@ -263,16 +267,19 @@ float Level::MarchVertical(float startY, float endY, float x1, float x2,bool& hi
 
 float Level::MarchHorizontal(float startX, float endX, float y1, float y2, bool& hit) {
 	float dir = endX > startX ? 1.0 : -1.0;
-	for (int i = startX; i != (int)endX+dir;i+=dir) {
-		if (GetBlock(i, y1)->present || GetBlock(i, y2)->present) {
-			hit = true;
-			if (dir > 0)
-			{
-				return i - .0001f;
-			}
-			else
-			{
-				return i + 1.0 + .0001f;
+	float yDir = y2>y1 ? 1.0 : -1.0;
+	for (int i = startX; i != (int)endX + dir; i += dir) {
+		for (int j = y1; j != (int)(y2 + yDir); j += yDir) {
+			if (GetBlock(i, j)->present) {
+				hit = true;
+				if (dir > 0)
+				{
+					return i - .0001f;
+				}
+				else
+				{
+					return i + 1.0 + .0001f;
+				}
 			}
 		}
 	}
@@ -607,8 +614,9 @@ void Level::_process(float delta)
 	if (isFadingOut) {
 		fadeOutLerp -= delta;
 		((ShaderMaterial*)fullscreenWipeMaterial.ptr())->set_shader_param("C", fadeOutLerp);
-		if (fadeOutLerp == 0) {
-			//do load
+		if (fadeOutLerp <= 0) {
+			get_tree()->change_scene("res://MainScene.tscn");
+			return;
 		}
 	}
 	for (int i = 0; i < outstandingAudioSources->size(); i++) 
