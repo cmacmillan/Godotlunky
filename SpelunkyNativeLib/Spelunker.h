@@ -6,7 +6,7 @@
 #include <Sprite.hpp>
 #include "Body.h"
 
-class Spelunker : public Node2D, IDamageReciever, IPicker
+class Spelunker : public Node2D, IDamageReciever, IPicker, ISmushReciever
 {
 	GODOT_CLASS(Spelunker, Node2D);
 
@@ -51,7 +51,9 @@ public:
 	Vector2 GetPickPosition();
 	void PickedBodyDestroyed();
 
-	void Die();
+	void TakeSmush();
+
+	void Die(bool playSound=true);
 	bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove);
 
 	static void _register_methods();

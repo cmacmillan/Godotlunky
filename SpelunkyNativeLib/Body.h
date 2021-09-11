@@ -26,6 +26,9 @@ public:
 	float bounciness;
 	float friction;
 	bool isGrounded;
+	bool isSmushed;
+	ISmushReciever* smushReciever;
+
 	bool pickable;
 	bool dealDamageWhenMovingFast;
 	bool isFacingRight;
@@ -35,6 +38,6 @@ public:
 	Vector2 endPos;//basically just out
 	Vector2 normal;//basically just out
 	void OnDestroy(vector<HitboxData*>* hitboxesToRemove);
-	void Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level, Vector2 initialVelocity, bool pickable, float weight, HitboxMask takeDamageMask, IDamageReciever* damageReceiver, IThrowAction* throwAction, bool dealDamageWhenMovingFast, bool playHitSFX, Ref<AudioStream> hitSFX);
+	void Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level, Vector2 initialVelocity, bool pickable, float weight, HitboxMask takeDamageMask, IDamageReciever* damageReceiver, IThrowAction* throwAction, bool dealDamageWhenMovingFast, bool playHitSFX, Ref<AudioStream> hitSFX,ISmushReciever* smushReciever);
 	bool process(float delta, bool applyGravity, bool applyFriction);
 };

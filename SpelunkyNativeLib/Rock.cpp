@@ -14,10 +14,17 @@ void Rock::_register_methods()
 
 void Rock::_init(){}
 
+void Rock::TakeSmush() {
+	level->PlayAudio(level->itemSmushSFX,body.aabb.center);
+	body.OnDestroy(nullptr);
+	queue_free();
+	level->UnregisterHurtbox(&body);
+}
+
 void Rock::_ready()
 {
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.5,.5),Vector2(0,0),.3,10000,this,level,Vector2(0,0),true,1,HitboxMask::Item,nullptr,nullptr,true,true,nullptr);
+	body.Init(Vector2(.5,.5),Vector2(0,0),.3,10000,this,level,Vector2(0,0),true,1,HitboxMask::Item,nullptr,nullptr,true,true,nullptr,this);
 	level->RegisterHurtbox(&body);
 }
 

@@ -3,7 +3,7 @@
 #include "Level.h"
 #include "Body.h"
 #include <AnimatedSprite.hpp>
-class Snake : public Node2D, IDamageReciever
+class Snake : public Node2D, IDamageReciever, ISmushReciever
 {
 	GODOT_CLASS(Snake, Node2D);
 public:
@@ -12,6 +12,8 @@ public:
 	Body body;
 	HitboxData hitbox;
 	bool isDead;
+
+	void TakeSmush();
 
 	bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove);
 

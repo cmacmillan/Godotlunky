@@ -5,7 +5,7 @@
 #include "Body.h"
 #include "ObjectMaker.h"
 
-class PrizeBox : public Node2D, IDamageReciever, IThrowAction
+class PrizeBox : public Node2D, IDamageReciever, IThrowAction, ISmushReciever
 {
 	GODOT_CLASS(PrizeBox, Node2D);
 
@@ -13,6 +13,8 @@ public:
 	Body body;
 	Level* level;
 	bool hasOpened;
+
+	void TakeSmush();
 
 	static void _register_methods();
 	void _init();

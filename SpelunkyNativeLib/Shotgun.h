@@ -5,7 +5,7 @@
 #include "Body.h"
 #include <Sprite.hpp>
 
-class Shotgun : public Node2D, IThrowAction
+class Shotgun : public Node2D, IThrowAction, ISmushReciever
 {
 	GODOT_CLASS(Shotgun, Node2D);
 
@@ -14,6 +14,8 @@ public:
 	Level* level;
 	Sprite* sprite;
 	float cooldownTime;
+
+	void TakeSmush();
 
 	static void _register_methods();
 	void _init();

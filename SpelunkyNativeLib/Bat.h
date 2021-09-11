@@ -8,7 +8,7 @@
 #include <AudioStreamPlayer2D.hpp>
 #include "HitboxData.h"
 
-class Bat : public Node2D, IDamageReciever
+class Bat : public Node2D, IDamageReciever, ISmushReciever
 {
 	GODOT_CLASS(Bat, Node2D);
 
@@ -21,6 +21,8 @@ public:
 	bool isDead;
 
 	bool TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove);
+
+	void TakeSmush();
 
 	static void _register_methods();
 	void _init();

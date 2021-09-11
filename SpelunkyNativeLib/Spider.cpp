@@ -13,10 +13,16 @@ void Spider::_register_methods()
 
 void Spider::_init(){}
 
+void Spider::TakeSmush() {
+	level->PlayAudio(level->smushSFX, body.aabb.center);
+	TakeDamage(1,false,nullptr);
+	level->UnregisterHurtbox(&body);
+}
+
 void Spider::_ready()
 {
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.8,.4),Vector2(0,0),.2f,9999999,this,level,Vector2(0,0),false,1,HitboxMask::Enemy,this,nullptr,false,true,level->spiderJumpSFX);
+	body.Init(Vector2(.8,.4),Vector2(0,0),.2f,9999999,this,level,Vector2(0,0),false,1,HitboxMask::Enemy,this,nullptr,false,true,level->spiderJumpSFX,this);
 	hitbox.creatorToEscape = nullptr;
 	hitbox.SetValues(body.aabb, 1, HitboxMask::Player, Vector2(0, 0), 0, false,&body);
 	animatedSprite = get_node<AnimatedSprite>("AnimatedSprite");
@@ -74,7 +80,7 @@ void Spider::_process(float delta)
 					level->PlayAudio(level->spiderJumpSFX, body.aabb.center);
 					animatedSprite->set_speed_scale(3);
 					animatedSprite->set_animation("Jump");
-					body.vel = Vector2(700*sign(level->spelunker->body.aabb.center.x-body.aabb.center.x),-1400);
+					body.vel = Vector2(700*godot::Math::sign(level->spelunker->body.aabb.center.x-body.aabb.center.x),-1400);
 					timeBeforeJump = 0.0f;
 				}
 			}

@@ -81,6 +81,8 @@ void Level::_register_methods()
 	register_property("batStartFlapSFX", &Level::batStartFlapSFX, Ref<AudioStream>());
 	register_property("switchHitSFX", &Level::switchHitSFX, Ref<AudioStream>());
 	register_property("doorOpenSFX", &Level::doorOpenSFX, Ref<AudioStream>());
+	register_property("smushSFX", &Level::smushSFX, Ref<AudioStream>());
+	register_property("itemSmushSFX", &Level::itemSmushSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 
@@ -295,8 +297,26 @@ float Level::Random() {
 	return retr;
 }
 
-bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector2& endPos, Vector2& normal,bool& isGrounded)
+bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector2& endPos, Vector2& normal,bool& isGrounded,bool& isSmushed)
 {
+	isGrounded = false;
+	normal = Vector2();
+	auto customNorm = Vector2();
+	bool hitCustom=false;
+
+	for (auto i : *customCollision) {
+		if (i->overlaps(aabb)) {
+			auto norm = i->unintersect(aabb);
+			if (norm.y == -1) {
+				isGrounded = true;
+			}
+			hitCustom = true;
+			customNorm += norm;
+		}
+	}
+
+	normal += customNorm;
+
 	Vector2 size = aabb.size;
 	Vector2 half = aabb.size/2;
 	Vector2 center = aabb.center;
@@ -311,26 +331,13 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 	Vector2 prevLowerLeft = previousPos+ Vector2(-half.x, half.y);
 	Vector2 prevLowerRight = previousPos+ half;
 
-	isGrounded = false;
-	normal = Vector2();
-	bool horizHit= false;
-	if (center.x > previousPos.x) {
-		endPos.x = MarchHorizontal(previousPos.x+half.x,upperRight.x,prevUpperRight.y,prevLowerRight.y,horizHit)-half.x;
-		if (horizHit) {
-			normal += Vector2(-1,0);
-		}
-	}
-	else if (center.x < previousPos.x) {
-		endPos.x = MarchHorizontal(previousPos.x - half.x, upperLeft.x, prevUpperLeft.y, prevLowerLeft.y,horizHit)+half.x;
-		if (horizHit) {
-			normal += Vector2(1,0);
-		}
-	}
-
 	bool vertHit= false;
 	if (center.y > previousPos.y) {
 		endPos.y = MarchVertical(previousPos.y + half.y, lowerLeft.y, prevLowerLeft.x, prevLowerRight.x,vertHit)-half.y;
 		if (vertHit) {
+			if (customNorm.y>0) {
+				isSmushed = true;
+			}
 			normal += Vector2(0,-1);
 			isGrounded = true;
 		}
@@ -339,18 +346,52 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 	{
 		endPos.y = MarchVertical(previousPos.y - half.y, upperLeft.y, prevUpperLeft.x, prevUpperRight.x,vertHit)+half.y;
 		if (vertHit) {
+			if (customNorm.y<0) {
+				isSmushed = true;
+			}
 			normal += Vector2(0,1);
 		}
 	}
+
+	bool horizHit= false;
+	if (center.x > previousPos.x) {
+		endPos.x = MarchHorizontal(previousPos.x+half.x,upperRight.x,prevUpperRight.y,prevLowerRight.y,horizHit)-half.x;
+		if (horizHit) {
+			if (customNorm.x>0) {
+				isSmushed = true;
+			}
+			normal += Vector2(-1,0);
+		}
+	}
+	else if (center.x < previousPos.x) {
+		endPos.x = MarchHorizontal(previousPos.x - half.x, upperLeft.x, prevUpperLeft.y, prevLowerLeft.y,horizHit)+half.x;
+		if (horizHit) {
+			if (customNorm.x<0) {
+				isSmushed = true;
+			}
+			normal += Vector2(1,0);
+		}
+	}
+
 	bool retr;
-	retr = vertHit || horizHit;
+	retr = vertHit || horizHit || hitCustom;
+	if (normal.x!=0)
+		normal.x = godot::Math::sign(normal.x);
+	if (normal.y != 0)
+		normal.y = godot::Math::sign(normal.y);
 	//if (retr)
 		//normal.normalize();
 	return retr;
 }
 
-template <typename T> int sign(T val) {
-    return (T(0) < val) - (val < T(0));
+bool Level::InsideCustomCollision(Vector2 pos,SpelAABB& hit) {
+	for (auto i : *customCollision) {
+		if (i->overlaps(pos)) {
+			hit = *i;
+			return true;
+		}
+	}
+	return false;
 }
 
 void Level::_ready()
@@ -364,6 +405,11 @@ void Level::_ready()
 	allRids = new	std::vector<RID>();
 	freeRids = new std::vector<RID>();
 #endif // showDebugHitboxes
+
+	customCollision = new std::set<SpelAABB*>();
+	testCustomCollision.center = Vector2(12.65,5);
+	testCustomCollision.size = Vector2(1, 1);
+	customCollision->insert(&testCustomCollision);
 
 	frontSpawnRoot = get_node("/root/GameScene/SpawnRoot");
 	uiRoot = get_node<Control>("/root/GameScene/Spelunker/Camera2D/CanvasLayer/Control");
@@ -405,7 +451,7 @@ void Level::_ready()
 		while (endIndex == startIndex) {
 			endIndex = (Random() * numMetaBlocksWidth);
 		}
-		int direction = sign(endIndex-startIndex);
+		int direction = godot::Math::sign(endIndex-startIndex);
 		for (int i = startIndex; i != endIndex+direction; i+=direction) {
 			string metaBlock;
 			bool flip = false;
@@ -601,8 +647,12 @@ RID Level::GetRid(VisualServer* vs) {
 std::vector<Body*>* hurtboxesToRemove = nullptr;
 std::vector<HitboxData*>* hitboxesToRemove= nullptr;
 std::vector<AutoPickup*>* autopickupsToRemove= nullptr;
+float timerTest = 0;//delete me
 void Level::_process(float delta)
 {
+	timerTest += delta;
+	//testCustomCollision.center = Vector2(12.65+godot::Math::sin(timerTest),5+godot::Math::sin(timerTest)*5);
+	testCustomCollision.center = spelunker->body.aabb.center + Vector2(0,2);
 	if (!hasPlayedFadeInSound) {
 		hasPlayedFadeInSound = true;
 		PlayAudio(fadeInSFX, spelunker->body.aabb.center);
@@ -650,6 +700,15 @@ void Level::_process(float delta)
 		r.set_position(GridToWorld(hitbox->aabb.center)-size/2);
 		r.set_size(size);
 		vs->canvas_item_add_rect(rid,r,Color(1,0,0.4));
+	}
+	{
+		auto rid = GetRid(vs);
+		Rect2 r;
+		vs->canvas_item_set_parent(rid, get_canvas_item());
+		auto size = GridToWorldSize(testCustomCollision.size);
+		r.set_position(GridToWorld(testCustomCollision.center) - size / 2);
+		r.set_size(size);
+		vs->canvas_item_add_rect(rid, r, Color(1, 0, 0.4));
 	}
 	for (auto hurtbox: *hurtboxes) {
 		auto rid = GetRid(vs);

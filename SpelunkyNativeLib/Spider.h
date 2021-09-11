@@ -5,7 +5,7 @@
 #include "Body.h"
 #include <AnimatedSprite.hpp>
 
-class Spider : public Node2D, IDamageReciever
+class Spider : public Node2D, IDamageReciever, ISmushReciever
 {
 	GODOT_CLASS(Spider, Node2D);
 
@@ -18,6 +18,8 @@ public:
 	bool hasSpottedPlayer;
 	float timeBeforeJump;
 	AnimatedSprite* animatedSprite;
+
+	void TakeSmush();
 
 	static void _register_methods();
 	void _init();

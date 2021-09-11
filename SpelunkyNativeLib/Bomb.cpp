@@ -13,12 +13,18 @@ void Bomb::_register_methods()
 
 void Bomb::_init(){}
 
+void Bomb::TakeSmush() {
+	if (lifetime < 2.5f) {
+		lifetime = 2.51f;
+	}
+}
+
 void Bomb::_ready()
 {
 	AnimatedSprite* animator = get_node<AnimatedSprite>("AnimatedSprite");
 	animator->_set_playing(true);
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.5f, .5f), Vector2(0, 0), .3, 3000, this, level, startVelocity,true,1,HitboxMask::Item,nullptr,nullptr,true,true,nullptr);
+	body.Init(Vector2(.5f, .5f), Vector2(0, 0), .3, 3000, this, level, startVelocity,true,1,HitboxMask::Item,nullptr,nullptr,true,true,nullptr,this);
 	level->RegisterHurtbox(&body);
 	auto audio = get_node<AudioStreamPlayer2D>("Audio");
 	audio->set_stream(level->bombTimerSFX);

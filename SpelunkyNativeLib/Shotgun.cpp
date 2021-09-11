@@ -17,10 +17,17 @@ void Shotgun::_register_methods()
 
 void Shotgun::_init(){}
 
+void Shotgun::TakeSmush() {
+	level->PlayAudio(level->itemSmushSFX,body.aabb.center);
+	body.OnDestroy(nullptr);
+	queue_free();
+	level->UnregisterHurtbox(&body);
+}
+
 void Shotgun::_ready()
 {
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.7,.3),Vector2(0,0),.1,5000,this,level,Vector2(0,0),true,1,HitboxMask::Item,nullptr,this,true,true,nullptr);
+	body.Init(Vector2(.7,.3),Vector2(0,0),.1,5000,this,level,Vector2(0,0),true,1,HitboxMask::Item,nullptr,this,true,true,nullptr,this);
 	sprite = get_node<Sprite>("Sprite");
 	level->RegisterHurtbox(&body);
 }

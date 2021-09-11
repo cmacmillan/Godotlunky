@@ -19,6 +19,7 @@
 #include "LevelLayouts.h"
 #include <RandomNumberGenerator.hpp>
 #include <SceneTree.hpp>
+#include <Math.hpp>
 
 enum DrawType {
 	Normal = 0,
@@ -84,6 +85,8 @@ public:
 	Ref<AudioStream> batStartFlapSFX;
 	Ref<AudioStream> switchHitSFX;
 	Ref<AudioStream> doorOpenSFX;
+	Ref<AudioStream> smushSFX;
+	Ref<AudioStream> itemSmushSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;
@@ -98,7 +101,6 @@ public:
 	Ref<PackedScene> spiderScene;
 	Ref<PackedScene> doorScene;
 	Ref<PackedScene> doorSwitchScene;
-	//Ref<PackedScene> mainScene;
 
 	//auto pickups
 	Ref<PackedScene> largeGoldScene;
@@ -134,6 +136,9 @@ public:
 	std::set<HitboxData*>* hitboxes;
 	std::set<AutoPickup*>* autoPickups;
 
+	std::set<SpelAABB*>* customCollision;
+	SpelAABB testCustomCollision;
+
 	bool isDoorOpen;
 	bool isFadingOut;
 	float fadeOutLerp;
@@ -162,9 +167,10 @@ public:
 	void UnregisterHurtbox(Body* hurtbox);
 	void RegisterHitbox(HitboxData* hitbox);
 	void UnregisterHitbox(HitboxData* hitbox);
-	bool CheckCollisionWithTerrain(SpelAABB aabb,Vector2 previousPos,Vector2& endPos,Vector2& normal,bool& isGrounded);
+	bool CheckCollisionWithTerrain(SpelAABB aabb,Vector2 previousPos,Vector2& endPos,Vector2& normal,bool& isGrounded,bool& isSmushed);
 	float MarchVertical(float startY, float endY, float x1, float x2,bool& hit);
 	float MarchHorizontal(float startX, float endX, float y1, float y2,bool& hit);
+	bool InsideCustomCollision(Vector2 pos,SpelAABB& hit);
 	bool IsOverlappingTerrain(Vector2 pos);
 	Vector2 CopyLayoutIntoBlocks(string layout, int x, int y, bool flipX);
 	float Random();

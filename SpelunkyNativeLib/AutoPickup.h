@@ -12,7 +12,7 @@ enum AutoPickupType : unsigned int{
 
 class Spelunker;
 
-class AutoPickup : public Node2D
+class AutoPickup : public Node2D, ISmushReciever
 {
 	GODOT_CLASS(AutoPickup, Node2D);
 
@@ -29,6 +29,8 @@ public:
 	int amountOfStuff;
 	int typeInt;
 	//////////////
+
+	void TakeSmush();
 
 	static void _register_methods();
 	void _init();

@@ -4,7 +4,7 @@
 #include "Level.h"
 #include "Body.h"
 
-class Bomb : public Node2D
+class Bomb : public Node2D, ISmushReciever
 {
 	GODOT_CLASS(Bomb, Node2D);
 
@@ -15,6 +15,8 @@ public:
 	bool hasExploded = false;
 	Level* level;
 	HitboxData explosionHitbox;
+
+	void TakeSmush();
 
 	static void _register_methods();
 	void _init();

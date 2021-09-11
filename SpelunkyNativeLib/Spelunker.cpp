@@ -48,9 +48,10 @@ bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitbo
 	}
 	return false;
 }
-void Spelunker::Die() {
+void Spelunker::Die(bool playSound) {
 	if (!isDead && !isEnteringDoor) {
-		level->PlayAudio(level->hitSFX, body.aabb.center);
+		if (playSound)
+			level->PlayAudio(level->hitSFX, body.aabb.center);
 		for (int i = 0; i < 10; i++) {
 			SpawnBloodSpurt(level, body.aabb.center);
 		}
@@ -74,12 +75,17 @@ Vector2 Spelunker::GetPickPosition() {
 	return get_position()+Vector2(0,20);
 }
 
+void Spelunker::TakeSmush() {
+	level->PlayAudio(level->smushSFX, body.aabb.center);
+	get_node<AnimatedSprite>(".")->set_visible(false);
+	Die(false);
+}
 void Spelunker::_ready()
 {
 	spaceTextLerp = 0;
 	health = 4;
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player,this,nullptr,false,false,nullptr);
+	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player,this,nullptr,false,false,nullptr,this);
 	camera = Object::cast_to<Camera2D>(get_node("Camera2D"));
 	whipForward = get_node<Sprite>("WhipForward");
 	whipBack = get_node<Sprite>("WhipBack");
@@ -94,6 +100,8 @@ void Spelunker::_ready()
 
 void Spelunker::_process(float delta)
 {
+	if (body.isSmushed)
+		return;
 	auto animator = get_node<AnimatedSprite>(".");
 	if (isEnteringDoor) {
 		enterDoorOpacity = godot::Math::move_toward(enterDoorOpacity,0,delta);
@@ -356,7 +364,7 @@ void Spelunker::_process(float delta)
 			}
 		}
 		grabRopeDisableTime -= delta;
-		if (input->is_action_pressed("lookup") && !holdingRope && grabRopeDisableTime <= 0) {
+		if (input->is_action_pressed("lookup") && !holdingLedge && !holdingRope && grabRopeDisableTime <= 0) {
 			auto ogPos = get_position();
 			auto coord = level->WorldToGrid(ogPos);
 			if (level->GetBlock(coord.x, coord.y)->hasRope) {
