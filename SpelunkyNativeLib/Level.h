@@ -38,9 +38,15 @@ struct LevelBlock {
 	bool bloody;
 };
 
+struct MovingPlatform {
+	Body* root;
+	SpelAABB aabb;
+};
+
 class Body;
 class Spelunker;
 class AutoPickup;
+
 
 #define showDebugHitboxes
 
@@ -87,6 +93,7 @@ public:
 	Ref<AudioStream> doorOpenSFX;
 	Ref<AudioStream> smushSFX;
 	Ref<AudioStream> itemSmushSFX;
+	Ref<AudioStream> godolmecHitSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;
@@ -101,6 +108,7 @@ public:
 	Ref<PackedScene> spiderScene;
 	Ref<PackedScene> doorScene;
 	Ref<PackedScene> doorSwitchScene;
+	Ref<PackedScene> godolmecScene;
 
 	//auto pickups
 	Ref<PackedScene> largeGoldScene;
@@ -136,8 +144,8 @@ public:
 	std::set<HitboxData*>* hitboxes;
 	std::set<AutoPickup*>* autoPickups;
 
-	std::set<SpelAABB*>* customCollision;
-	SpelAABB testCustomCollision;
+	std::set<MovingPlatform*>* customCollision;
+	//MovingPlatform testCustomCollision;
 
 	bool isDoorOpen;
 	bool isFadingOut;
@@ -167,10 +175,9 @@ public:
 	void UnregisterHurtbox(Body* hurtbox);
 	void RegisterHitbox(HitboxData* hitbox);
 	void UnregisterHitbox(HitboxData* hitbox);
-	bool CheckCollisionWithTerrain(SpelAABB aabb,Vector2 previousPos,Vector2& endPos,Vector2& normal,bool& isGrounded,bool& isSmushed);
+	bool CheckCollisionWithTerrain(SpelAABB aabb,Vector2 previousPos,Vector2& endPos,Vector2& normal,bool& isGrounded,bool& isSmushed,Body* body);
 	float MarchVertical(float startY, float endY, float x1, float x2,bool& hit);
 	float MarchHorizontal(float startX, float endX, float y1, float y2,bool& hit);
-	bool InsideCustomCollision(Vector2 pos,SpelAABB& hit);
 	bool IsOverlappingTerrain(Vector2 pos);
 	Vector2 CopyLayoutIntoBlocks(string layout, int x, int y, bool flipX);
 	float Random();

@@ -28,6 +28,7 @@ public:
 	bool isGrounded;
 	bool isSmushed;
 	ISmushReciever* smushReciever;
+	bool ignoreCustomCollision;
 
 	bool pickable;
 	bool dealDamageWhenMovingFast;

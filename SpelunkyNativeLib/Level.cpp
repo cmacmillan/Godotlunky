@@ -83,6 +83,7 @@ void Level::_register_methods()
 	register_property("doorOpenSFX", &Level::doorOpenSFX, Ref<AudioStream>());
 	register_property("smushSFX", &Level::smushSFX, Ref<AudioStream>());
 	register_property("itemSmushSFX", &Level::itemSmushSFX, Ref<AudioStream>());
+	register_property("godolmecHitSFX", &Level::godolmecHitSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 
@@ -98,6 +99,7 @@ void Level::_register_methods()
 	register_property("spiderScene", &Level::spiderScene, Ref<PackedScene>());
 	register_property("doorScene", &Level::doorScene, Ref<PackedScene>());
 	register_property("doorSwitchScene", &Level::doorSwitchScene, Ref<PackedScene>());
+	register_property("godolmecScene", &Level::godolmecScene, Ref<PackedScene>());
 	//register_property("mainScene", &Level::mainScene, Ref<PackedScene>());
 
 	//auto pickups
@@ -168,6 +170,8 @@ Vector2 Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 				SpawnSmallRopePile(this, gridCoord,0.0f);
 			} else if (line[i] == 'P') {
 				SpawnPrizeBox(this,gridCoord);
+			} else if(line[i] == '9') {
+				SpawnGodolmec(this, gridCoord);
 			} else if (line[i] == 'B') {
 				SpawnBat(this,gridCoord);
 			} else if (line[i] == 'G') {
@@ -297,7 +301,7 @@ float Level::Random() {
 	return retr;
 }
 
-bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector2& endPos, Vector2& normal,bool& isGrounded,bool& isSmushed)
+bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector2& endPos, Vector2& normal,bool& isGrounded,bool& isSmushed,Body* body)
 {
 	isGrounded = false;
 	normal = Vector2();
@@ -305,10 +309,17 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 	bool hitCustom=false;
 
 	for (auto i : *customCollision) {
-		if (i->overlaps(aabb)) {
-			auto norm = i->unintersect(aabb);
+		if (i->root!=body && i->aabb.overlaps(aabb)) {
+			float mag;
+			auto norm = i->aabb.unintersect(aabb,mag);
 			if (norm.y == -1) {
 				isGrounded = true;
+			}
+			if (norm.y != 0 && abs(mag)>.01f && customNorm.y!=0 && godot::Math::sign(norm.y) != godot::Math::sign(customNorm.y)) {
+				isSmushed = true;
+			}
+			if (norm.x != 0 && abs(mag)>.01f && customNorm.x!=0&& godot::Math::sign(norm.x) != godot::Math::sign(customNorm.x)) {
+				isSmushed = true;
 			}
 			hitCustom = true;
 			customNorm += norm;
@@ -384,16 +395,6 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 	return retr;
 }
 
-bool Level::InsideCustomCollision(Vector2 pos,SpelAABB& hit) {
-	for (auto i : *customCollision) {
-		if (i->overlaps(pos)) {
-			hit = *i;
-			return true;
-		}
-	}
-	return false;
-}
-
 void Level::_ready()
 {
 	rng = RandomNumberGenerator::_new();
@@ -406,10 +407,10 @@ void Level::_ready()
 	freeRids = new std::vector<RID>();
 #endif // showDebugHitboxes
 
-	customCollision = new std::set<SpelAABB*>();
-	testCustomCollision.center = Vector2(12.65,5);
-	testCustomCollision.size = Vector2(1, 1);
-	customCollision->insert(&testCustomCollision);
+	customCollision = new std::set<MovingPlatform*>();
+	//testCustomCollision.aabb.center = Vector2(12.65,5);
+	//testCustomCollision.aabb.size = Vector2(1, 1);
+	//customCollision->insert(&testCustomCollision);
 
 	frontSpawnRoot = get_node("/root/GameScene/SpawnRoot");
 	uiRoot = get_node<Control>("/root/GameScene/Spelunker/Camera2D/CanvasLayer/Control");
@@ -647,12 +648,13 @@ RID Level::GetRid(VisualServer* vs) {
 std::vector<Body*>* hurtboxesToRemove = nullptr;
 std::vector<HitboxData*>* hitboxesToRemove= nullptr;
 std::vector<AutoPickup*>* autopickupsToRemove= nullptr;
-float timerTest = 0;//delete me
+//float timerTest = 0;//delete me
 void Level::_process(float delta)
 {
-	timerTest += delta;
+	//timerTest += delta;
+	//testCustomCollision.aabb.center = Vector2(12.65+godot::Math::sin(timerTest)*3,5);
 	//testCustomCollision.center = Vector2(12.65+godot::Math::sin(timerTest),5+godot::Math::sin(timerTest)*5);
-	testCustomCollision.center = spelunker->body.aabb.center + Vector2(0,2);
+	//testCustomCollision.center = spelunker->body.aabb.center + Vector2(0,2);
 	if (!hasPlayedFadeInSound) {
 		hasPlayedFadeInSound = true;
 		PlayAudio(fadeInSFX, spelunker->body.aabb.center);
@@ -701,12 +703,13 @@ void Level::_process(float delta)
 		r.set_size(size);
 		vs->canvas_item_add_rect(rid,r,Color(1,0,0.4));
 	}
+	for (auto movingPlatform : *customCollision)
 	{
 		auto rid = GetRid(vs);
 		Rect2 r;
 		vs->canvas_item_set_parent(rid, get_canvas_item());
-		auto size = GridToWorldSize(testCustomCollision.size);
-		r.set_position(GridToWorld(testCustomCollision.center) - size / 2);
+		auto size = GridToWorldSize(movingPlatform->aabb.size);
+		r.set_position(GridToWorld(movingPlatform->aabb.center) - size / 2);
 		r.set_size(size);
 		vs->canvas_item_add_rect(rid, r, Color(1, 0, 0.4));
 	}

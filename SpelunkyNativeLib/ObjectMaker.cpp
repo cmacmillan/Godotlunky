@@ -26,6 +26,7 @@ BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord) {  return PutAtAndCh
 PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<PrizeBox>(level->prizeBoxScene->instance()), gridCoord, level,true);}
 Spider* SpawnSpider(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Spider>(level->spiderScene->instance()), gridCoord, level,true);}
 DoorOpener* SpawnDoorOpener(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<DoorOpener>(level->doorSwitchScene->instance()), gridCoord, level,false);}
+Godolmec* SpawnGodolmec(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Godolmec>(level->godolmecScene->instance()), gridCoord, level,false);}
 
 //auto pickup
 AutoPickup* SpawnLargeGoldPile(Level* level, Vector2 gridCoord,float timeUntilActive) { 

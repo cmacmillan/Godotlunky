@@ -58,7 +58,7 @@ bool Body::process(float delta, bool applyGravity, bool applyFriction)
 	}
 	aabb.center = level->WorldToGrid(node->get_position()+vel*delta) + this->offset;
 	endPos = aabb.center;
-	bool hitTerrain = level->CheckCollisionWithTerrain(aabb, startPos, endPos, normal, isGrounded,isSmushed);
+	bool hitTerrain = level->CheckCollisionWithTerrain(aabb, startPos, endPos, normal, isGrounded,isSmushed,this);
 	isSmushed &= smushReciever != nullptr;
 	if (isSmushed) {
 		smushReciever->TakeSmush();

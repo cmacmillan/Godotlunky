@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/GodolmecJaw.png-fc15306c35fda68a806c2e8c4dd0cee9.stex"
+path="res://.import/GodolmecBackground.png-75dfde83fcdf7602cb4c727d2606dfed.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Godolmec/GodolmecJaw.png"
-dest_files=[ "res://.import/GodolmecJaw.png-fc15306c35fda68a806c2e8c4dd0cee9.stex" ]
+source_file="res://Godolmec/GodolmecBackground.png"
+dest_files=[ "res://.import/GodolmecBackground.png-75dfde83fcdf7602cb4c727d2606dfed.stex" ]
 
 [params]
 

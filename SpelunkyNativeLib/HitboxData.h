@@ -13,18 +13,20 @@ struct SpelAABB
 		return overlaps1D(other.center.x - otherHalf.x, other.center.x + otherHalf.x, center.x - half.x, center.x + half.x) && \
 			overlaps1D(other.center.y - otherHalf.y, other.center.y + otherHalf.y, center.y - half.y, center.y + half.y);
 	}
-	Vector2 unintersect(SpelAABB& other) {
+	Vector2 unintersect(SpelAABB& other,float& magnitude) {
 		Vector2 half = size/2;
 		Vector2 otherHalf= other.size/2;
 		float xOffset = uninstersect1D(other.center.x - otherHalf.x, other.center.x + otherHalf.x, center.x - half.x, center.x + half.x);
 		float yOffset = uninstersect1D(other.center.y - otherHalf.y, other.center.y + otherHalf.y, center.y - half.y, center.y + half.y);
 		if (abs(xOffset) < abs(yOffset)) 
 		{
+			magnitude = xOffset;
 			other.center.x += xOffset;
 			return Vector2(godot::Math::sign(xOffset),0);
 		}
 		else 
 		{
+			magnitude = yOffset;
 			other.center.y += yOffset;
 			return Vector2(0,godot::Math::sign(yOffset));
 		}

@@ -158,6 +158,14 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="DoorOpener.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Godolmec.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="ObjectMaker.cpp" />
     <ClCompile Include="PrizeBox.cpp">
@@ -201,6 +209,14 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="DoorOpener.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Godolmec.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="HitboxData.h" />
     <ClInclude Include="IDamageReciever.h" />
     <ClInclude Include="Level.h" />

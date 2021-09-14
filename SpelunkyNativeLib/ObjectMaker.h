@@ -12,6 +12,7 @@
 #include "AutoPickup.h"
 #include "Spider.h"
 #include "DoorOpener.h"
+#include "Godolmec.h"
 
 class PrizeBox;
 
@@ -26,6 +27,7 @@ BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord);
 PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord);
 Spider* SpawnSpider(Level* level, Vector2 gridCoord);
 DoorOpener* SpawnDoorOpener(Level* level, Vector2 gridCoord);
+Godolmec* SpawnGodolmec(Level* level, Vector2 gridCoord);
 
 //AutoPickup
 AutoPickup* SpawnLargeGoldPile(Level* level, Vector2 gridCoord,float timeUntilActive);
