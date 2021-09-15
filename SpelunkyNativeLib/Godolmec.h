@@ -5,6 +5,13 @@
 #include "Body.h"
 #include <AnimationPlayer.hpp>
 
+enum GodolmecState : int { 
+	BreakingFree=0,
+	JumpingAtPlayer=1,
+	WaitingToSwitchStates=2,
+	WaitingToBreakFree=3,
+	FiringBombs=4,
+};
 class Godolmec : public Node2D
 {
 	GODOT_CLASS(Godolmec, Node2D);
@@ -17,9 +24,15 @@ public:
 	Node2D* bottomPoint;
 	Node2D* faceRoot;
 
+	GodolmecState state;
+	float stateTime = 0;
+	bool wasGrounded;
+
 	MovingPlatform jawHitbox1;
 	MovingPlatform faceHitbox1;
 	MovingPlatform faceHitbox2;
+
+	void SwitchState(GodolmecState targetState);
 
 	void SetColliderPositions();
 	Vector2 GetBodyBounds(float& center);

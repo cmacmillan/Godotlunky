@@ -23,7 +23,7 @@ void Godolmec::_ready()
 	faceRoot = get_node<Node2D>("Jaw/Face");
 	float center;
 	Vector2 bounds = GetBodyBounds(center);
-	body.Init(Vector2(4.3f,(bounds.x-bounds.y)),Vector2(0,center),0,100000,this,level,Vector2(0,0),false,100,HitboxMask::Nothing,nullptr,nullptr,false,true,level->godolmecHitSFX,nullptr);
+	body.Init(Vector2(4.3f,(bounds.x-bounds.y)),Vector2(0,center),0,100000,this,level,Vector2(0,0),false,100,HitboxMask::Nothing,nullptr,nullptr,false,false,nullptr,nullptr);
 	level->RegisterHurtbox(&body);
 	level->customCollision->insert(&jawHitbox1);
 	level->customCollision->insert(&faceHitbox1);
@@ -31,11 +31,35 @@ void Godolmec::_ready()
 	jawHitbox1.root = &body;
 	faceHitbox1.root = &body;
 	faceHitbox2.root = &body;
-	jawHitbox1.aabb.size = Vector2(4.3f, .65f);
+	jawHitbox1.aabb.size = Vector2(4.3f, .85f);
 	faceHitbox1.aabb.size = Vector2(4.3f,2.3f);
 	faceHitbox2.aabb.size = Vector2(2.6f,1.f);
-	animPlayer->set_current_animation("BreakFree");
+	wasGrounded = true;
+	//SwitchState(GodolmecState::WaitingToBreakFree);
+	SwitchState(GodolmecState::BreakingFree);
 	SetColliderPositions();
+}
+
+void Godolmec::SwitchState(GodolmecState targetState) 
+{
+	switch (targetState) {
+	case GodolmecState::BreakingFree:
+		animPlayer->set_current_animation("BreakFree");
+		break;
+	case GodolmecState::FiringBombs:
+		animPlayer->set_current_animation("FireBombs");
+		break;
+	case GodolmecState::JumpingAtPlayer: 
+	{
+		body.vel = Vector2(0, -2000);
+	}
+		break;
+	case GodolmecState::WaitingToSwitchStates:
+	case GodolmecState::WaitingToBreakFree:
+		break;
+	}
+	stateTime = 0;
+	state = targetState;
 }
 
 Vector2 Godolmec::GetBodyBounds(float& center) {
@@ -51,7 +75,7 @@ void Godolmec::SetColliderPositions() {
 	body.startPos.y += center-body.offset.y;
 	body.offset.y = center;
 	body.aabb.size = Vector2(4.3f, (bounds.x - bounds.y));
-	jawHitbox1.aabb.center = level->WorldToGrid(get_global_position())+Vector2(0,1.95);
+	jawHitbox1.aabb.center = level->WorldToGrid(get_global_position())+Vector2(0,1.8);
 	faceHitbox1.aabb.center = level->WorldToGrid(faceRoot->get_global_position())+Vector2(0,0.f);
 	faceHitbox2.aabb.center = level->WorldToGrid(faceRoot->get_global_position())+Vector2(0,-1.2f);
 }
@@ -59,5 +83,44 @@ void Godolmec::SetColliderPositions() {
 void Godolmec::_process(float delta)
 {
 	SetColliderPositions();
-	body.process(delta,true,true);
+	body.process(delta, true, true);
+	stateTime += delta;
+	switch (state)
+	{
+	case WaitingToSwitchStates:
+		if (stateTime > 1.0f) {
+			if (level->Random() < 0){//.8f) {
+				SwitchState(GodolmecState::JumpingAtPlayer);
+			}
+			else {
+				SwitchState(GodolmecState::FiringBombs);
+			}
+		}
+		break;
+	case FiringBombs:
+		break;
+	case BreakingFree:
+		if (stateTime > 10.0f) {
+			SwitchState(GodolmecState::JumpingAtPlayer);
+			//SwitchState(GodolmecState::FiringBombs);
+		}
+		break;
+	case JumpingAtPlayer:
+		if (body.isGrounded) {
+			SwitchState(GodolmecState::WaitingToSwitchStates);
+		}
+		else 
+		{
+			auto target = level->spelunker->body.aabb.center;
+			float x = godot::Math::sign(target.x - body.aabb.center.x);
+			body.vel.x = x*600;
+		}
+		break;
+	default:
+		break;
+	}
+	if (!wasGrounded && body.isGrounded) {
+		level->PlayAudio(level->godolmecHitSFX, body.aabb.center);
+	}
+	wasGrounded = body.isGrounded;
 }
