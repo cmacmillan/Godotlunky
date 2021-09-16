@@ -24,11 +24,12 @@ void DoorOpener::_ready()
 	sprite = get_node<Sprite>("Sprite");
 	sprite->set_modulate(normalColor);
 	isFlickering = false;
+	isGodolmec = false;
 }
 
-bool DoorOpener::TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove) {
+bool DoorOpener::TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove,DamageSource source) {
 	if (!isFlickering) {
-		level->DoorSwitchHit();
+		level->DoorSwitchHit(isGodolmec);
 		level->PlayAudio(level->switchHitSFX, body.aabb.center);
 		isFlickering = true;
 		flickerTime = 0;
@@ -38,6 +39,11 @@ bool DoorOpener::TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hi
 
 void DoorOpener::_process(float delta)
 {
+	if (isGodolmec) {
+		auto pos = level->godolmec->doorOpenerSpot->get_global_position();
+		body.aabb.center = level->WorldToGrid(pos);
+		set_global_position(pos);
+	}
 	if (isFlickering) {
 		flickerTime += delta;
 		if (flickerTime > 2.0f) {

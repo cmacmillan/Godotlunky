@@ -5,6 +5,7 @@
 #include <Camera2D.hpp>
 #include <Sprite.hpp>
 #include "Body.h"
+#include "DamageSource.h"
 
 class Spelunker : public Node2D, IDamageReciever, IPicker, ISmushReciever
 {
@@ -53,8 +54,8 @@ public:
 
 	void TakeSmush();
 
-	void Die(bool playSound=true);
-	bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove);
+	void Die(DamageSource source,bool playSound=true);
+	bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove,DamageSource source);
 
 	static void _register_methods();
 	void _init();

@@ -26,8 +26,9 @@ void HitboxData::InitOrClearBodiesAlreadyDamagedList() {
 		bodiesAlreadyDamaged->clear();
 	}
 }
-void HitboxData::SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount, bool stun,Body* self)
+void HitboxData::SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount, bool stun,Body* self,DamageSource source)
 {
+	this->source = source;
 	this->aabb = box;
 	this->damageAmount = damageAmount;
 	this->mask = mask;
@@ -109,8 +110,8 @@ void Level::_register_methods()
 	register_property("largeBombBoxScene", &Level::largeBombBoxScene, Ref<PackedScene>());
 }
 
-void Level::DoorSwitchHit() {
-	{//if not final boss
+void Level::DoorSwitchHit(bool isGodolmec) {
+	if (!isGodolmec){//if not final boss
 		if (!isDoorOpen) {
 			isDoorOpen = true;
 			PlayAudio(doorOpenSFX, exitPosition.center);
@@ -406,6 +407,8 @@ void Level::_ready()
 	allRids = new	std::vector<RID>();
 	freeRids = new std::vector<RID>();
 #endif // showDebugHitboxes
+
+	godolmec = nullptr;
 
 	customCollision = new std::set<MovingPlatform*>();
 	//testCustomCollision.aabb.center = Vector2(12.65,5);
@@ -731,9 +734,9 @@ void Level::_process(float delta)
 	if (!spelunker->body.isGrounded && spelunker->body.vel.y>0) {
 		auto hitbox = spelunker->footHitbox;
 		for (auto body : *hurtboxes) {
-			if (((hitbox.mask & body->takeDamageMask) != 0) && hitbox.aabb.overlaps(body->aabb)) {
+			if ((((int)hitbox.mask & (int)body->takeDamageMask) != 0) && hitbox.aabb.overlaps(body->aabb)) {
 				if (body->damageReciever != nullptr) {
-					if (body->damageReciever->TakeDamage(hitbox.damageAmount, hitbox.stun, hitboxesToRemove)) {
+					if (body->damageReciever->TakeDamage(hitbox.damageAmount, hitbox.stun, hitboxesToRemove,hitbox.source)) {
 						hurtboxesToRemove->push_back(body);
 					}
 					spelunker->body.vel.y = -1500;
@@ -762,7 +765,7 @@ void Level::_process(float delta)
 	//process hit/hurt
 	for (auto hitbox : *hitboxes){
 		for (auto body : *hurtboxes) {
-			if (hitbox->creatorToEscape!=body && ((hitbox->mask & body->takeDamageMask) != 0) && hitbox->aabb.overlaps(body->aabb)) {
+			if (hitbox->creatorToEscape!=body && (((int)hitbox->mask & (int)body->takeDamageMask) != 0) && hitbox->aabb.overlaps(body->aabb)) {
 				bool isValid = true;
 				if (hitbox->bodiesAlreadyDamaged != nullptr) {
 					for (auto i : *hitbox->bodiesAlreadyDamaged) {
@@ -781,7 +784,7 @@ void Level::_process(float delta)
 				if (isValid) {
 					bool shouldApplyForce = true;
 					if (body->damageReciever != nullptr) {
-						if (body->damageReciever->TakeDamage(hitbox->damageAmount, hitbox->stun, hitboxesToRemove)) {
+						if (body->damageReciever->TakeDamage(hitbox->damageAmount, hitbox->stun, hitboxesToRemove,hitbox->source)) {
 							hurtboxesToRemove->push_back(body);
 							shouldApplyForce = false;
 						}

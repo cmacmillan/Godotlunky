@@ -134,5 +134,8 @@
     <ClInclude Include="Godolmec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DamageSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

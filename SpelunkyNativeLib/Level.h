@@ -1,4 +1,5 @@
 #pragma once
+#include "DamageSource.h"
 #include "IDamageReciever.h"
 #include "Common.h"
 #include <Node2D.hpp>
@@ -21,7 +22,7 @@
 #include <SceneTree.hpp>
 #include <Math.hpp>
 
-enum DrawType {
+enum class DrawType {
 	Normal = 0,
 	Top = 1,
 	Bottom = 2,
@@ -46,6 +47,7 @@ struct MovingPlatform {
 class Body;
 class Spelunker;
 class AutoPickup;
+class Godolmec;
 
 
 #define showDebugHitboxes
@@ -134,6 +136,7 @@ public:
 	bool hasPlayedFadeInSound;
 	float fullscreenWipePercent = 0;
 	Ref<Material> fullscreenWipeMaterial;
+	Godolmec* godolmec;
 	Spelunker* spelunker;
 	LevelBlock* blocks;
 	DrawType* drawTypes;
@@ -169,7 +172,7 @@ public:
 	Vector2 GridToWorld(Vector2 v);
 	Vector2 WorldToGridSize(Vector2 v);
 	Vector2 GridToWorldSize(Vector2 v);
-	void DoorSwitchHit();
+	void DoorSwitchHit(bool isGodolmec);
 	void SpawnBlood(Vector2 gridCoord,int count=10);
 	void RegisterHurtbox(Body* hurtbox);
 	void UnregisterHurtbox(Body* hurtbox);

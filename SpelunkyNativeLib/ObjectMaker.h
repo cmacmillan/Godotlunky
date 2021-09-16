@@ -15,6 +15,8 @@
 #include "Godolmec.h"
 
 class PrizeBox;
+class Godolmec;
+class DoorOpener;
 
 Bullet* SpawnBullet(Level* level,Vector2 gridCoord);
 Rock* SpawnRock(Level* level,Vector2 gridCoord);

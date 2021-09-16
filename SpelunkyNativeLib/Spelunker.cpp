@@ -26,7 +26,7 @@ void Spelunker::_init()
 }
 
 
-bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) {
+bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove,DamageSource source) {
 	if (invulTime <= 0 && !isDead && !isEnteringDoor) {
 		if (stun) {
 			isStunned = true;
@@ -35,7 +35,7 @@ bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitbo
 		health -= damageAmount;
 		if (health <= 0) {
 			health = 0;
-			Die();
+			Die(source);
 			return false;//keep the hitbox active even after death
 		}
 		else {
@@ -48,7 +48,7 @@ bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitbo
 	}
 	return false;
 }
-void Spelunker::Die(bool playSound) {
+void Spelunker::Die(DamageSource source,bool playSound) {
 	if (!isDead && !isEnteringDoor) {
 		if (playSound)
 			level->PlayAudio(level->hitSFX, body.aabb.center);
@@ -78,7 +78,7 @@ Vector2 Spelunker::GetPickPosition() {
 void Spelunker::TakeSmush() {
 	level->PlayAudio(level->smushSFX, body.aabb.center);
 	get_node<AnimatedSprite>(".")->set_visible(false);
-	Die(false);
+	Die(DamageSource::MushedDamage,false);
 }
 void Spelunker::_ready()
 {
@@ -155,7 +155,7 @@ void Spelunker::_process(float delta)
 	float ogHeight = body.aabb.size.y;
 	footAABB.center = body.aabb.center + Vector2(0, ogHeight / 4);
 	footAABB.size = body.aabb.size + Vector2(0, -ogHeight / 2);
-	footHitbox.SetValues(footAABB, 1, HitboxMask::Enemy, Vector2(0, 0), 0, true, &body);
+	footHitbox.SetValues(footAABB, 1, HitboxMask::Enemy, Vector2(0, 0), 0, true, &body,DamageSource::SpelunkerDamage);
 
 	float accelSpeed=20000;
 
@@ -268,7 +268,7 @@ void Spelunker::_process(float delta)
 		}
 		else 
 		{
-			whipHitbox.SetValues(body.aabb, 1, HitboxMask::ItemAndEnemy,Vector2(1000*(body.isFacingRight?1:-1),-500) , 0, true,nullptr);
+			whipHitbox.SetValues(body.aabb, 1, HitboxMask::ItemAndEnemy,Vector2(1000*(body.isFacingRight?1:-1),-500) , 0, true,nullptr,DamageSource::SpelunkerDamage);
 			whipHitbox.InitOrClearBodiesAlreadyDamagedList();
 			whipHitbox.assignCreatorToEscapeToMoveFastHitbox = &body;
 			whipHitbox.creatorToEscape = nullptr;
@@ -538,7 +538,7 @@ void Spelunker::_process(float delta)
 			audio->set_volume_db(0.0f);
 			audio->set_stream(level->hitSFX);
 			audio->play();
-			TakeDamage(1,true,nullptr);
+			TakeDamage(1,true,nullptr,DamageSource::FallDamage);
 		}
 		else {
 			auto audio = get_node<AudioStreamPlayer2D>("JumpAudio");
@@ -560,7 +560,7 @@ void Spelunker::_process(float delta)
 			level->UpdateMeshes();
 			body.vel.x = 0;
 			body.friction = 1000000;
-			Die();
+			Die(DamageSource::SpikesDamage);
 		}
 	}
 	wasGrounded = body.isGrounded;

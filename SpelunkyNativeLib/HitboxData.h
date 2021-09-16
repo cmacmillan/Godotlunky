@@ -1,4 +1,5 @@
 #pragma once
+#include "DamageSource.h"
 #include "Common.h"
 #include <vector>
 #include <Math.hpp>
@@ -52,7 +53,7 @@ struct SpelAABB
 	}
 };
 
-enum HitboxMask : unsigned int {
+enum class HitboxMask : unsigned int {
 	Nothing = 0,
 	Player = 1,
 	Enemy = 2,
@@ -65,6 +66,7 @@ enum HitboxMask : unsigned int {
 class Body;
 
 struct HitboxData {
+	DamageSource source;
 	SpelAABB aabb;
 	int damageAmount;
 	HitboxMask mask;
@@ -77,5 +79,5 @@ struct HitboxData {
 	bool autoUnregister;
 	std::vector<Body*>* bodiesAlreadyDamaged=nullptr;
 	void InitOrClearBodiesAlreadyDamagedList();
-	void SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount,bool stun,Body* self);
+	void SetValues(SpelAABB box, int damageAmount, HitboxMask mask, Vector2 knockInDirectionAmount, float knockAwayAmount,bool stun,Body* self,DamageSource source);
 };

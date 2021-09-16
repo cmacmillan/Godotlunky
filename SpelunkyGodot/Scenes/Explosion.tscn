@@ -26,4 +26,3 @@ visible = false
 scale = Vector2( 7, 7 )
 frames = SubResource( 1 )
 animation = "Explode"
-frame = 9

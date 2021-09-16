@@ -20,7 +20,7 @@ public:
 	bool hasSpottedPlayer;
 	bool isDead;
 
-	bool TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove);
+	bool TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove,DamageSource source);
 
 	void TakeSmush();
 

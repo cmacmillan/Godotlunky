@@ -4,3 +4,4 @@
 
 [node name="AudioSourceScene" type="AudioStreamPlayer2D"]
 stream = ExtResource( 1 )
+max_distance = 5000.0

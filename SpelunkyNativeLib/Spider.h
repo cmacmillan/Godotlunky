@@ -27,6 +27,6 @@ public:
 	void _process(float delta);
 
 
-	bool TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove);
+	bool TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove,DamageSource source);
 };
 

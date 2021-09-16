@@ -10,6 +10,8 @@ void Godolmec::_register_methods()
 {
 	register_method("_ready", &Godolmec::_ready);
 	register_method("_process", &Godolmec::_process);
+
+	register_method("FireBomb", &Godolmec::FireBomb);
 }
 
 void Godolmec::_init(){}
@@ -17,6 +19,7 @@ void Godolmec::_init(){}
 void Godolmec::_ready()
 {
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
+	level->godolmec = this;//must nullify on free
 	animPlayer = get_node<AnimationPlayer>("AnimationPlayer");
 	topPoint = get_node<Node2D>("Jaw/Face/TopPoint");
 	bottomPoint = get_node<Node2D>("Jaw/BottomPoint");
@@ -28,6 +31,10 @@ void Godolmec::_ready()
 	level->customCollision->insert(&jawHitbox1);
 	level->customCollision->insert(&faceHitbox1);
 	level->customCollision->insert(&faceHitbox2);
+	bombSpot1 = get_node<Node2D>("Jaw/Face/FireFlash1");
+	bombSpot2 = get_node<Node2D>("Jaw/Face/FireFlash2");
+	bombSpot3 = get_node<Node2D>("Jaw/Face/FireFlash3");
+	bombSpot4 = get_node<Node2D>("Jaw/Face/FireFlash4");
 	jawHitbox1.root = &body;
 	faceHitbox1.root = &body;
 	faceHitbox2.root = &body;
@@ -35,9 +42,35 @@ void Godolmec::_ready()
 	faceHitbox1.aabb.size = Vector2(4.3f,2.3f);
 	faceHitbox2.aabb.size = Vector2(2.6f,1.f);
 	wasGrounded = true;
+	doorOpenerSpot = get_node<Node2D>("Jaw/DoorOpenerSpawnPoint");
+	auto doorOpener = SpawnDoorOpener(level, level->WorldToGrid(doorOpenerSpot->get_global_position()));
+	doorOpener->isGodolmec = true;
 	//SwitchState(GodolmecState::WaitingToBreakFree);
 	SwitchState(GodolmecState::BreakingFree);
 	SetColliderPositions();
+}
+
+void Godolmec::FireBomb(int index) 
+{
+	Node2D* spot = nullptr;
+	switch (index)
+	{
+	case 0:
+		spot = bombSpot1;
+		break;
+	case 1:
+		spot = bombSpot2;
+		break;
+	case 2:
+		spot = bombSpot3;
+		break;
+	case 3:
+		spot = bombSpot4;
+		break;
+	default:
+		break;
+	}
+	SpawnBomb(level,level->WorldToGrid(spot->get_global_position()),2000*level->WorldToGridSize(spot->get_transform().xform(Vector2(0,1))));
 }
 
 void Godolmec::SwitchState(GodolmecState targetState) 
@@ -87,7 +120,7 @@ void Godolmec::_process(float delta)
 	stateTime += delta;
 	switch (state)
 	{
-	case WaitingToSwitchStates:
+	case GodolmecState::WaitingToSwitchStates:
 		if (stateTime > 1.0f) {
 			if (level->Random() < 0){//.8f) {
 				SwitchState(GodolmecState::JumpingAtPlayer);
@@ -97,15 +130,15 @@ void Godolmec::_process(float delta)
 			}
 		}
 		break;
-	case FiringBombs:
+	case GodolmecState::FiringBombs:
 		break;
-	case BreakingFree:
+	case GodolmecState::BreakingFree:
 		if (stateTime > 10.0f) {
 			SwitchState(GodolmecState::JumpingAtPlayer);
 			//SwitchState(GodolmecState::FiringBombs);
 		}
 		break;
-	case JumpingAtPlayer:
+	case GodolmecState::JumpingAtPlayer:
 		if (body.isGrounded) {
 			SwitchState(GodolmecState::WaitingToSwitchStates);
 		}

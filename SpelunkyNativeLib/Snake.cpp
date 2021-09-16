@@ -13,7 +13,7 @@ void Snake::_init()
 
 void Snake::TakeSmush() {
 	level->PlayAudio(level->smushSFX, body.aabb.center);
-	TakeDamage(1, false, nullptr);
+	TakeDamage(1, false, nullptr,DamageSource::MushedDamage);
 	level->UnregisterHurtbox(&body);
 }
 
@@ -23,14 +23,14 @@ void Snake::_ready()
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	body.Init(Vector2(.8, .6), Vector2(0, .2), 0, 0, this, level, Vector2(0, 0),false,1,HitboxMask::Enemy,this,nullptr,false,false,nullptr,this);
 	level->RegisterHurtbox(&body);
-	hitbox.SetValues(body.aabb, 1, HitboxMask::Player, Vector2(0, 0), 0,false,&body);
+	hitbox.SetValues(body.aabb, 1, HitboxMask::Player, Vector2(0, 0), 0,false,&body,DamageSource::SnakeDamage);
 	hitbox.creatorToEscape = nullptr;
 	hitbox.autoUnregister = false;
 	isDead = false;
 	level->RegisterHitbox(&hitbox);
 }
 
-bool Snake::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove) {
+bool Snake::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove,DamageSource source) {
 	//no health so just die
 	if (!isDead) {
 		isDead = true;

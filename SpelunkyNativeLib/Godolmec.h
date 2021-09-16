@@ -4,8 +4,9 @@
 #include "Level.h"
 #include "Body.h"
 #include <AnimationPlayer.hpp>
+#include "ObjectMaker.h"
 
-enum GodolmecState : int { 
+enum class GodolmecState : int { 
 	BreakingFree=0,
 	JumpingAtPlayer=1,
 	WaitingToSwitchStates=2,
@@ -32,7 +33,15 @@ public:
 	MovingPlatform faceHitbox1;
 	MovingPlatform faceHitbox2;
 
+	Node2D* bombSpot1;
+	Node2D* bombSpot2;
+	Node2D* bombSpot3;
+	Node2D* bombSpot4;
+	Node2D* doorOpenerSpot;
+
 	void SwitchState(GodolmecState targetState);
+
+	void FireBomb(int index);
 
 	void SetColliderPositions();
 	Vector2 GetBodyBounds(float& center);

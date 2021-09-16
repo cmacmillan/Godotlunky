@@ -209,6 +209,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="DamageSource.h" />
     <ClInclude Include="DoorOpener.h">
       <SubType>
       </SubType>

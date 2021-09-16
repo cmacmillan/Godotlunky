@@ -23,5 +23,5 @@ public:
 
 	void OpenBox(vector<HitboxData*>* hitboxesToRemove);
 	virtual void DoThrowAction();
-	virtual bool TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove);
+	virtual bool TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove,DamageSource source);
 };

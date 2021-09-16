@@ -3,6 +3,7 @@
 #include <Node2D.hpp>
 #include "Level.h"
 #include "Body.h"
+#include "Godolmec.h"
 
 class DoorOpener : public Node2D, IDamageReciever
 {
@@ -18,7 +19,9 @@ public:
 	Color normalColor;
 	Color flashColor;
 
-	bool TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove);
+	bool isGodolmec;
+
+	bool TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove,DamageSource source);
 
 	static void _register_methods();
 	void _init();

@@ -91,7 +91,7 @@ void PrizeBox::DoThrowAction()
 	level->UnregisterHurtbox(&body);
 }
 
-bool PrizeBox::TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove) 
+bool PrizeBox::TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove,DamageSource source) 
 {
 	OpenBox(hitboxesToRemove);
 	return true;

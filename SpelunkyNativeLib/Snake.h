@@ -15,7 +15,7 @@ public:
 
 	void TakeSmush();
 
-	bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove);
+	bool TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitboxesToRemove,DamageSource source);
 
 	static void _register_methods();
 	void _init();
