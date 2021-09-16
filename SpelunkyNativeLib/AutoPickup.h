@@ -4,7 +4,7 @@
 #include "Level.h"
 #include "Body.h"
 
-enum class AutoPickupType : unsigned int{
+enum AutoPickupType : unsigned int{
 	RopePile = 0,
 	BombPile = 1,
 	Gold = 2,

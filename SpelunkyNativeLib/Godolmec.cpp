@@ -24,6 +24,7 @@ void Godolmec::_ready()
 	topPoint = get_node<Node2D>("Jaw/Face/TopPoint");
 	bottomPoint = get_node<Node2D>("Jaw/BottomPoint");
 	faceRoot = get_node<Node2D>("Jaw/Face");
+	health = 3;
 	float center;
 	Vector2 bounds = GetBodyBounds(center);
 	body.Init(Vector2(4.3f,(bounds.x-bounds.y)),Vector2(0,center),0,100000,this,level,Vector2(0,0),false,100,HitboxMask::Nothing,nullptr,nullptr,false,false,nullptr,nullptr);
@@ -35,6 +36,9 @@ void Godolmec::_ready()
 	bombSpot2 = get_node<Node2D>("Jaw/Face/FireFlash2");
 	bombSpot3 = get_node<Node2D>("Jaw/Face/FireFlash3");
 	bombSpot4 = get_node<Node2D>("Jaw/Face/FireFlash4");
+	jawRedFlash = get_node<Sprite>("Jaw/JawOutline");
+	faceRedFlash = get_node<Sprite>("Jaw/Face/FaceOutline");
+	isTakingDamage = false;
 	jawHitbox1.root = &body;
 	faceHitbox1.root = &body;
 	faceHitbox2.root = &body;
@@ -48,6 +52,14 @@ void Godolmec::_ready()
 	//SwitchState(GodolmecState::WaitingToBreakFree);
 	SwitchState(GodolmecState::BreakingFree);
 	SetColliderPositions();
+}
+
+void Godolmec::TakeDamage() {
+	level->PlayAudio(level->godolmecTakeDamageSFX, body.aabb.center);
+	health--;
+	isTakingDamage = true;
+	flashDirection = 1;
+	flashOpacity = 0;
 }
 
 void Godolmec::FireBomb(int index) 
@@ -87,6 +99,7 @@ void Godolmec::SwitchState(GodolmecState targetState)
 		body.vel = Vector2(0, -2000);
 	}
 		break;
+		break;
 	case GodolmecState::WaitingToSwitchStates:
 	case GodolmecState::WaitingToBreakFree:
 		break;
@@ -122,7 +135,7 @@ void Godolmec::_process(float delta)
 	{
 	case GodolmecState::WaitingToSwitchStates:
 		if (stateTime > 1.0f) {
-			if (level->Random() < 0){//.8f) {
+			if (level->Random() < .8f) {
 				SwitchState(GodolmecState::JumpingAtPlayer);
 			}
 			else {
@@ -131,11 +144,13 @@ void Godolmec::_process(float delta)
 		}
 		break;
 	case GodolmecState::FiringBombs:
+		if (stateTime > 5.0f) {
+			SwitchState(GodolmecState::WaitingToSwitchStates);
+		}
 		break;
 	case GodolmecState::BreakingFree:
 		if (stateTime > 10.0f) {
 			SwitchState(GodolmecState::JumpingAtPlayer);
-			//SwitchState(GodolmecState::FiringBombs);
 		}
 		break;
 	case GodolmecState::JumpingAtPlayer:
@@ -151,6 +166,17 @@ void Godolmec::_process(float delta)
 		break;
 	default:
 		break;
+	}
+	if (isTakingDamage) {
+		flashOpacity = godot::Math::move_toward(flashOpacity, flashDirection, delta * 10);
+		if (flashOpacity == flashDirection) {
+			flashDirection = 1 - flashDirection;
+		}
+		faceRedFlash->set_modulate(Color(1, 0, 0, flashOpacity));
+		jawRedFlash->set_modulate(Color(1, 0, 0, flashOpacity));
+		if (flashOpacity == 0 && stateTime > 2.5f) {
+			isTakingDamage = false;
+		}
 	}
 	if (!wasGrounded && body.isGrounded) {
 		level->PlayAudio(level->godolmecHitSFX, body.aabb.center);

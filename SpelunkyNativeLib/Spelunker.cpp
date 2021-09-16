@@ -91,6 +91,7 @@ void Spelunker::_ready()
 	whipBack = get_node<Sprite>("WhipBack");
 	isWhipping = false;
 	isDead = false;
+	deadTime = 0;
 	isStunned = false;
 	body.isFacingRight = true;
 	pickedBody = nullptr;
@@ -100,6 +101,17 @@ void Spelunker::_ready()
 
 void Spelunker::_process(float delta)
 {
+	if (level->isFadingOut) {
+		return;
+	}
+	if (isDead) {
+		deadTime += delta;
+		if (deadTime > 1.5f) {
+			level->isFadingOut = true;
+			level->fadeOutLerp = 1;
+			level->PlayAudio(level->fadeOutSFX,body.aabb.center);
+		}
+	}
 	if (body.isSmushed)
 		return;
 	auto animator = get_node<AnimatedSprite>(".");

@@ -1,0 +1,179 @@
+[gd_scene load_steps=36 format=2]
+
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment33.png" type="Texture" id=1]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment35.png" type="Texture" id=2]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment32.png" type="Texture" id=3]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment29.png" type="Texture" id=4]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment34.png" type="Texture" id=5]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment30.png" type="Texture" id=6]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment31.png" type="Texture" id=7]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment12.png" type="Texture" id=8]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment14.png" type="Texture" id=9]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment6.png" type="Texture" id=10]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment16.png" type="Texture" id=11]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment17.png" type="Texture" id=12]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment4.png" type="Texture" id=13]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment7.png" type="Texture" id=14]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment8.png" type="Texture" id=15]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment13.png" type="Texture" id=16]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment20.png" type="Texture" id=17]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment9.png" type="Texture" id=18]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment11.png" type="Texture" id=19]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment21.png" type="Texture" id=20]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment1.png" type="Texture" id=21]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment22.png" type="Texture" id=22]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment5.png" type="Texture" id=23]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment10.png" type="Texture" id=24]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment18.png" type="Texture" id=25]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment2.png" type="Texture" id=26]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment15.png" type="Texture" id=27]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment19.png" type="Texture" id=28]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment3.png" type="Texture" id=29]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment26.png" type="Texture" id=30]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment24.png" type="Texture" id=31]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment27.png" type="Texture" id=32]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment23.png" type="Texture" id=33]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment28.png" type="Texture" id=34]
+[ext_resource path="res://Godolmec/Fragments/GodolmecDeathFragment25.png" type="Texture" id=35]
+
+[node name="FracturedGodolmec" type="Node2D"]
+
+[node name="GodolmecDeathFragment2" type="Sprite" parent="."]
+position = Vector2( -59, -112 )
+texture = ExtResource( 26 )
+
+[node name="GodolmecDeathFragment6" type="Sprite" parent="."]
+position = Vector2( -58, -83 )
+texture = ExtResource( 10 )
+
+[node name="GodolmecDeathFragment3" type="Sprite" parent="."]
+position = Vector2( -42, -109 )
+texture = ExtResource( 29 )
+
+[node name="GodolmecDeathFragment4" type="Sprite" parent="."]
+position = Vector2( -12, -119 )
+texture = ExtResource( 13 )
+
+[node name="GodolmecDeathFragment5" type="Sprite" parent="."]
+position = Vector2( -97, -83 )
+texture = ExtResource( 23 )
+
+[node name="GodolmecDeathFragment7" type="Sprite" parent="."]
+position = Vector2( -22, -93 )
+texture = ExtResource( 14 )
+
+[node name="GodolmecDeathFragment8" type="Sprite" parent="."]
+position = Vector2( 7, -97 )
+texture = ExtResource( 15 )
+
+[node name="GodolmecDeathFragment9" type="Sprite" parent="."]
+position = Vector2( 31, -89 )
+texture = ExtResource( 18 )
+
+[node name="GodolmecDeathFragment10" type="Sprite" parent="."]
+position = Vector2( -87, -71 )
+texture = ExtResource( 24 )
+
+[node name="GodolmecDeathFragment11" type="Sprite" parent="."]
+position = Vector2( -6, -80 )
+texture = ExtResource( 19 )
+
+[node name="GodolmecDeathFragment12" type="Sprite" parent="."]
+position = Vector2( 24, -75 )
+texture = ExtResource( 8 )
+
+[node name="GodolmecDeathFragment13" type="Sprite" parent="."]
+position = Vector2( -95, -49 )
+texture = ExtResource( 16 )
+
+[node name="GodolmecDeathFragment14" type="Sprite" parent="."]
+position = Vector2( -71, -61 )
+texture = ExtResource( 9 )
+
+[node name="GodolmecDeathFragment15" type="Sprite" parent="."]
+position = Vector2( -37, -68 )
+texture = ExtResource( 27 )
+
+[node name="GodolmecDeathFragment16" type="Sprite" parent="."]
+position = Vector2( -2, -63 )
+texture = ExtResource( 11 )
+
+[node name="GodolmecDeathFragment17" type="Sprite" parent="."]
+position = Vector2( 25, -56 )
+texture = ExtResource( 12 )
+
+[node name="GodolmecDeathFragment18" type="Sprite" parent="."]
+position = Vector2( -90, -38 )
+texture = ExtResource( 25 )
+
+[node name="GodolmecDeathFragment19" type="Sprite" parent="."]
+position = Vector2( -60, -45 )
+texture = ExtResource( 28 )
+
+[node name="GodolmecDeathFragment20" type="Sprite" parent="."]
+position = Vector2( -30, -47 )
+texture = ExtResource( 17 )
+
+[node name="GodolmecDeathFragment21" type="Sprite" parent="."]
+position = Vector2( 1, -45 )
+texture = ExtResource( 20 )
+
+[node name="GodolmecDeathFragment22" type="Sprite" parent="."]
+position = Vector2( 25, -34 )
+texture = ExtResource( 22 )
+
+[node name="GodolmecDeathFragment24" type="Sprite" parent="."]
+position = Vector2( 32, -11 )
+texture = ExtResource( 31 )
+
+[node name="GodolmecDeathFragment30" type="Sprite" parent="."]
+position = Vector2( 10, -23 )
+texture = ExtResource( 6 )
+
+[node name="GodolmecDeathFragment33" type="Sprite" parent="."]
+position = Vector2( -48, -25 )
+texture = ExtResource( 1 )
+
+[node name="GodolmecDeathFragment34" type="Sprite" parent="."]
+position = Vector2( -24, -11 )
+texture = ExtResource( 5 )
+
+[node name="GodolmecDeathFragment35" type="Sprite" parent="."]
+position = Vector2( -19, -27 )
+texture = ExtResource( 2 )
+
+[node name="GodolmecDeathFragment31" type="Sprite" parent="."]
+position = Vector2( -74, -17 )
+texture = ExtResource( 7 )
+
+[node name="GodolmecDeathFragment32" type="Sprite" parent="."]
+position = Vector2( -52, -10 )
+texture = ExtResource( 3 )
+
+[node name="GodolmecDeathFragment25" type="Sprite" parent="."]
+position = Vector2( -89, -1 )
+texture = ExtResource( 35 )
+
+[node name="GodolmecDeathFragment23" type="Sprite" parent="."]
+position = Vector2( -94, -14 )
+texture = ExtResource( 33 )
+
+[node name="GodolmecDeathFragment26" type="Sprite" parent="."]
+position = Vector2( -68, 6 )
+texture = ExtResource( 30 )
+
+[node name="GodolmecDeathFragment27" type="Sprite" parent="."]
+position = Vector2( 19, -3 )
+texture = ExtResource( 32 )
+
+[node name="GodolmecDeathFragment29" type="Sprite" parent="."]
+position = Vector2( -37, 8 )
+texture = ExtResource( 4 )
+
+[node name="GodolmecDeathFragment28" type="Sprite" parent="."]
+position = Vector2( -3, 2 )
+texture = ExtResource( 34 )
+
+[node name="GodolmecDeathFragment1" type="Sprite" parent="."]
+position = Vector2( -88, -95 )
+texture = ExtResource( 21 )

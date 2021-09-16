@@ -96,6 +96,7 @@ public:
 	Ref<AudioStream> smushSFX;
 	Ref<AudioStream> itemSmushSFX;
 	Ref<AudioStream> godolmecHitSFX;
+	Ref<AudioStream> godolmecTakeDamageSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;

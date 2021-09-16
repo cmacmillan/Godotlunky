@@ -29,6 +29,11 @@ public:
 	float stateTime = 0;
 	bool wasGrounded;
 
+	float flashOpacity;
+	float flashDirection;
+	int health;
+	bool isTakingDamage;
+
 	MovingPlatform jawHitbox1;
 	MovingPlatform faceHitbox1;
 	MovingPlatform faceHitbox2;
@@ -39,7 +44,12 @@ public:
 	Node2D* bombSpot4;
 	Node2D* doorOpenerSpot;
 
+	Sprite* faceRedFlash;
+	Sprite* jawRedFlash;
+
 	void SwitchState(GodolmecState targetState);
+
+	void TakeDamage();
 
 	void FireBomb(int index);
 

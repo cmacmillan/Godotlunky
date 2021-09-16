@@ -85,6 +85,7 @@ void Level::_register_methods()
 	register_property("smushSFX", &Level::smushSFX, Ref<AudioStream>());
 	register_property("itemSmushSFX", &Level::itemSmushSFX, Ref<AudioStream>());
 	register_property("godolmecHitSFX", &Level::godolmecHitSFX, Ref<AudioStream>());
+	register_property("godolmecTakeDamageSFX", &Level::godolmecTakeDamageSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 
@@ -118,6 +119,10 @@ void Level::DoorSwitchHit(bool isGodolmec) {
 			exitDoor->get_node<Sprite>("ClosedDoor")->set_visible(false);
 			exitDoor->get_node<Sprite>("OpenDoor")->set_visible(true);
 		}
+	}
+	else 
+	{
+		godolmec->TakeDamage();
 	}
 }
 

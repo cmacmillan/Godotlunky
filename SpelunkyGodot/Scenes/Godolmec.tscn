@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://Godolmec/GodolmecBombSpots.png" type="Texture" id=1]
 [ext_resource path="res://Godolmec/GodolmecRedEyes.png" type="Texture" id=2]
@@ -17,12 +17,26 @@
 [ext_resource path="res://SFX/RedEyesTurnOn.wav" type="AudioStream" id=15]
 [ext_resource path="res://SFX/rocklaugh.wav" type="AudioStream" id=16]
 [ext_resource path="res://SFX/rockloop.wav" type="AudioStream" id=17]
+[ext_resource path="res://Godolmec/GodolmecHeadOutline.png" type="Texture" id=18]
 [ext_resource path="res://NativeScripts/Godolmec.gdns" type="Script" id=19]
 [ext_resource path="res://Godolmec/GodolmecBackground.png" type="Texture" id=20]
 [ext_resource path="res://ShootFlash.png" type="Texture" id=21]
 [ext_resource path="res://SFX/launch4.wav" type="AudioStream" id=22]
 [ext_resource path="res://SFX/bone_shatter.wav" type="AudioStream" id=23]
 [ext_resource path="res://SFX/boulderhit4.wav" type="AudioStream" id=24]
+[ext_resource path="res://Godolmec/GodolmecJawOutline.png" type="Texture" id=25]
+[ext_resource path="res://Godolmec/GodolmecJawDeathCrack2.png" type="Texture" id=26]
+[ext_resource path="res://Godolmec/GodolmecJawDeathCrack3.png" type="Texture" id=27]
+[ext_resource path="res://Godolmec/GodolmecFaceDeathCrack1.png" type="Texture" id=28]
+[ext_resource path="res://Godolmec/GodolmecJawDeathCrack1.png" type="Texture" id=29]
+[ext_resource path="res://Godolmec/GodolmecFaceDeathCrack3.png" type="Texture" id=30]
+[ext_resource path="res://Godolmec/GodolmecFaceDeathCrack2.png" type="Texture" id=31]
+
+[sub_resource type="CanvasItemMaterial" id=3]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=4]
+blend_mode = 1
 
 [sub_resource type="Animation" id=1]
 resource_name = "BreakFree"
@@ -323,7 +337,7 @@ tracks/23/keys = {
 
 [sub_resource type="Animation" id=2]
 resource_name = "FireBombs"
-length = 10.0
+length = 5.0
 step = 0.025
 tracks/0/type = "value"
 tracks/0/path = NodePath("Jaw/Face:position")
@@ -439,6 +453,11 @@ script = ExtResource( 19 )
 z_index = 100
 texture = ExtResource( 4 )
 
+[node name="JawOutline" type="Sprite" parent="Jaw"]
+modulate = Color( 1, 0, 0, 0 )
+material = SubResource( 3 )
+texture = ExtResource( 25 )
+
 [node name="BottomPoint" type="Node2D" parent="Jaw"]
 position = Vector2( 0, 75.718 )
 
@@ -448,6 +467,15 @@ texture = ExtResource( 20 )
 
 [node name="DoorOpenerSpawnPoint" type="Node2D" parent="Jaw"]
 position = Vector2( 0, 23.475 )
+
+[node name="JawCrack1" type="Sprite" parent="Jaw"]
+texture = ExtResource( 29 )
+
+[node name="JawCrack2" type="Sprite" parent="Jaw"]
+texture = ExtResource( 26 )
+
+[node name="JawCrack3" type="Sprite" parent="Jaw"]
+texture = ExtResource( 27 )
 
 [node name="Face" type="Sprite" parent="Jaw"]
 z_index = 104
@@ -502,6 +530,20 @@ scale = Vector2( 1.5, 1.5 )
 z_index = 103
 z_as_relative = false
 texture = ExtResource( 21 )
+
+[node name="FaceOutline" type="Sprite" parent="Jaw/Face"]
+modulate = Color( 1, 0, 0, 0 )
+material = SubResource( 4 )
+texture = ExtResource( 18 )
+
+[node name="FaceCrack1" type="Sprite" parent="Jaw/Face"]
+texture = ExtResource( 28 )
+
+[node name="FaceCrack2" type="Sprite" parent="Jaw/Face"]
+texture = ExtResource( 31 )
+
+[node name="FaceCrack3" type="Sprite" parent="Jaw/Face"]
+texture = ExtResource( 30 )
 
 [node name="WholeRock1" type="Sprite" parent="."]
 visible = false

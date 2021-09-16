@@ -21,6 +21,7 @@ public:
 	Level* level=nullptr;
 	bool holdingLedge = false;
 	bool holdingRope= false;
+	float deadTime = 0;
 	bool isEnteringDoor = false;
 	float enterDoorOpacity = 1;
 	float grabRopeDisableTime = 0;

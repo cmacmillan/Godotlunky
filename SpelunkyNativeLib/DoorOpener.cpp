@@ -29,10 +29,12 @@ void DoorOpener::_ready()
 
 bool DoorOpener::TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hitboxesToRemove,DamageSource source) {
 	if (!isFlickering) {
-		level->DoorSwitchHit(isGodolmec);
-		level->PlayAudio(level->switchHitSFX, body.aabb.center);
-		isFlickering = true;
-		flickerTime = 0;
+		if (!isGodolmec || (level->godolmec->state == GodolmecState::FiringBombs && !level->godolmec->isTakingDamage)) {
+			level->DoorSwitchHit(isGodolmec);
+			level->PlayAudio(level->switchHitSFX, body.aabb.center);
+			isFlickering = true;
+			flickerTime = 0;
+		}
 	}
 	return false;
 }
