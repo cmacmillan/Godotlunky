@@ -123,11 +123,11 @@ position = Vector2( 25, -34 )
 texture = ExtResource( 22 )
 
 [node name="GodolmecDeathFragment24" type="Sprite" parent="."]
-position = Vector2( 32, -11 )
+position = Vector2( 31, -11 )
 texture = ExtResource( 31 )
 
 [node name="GodolmecDeathFragment30" type="Sprite" parent="."]
-position = Vector2( 10, -23 )
+position = Vector2( 9, -22 )
 texture = ExtResource( 6 )
 
 [node name="GodolmecDeathFragment33" type="Sprite" parent="."]
@@ -139,7 +139,7 @@ position = Vector2( -24, -11 )
 texture = ExtResource( 5 )
 
 [node name="GodolmecDeathFragment35" type="Sprite" parent="."]
-position = Vector2( -19, -27 )
+position = Vector2( -20, -27 )
 texture = ExtResource( 2 )
 
 [node name="GodolmecDeathFragment31" type="Sprite" parent="."]
@@ -163,7 +163,7 @@ position = Vector2( -68, 6 )
 texture = ExtResource( 30 )
 
 [node name="GodolmecDeathFragment27" type="Sprite" parent="."]
-position = Vector2( 19, -3 )
+position = Vector2( 18, -3 )
 texture = ExtResource( 32 )
 
 [node name="GodolmecDeathFragment29" type="Sprite" parent="."]
@@ -171,7 +171,7 @@ position = Vector2( -37, 8 )
 texture = ExtResource( 4 )
 
 [node name="GodolmecDeathFragment28" type="Sprite" parent="."]
-position = Vector2( -3, 2 )
+position = Vector2( -4, 2 )
 texture = ExtResource( 34 )
 
 [node name="GodolmecDeathFragment1" type="Sprite" parent="."]

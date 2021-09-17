@@ -47,6 +47,13 @@ public:
 	Sprite* faceRedFlash;
 	Sprite* jawRedFlash;
 
+	Sprite* jawCrack1;
+	Sprite* jawCrack2;
+	Sprite* jawCrack3;
+	Sprite* faceCrack1;
+	Sprite* faceCrack2;
+	Sprite* faceCrack3;
+
 	void SwitchState(GodolmecState targetState);
 
 	void TakeDamage();

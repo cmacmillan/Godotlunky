@@ -469,12 +469,15 @@ texture = ExtResource( 20 )
 position = Vector2( 0, 23.475 )
 
 [node name="JawCrack1" type="Sprite" parent="Jaw"]
+visible = false
 texture = ExtResource( 29 )
 
 [node name="JawCrack2" type="Sprite" parent="Jaw"]
+visible = false
 texture = ExtResource( 26 )
 
 [node name="JawCrack3" type="Sprite" parent="Jaw"]
+visible = false
 texture = ExtResource( 27 )
 
 [node name="Face" type="Sprite" parent="Jaw"]
@@ -537,12 +540,15 @@ material = SubResource( 4 )
 texture = ExtResource( 18 )
 
 [node name="FaceCrack1" type="Sprite" parent="Jaw/Face"]
+visible = false
 texture = ExtResource( 28 )
 
 [node name="FaceCrack2" type="Sprite" parent="Jaw/Face"]
+visible = false
 texture = ExtResource( 31 )
 
 [node name="FaceCrack3" type="Sprite" parent="Jaw/Face"]
+visible = false
 texture = ExtResource( 30 )
 
 [node name="WholeRock1" type="Sprite" parent="."]

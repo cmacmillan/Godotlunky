@@ -24,7 +24,7 @@ void Godolmec::_ready()
 	topPoint = get_node<Node2D>("Jaw/Face/TopPoint");
 	bottomPoint = get_node<Node2D>("Jaw/BottomPoint");
 	faceRoot = get_node<Node2D>("Jaw/Face");
-	health = 3;
+	health = 4;
 	float center;
 	Vector2 bounds = GetBodyBounds(center);
 	body.Init(Vector2(4.3f,(bounds.x-bounds.y)),Vector2(0,center),0,100000,this,level,Vector2(0,0),false,100,HitboxMask::Nothing,nullptr,nullptr,false,false,nullptr,nullptr);
@@ -38,6 +38,12 @@ void Godolmec::_ready()
 	bombSpot4 = get_node<Node2D>("Jaw/Face/FireFlash4");
 	jawRedFlash = get_node<Sprite>("Jaw/JawOutline");
 	faceRedFlash = get_node<Sprite>("Jaw/Face/FaceOutline");
+	jawCrack1 = get_node<Sprite>("Jaw/JawCrack1");
+	jawCrack2 = get_node<Sprite>("Jaw/JawCrack2");
+	jawCrack3 = get_node<Sprite>("Jaw/JawCrack3");
+	faceCrack1 = get_node<Sprite>("Jaw/Face/FaceCrack1");
+	faceCrack2 = get_node<Sprite>("Jaw/Face/FaceCrack2");
+	faceCrack3 = get_node<Sprite>("Jaw/Face/FaceCrack3");
 	isTakingDamage = false;
 	jawHitbox1.root = &body;
 	faceHitbox1.root = &body;
@@ -57,6 +63,29 @@ void Godolmec::_ready()
 void Godolmec::TakeDamage() {
 	level->PlayAudio(level->godolmecTakeDamageSFX, body.aabb.center);
 	health--;
+	switch (health)
+	{
+	case 3:
+		jawCrack1->set_visible(true);
+		faceCrack1->set_visible(true);
+		break;
+	case 2:
+		jawCrack1->set_visible(false);
+		faceCrack1->set_visible(false);
+		jawCrack2->set_visible(true);
+		faceCrack2->set_visible(true);
+		break;
+	case 1:
+		jawCrack2->set_visible(false);
+		faceCrack2->set_visible(false);
+		jawCrack3->set_visible(true);
+		faceCrack3->set_visible(true);
+		break;
+	case 0:
+		break;
+	default:
+		break;
+	}
 	isTakingDamage = true;
 	flashDirection = 1;
 	flashOpacity = 0;
