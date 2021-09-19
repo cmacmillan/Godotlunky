@@ -53,7 +53,11 @@ void Level::_register_methods()
 	register_property("edgeWallMultimesh", &Level::edgeWallMultimesh, Ref<MultiMesh>());
 	register_property("biMultimesh", &Level::biMultimesh, Ref<MultiMesh>());
 
+	register_property("camShakeForceAmount", &Level::camShakeForceAmount, 0.0f);
 	register_property("g", &Level::g, 0.0f);
+	register_property("camShakeAmountToDampPerSecond", &Level::camShakeAmountToDampPerSecond, 0.0f);
+	register_property("camShakesPerSecond", &Level::camShakesPerSecond, 0.0f);
+	register_property("shakeForceDampRate", &Level::shakeForceDampRate, 0.0f);
 
 	register_property("bombExplosionSFX", &Level::bombExplosionSFX, Ref<AudioStream>());
 	register_property("bombTimerSFX", &Level::bombTimerSFX, Ref<AudioStream>());
@@ -421,13 +425,15 @@ void Level::_ready()
 	//customCollision->insert(&testCustomCollision);
 
 	frontSpawnRoot = get_node("/root/GameScene/SpawnRoot");
-	uiRoot = get_node<Control>("/root/GameScene/Spelunker/Camera2D/CanvasLayer/Control");
+	camera = get_node<Camera2D>("/root/GameScene/CameraTarget/Camera2D");
+	cameraTarget = get_node<Node2D>("/root/GameScene/CameraTarget");
+	uiRoot = get_node<Control>("/root/GameScene/CameraTarget/Camera2D/CanvasLayer/Control");
 	bombCountLabel = uiRoot->get_node<Label>("TopLeftContainer/BombCountContainer/Label");
 	ropeCountLabel= uiRoot->get_node<Label>("TopLeftContainer/RopeCountContainer/Label");
 	healthCountLabel= uiRoot->get_node<Label>("TopLeftContainer/HealthCountContainer/Label");
 	moneyCountLabel = uiRoot->get_node<Label>("TopLeftContainer/MoneyCountContainer/Label");
 
-	auto fullscreenWipe = get_node<ColorRect>("/root/GameScene/Spelunker/Camera2D/CanvasLayer/FullscreenWipe");
+	auto fullscreenWipe = get_node<ColorRect>("/root/GameScene/CameraTarget/Camera2D/CanvasLayer/FullscreenWipe");
 	this->fullscreenWipeMaterial = fullscreenWipe->get_material();
 	fullscreenWipePercent = 0;
 	isFadingOut = false;
@@ -553,6 +559,7 @@ void Level::_ready()
 	printf("expected %d, actual %d ", expectedCount, edgeWallIndex);
 	//CopyLayoutIntoBlocks(layout1, 0, 0);
 	UpdateMeshes();
+	currentShakeForce = 0.0f;
 	hasPlayedFadeInSound = false;
 }
 void Level::UpdateMeshes() {
@@ -825,6 +832,20 @@ void Level::_process(float delta)
 	hurtboxesToRemove->clear();
 	hitboxesToRemove->clear();
 	autopickupsToRemove->clear();
+	//update camera
+	cameraTarget->set_position(spelunker->get_position());
+	currentShakeForce = godot::Math::move_toward(currentShakeForce, 0, delta * shakeForceDampRate*camShakeForceAmount);
+	{
+		auto pos = camera->get_offset();
+		Vector2 offset = Vector2(Random() * 2.f - 1.f, Random() * 2.f - 1.f);
+		offset.normalize();
+		camera->set_offset(pos + offset * currentShakeForce);
+	}
+	{
+		auto camPos = camera->get_offset();
+		auto offset = camShakeAmountToDampPerSecond * -camPos * delta;
+		camera->set_offset(camPos + offset);
+	}
 }
 
 LevelBlock* Level::GetBlock(int x, int y) {

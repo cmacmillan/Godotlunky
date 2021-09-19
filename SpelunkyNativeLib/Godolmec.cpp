@@ -54,6 +54,7 @@ void Godolmec::_ready()
 	wasGrounded = true;
 	doorOpenerSpot = get_node<Node2D>("Jaw/DoorOpenerSpawnPoint");
 	auto doorOpener = SpawnDoorOpener(level, level->WorldToGrid(doorOpenerSpot->get_global_position()));
+	flashTime = 0;
 	doorOpener->isGodolmec = true;
 	//SwitchState(GodolmecState::WaitingToBreakFree);
 	SwitchState(GodolmecState::BreakingFree);
@@ -87,6 +88,7 @@ void Godolmec::TakeDamage() {
 		break;
 	}
 	isTakingDamage = true;
+	flashTime = 0;
 	flashDirection = 1;
 	flashOpacity = 0;
 }
@@ -129,6 +131,7 @@ void Godolmec::SwitchState(GodolmecState targetState)
 	}
 		break;
 		break;
+	case GodolmecState::WaitingToSwitchStatesForceJump:
 	case GodolmecState::WaitingToSwitchStates:
 	case GodolmecState::WaitingToBreakFree:
 		break;
@@ -162,9 +165,14 @@ void Godolmec::_process(float delta)
 	stateTime += delta;
 	switch (state)
 	{
+	case GodolmecState::WaitingToSwitchStatesForceJump:
+		if (stateTime > 1.0f) {
+			SwitchState(GodolmecState::JumpingAtPlayer);
+		}
+		break;
 	case GodolmecState::WaitingToSwitchStates:
 		if (stateTime > 1.0f) {
-			if (level->Random() < .8f) {
+			if (level->Random() < .7f) {
 				SwitchState(GodolmecState::JumpingAtPlayer);
 			}
 			else {
@@ -197,13 +205,14 @@ void Godolmec::_process(float delta)
 		break;
 	}
 	if (isTakingDamage) {
+		flashTime += delta;
 		flashOpacity = godot::Math::move_toward(flashOpacity, flashDirection, delta * 10);
 		if (flashOpacity == flashDirection) {
 			flashDirection = 1 - flashDirection;
 		}
 		faceRedFlash->set_modulate(Color(1, 0, 0, flashOpacity));
 		jawRedFlash->set_modulate(Color(1, 0, 0, flashOpacity));
-		if (flashOpacity == 0 && stateTime > 2.5f) {
+		if (flashOpacity == 0 && flashTime > 1.5f) {
 			isTakingDamage = false;
 		}
 	}

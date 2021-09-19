@@ -44,6 +44,7 @@ void Shotgun::_process(float delta)
 void Shotgun::DoThrowAction()
 {
 	if (cooldownTime <= 0) {
+		level->currentShakeForce = level->camShakeForceAmount*.5f;
 		for (int i = 0; i < 10; i++) {
 			auto bullet = SpawnBullet(level, Vector2(body.endPos.x, body.endPos.y));
 			bullet->body.moveFastHitbox.creatorToEscape = this->body.pickedBy->GetBody();

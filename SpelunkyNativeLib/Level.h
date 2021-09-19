@@ -21,6 +21,7 @@
 #include <RandomNumberGenerator.hpp>
 #include <SceneTree.hpp>
 #include <Math.hpp>
+#include <Camera2D.hpp>
 
 enum class DrawType {
 	Normal = 0,
@@ -131,6 +132,16 @@ public:
 	Label* ropeCountLabel;
 	Label* healthCountLabel;
 	Label* moneyCountLabel;
+
+	bool overrideCamera;
+	Vector2 overrideCameraPosition;
+	Camera2D* camera;
+	Node2D* cameraTarget;
+	float camShakeAmountToDampPerSecond;
+	float camShakeForceAmount;
+	float camShakesPerSecond;
+	float currentShakeForce;
+	float shakeForceDampRate;
 
 	SpelAABB exitPosition;
 

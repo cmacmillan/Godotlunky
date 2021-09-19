@@ -12,6 +12,7 @@ enum class GodolmecState : int {
 	WaitingToSwitchStates=2,
 	WaitingToBreakFree=3,
 	FiringBombs=4,
+	WaitingToSwitchStatesForceJump=5,
 };
 class Godolmec : public Node2D
 {
@@ -32,6 +33,7 @@ public:
 	float flashOpacity;
 	float flashDirection;
 	int health;
+	float flashTime = 0;
 	bool isTakingDamage;
 
 	MovingPlatform jawHitbox1;
