@@ -55,7 +55,7 @@ bool DoorOpener::TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hi
 
 void DoorOpener::_process(float delta)
 {
-	if (isGodolmec) {
+	if (isGodolmec && level->godolmec!=nullptr) {
 		auto pos = level->godolmec->doorOpenerSpot->get_global_position();
 		body.aabb.center = level->WorldToGrid(pos);
 		set_global_position(pos);

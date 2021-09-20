@@ -26,7 +26,8 @@ void Godolmec::_ready()
 	topPoint = get_node<Node2D>("Jaw/Face/TopPoint");
 	bottomPoint = get_node<Node2D>("Jaw/BottomPoint");
 	faceRoot = get_node<Node2D>("Jaw/Face");
-	health = 4;
+	//health = 4;
+	health = 1;
 	float center;
 	Vector2 bounds = GetBodyBounds(center);
 	body.Init(Vector2(4.3f,(bounds.x-bounds.y)),Vector2(0,center),0,100000,this,level,Vector2(0,0),false,100,HitboxMask::Nothing,nullptr,nullptr,false,false,nullptr,nullptr);
@@ -46,6 +47,7 @@ void Godolmec::_ready()
 	faceCrack1 = get_node<Sprite>("Jaw/Face/FaceCrack1");
 	faceCrack2 = get_node<Sprite>("Jaw/Face/FaceCrack2");
 	faceCrack3 = get_node<Sprite>("Jaw/Face/FaceCrack3");
+	explosionChargeSFX = get_node<AudioStreamPlayer2D>("Jaw/ExplosionChargeSFX");
 	isTakingDamage = false;
 	jawHitbox1.root = &body;
 	faceHitbox1.root = &body;
@@ -55,9 +57,12 @@ void Godolmec::_ready()
 	faceHitbox2.aabb.size = Vector2(2.6f,1.f);
 	wasGrounded = true;
 	doorOpenerSpot = get_node<Node2D>("Jaw/DoorOpenerSpawnPoint");
-	auto doorOpener = SpawnDoorOpener(level, level->WorldToGrid(doorOpenerSpot->get_global_position()));
+	doorOpener = SpawnDoorOpener(level, level->WorldToGrid(doorOpenerSpot->get_global_position()));
 	flashTime = 0;
 	doorOpener->isGodolmec = true;
+	shatter = Object::cast_to<Node2D>(level->shatteredGodolmecScene->instance());
+	shatter->set_visible(false);
+	level->frontSpawnRoot->add_child(shatter);
 	SwitchState(GodolmecState::WaitingToBreakFree);
 	SetColliderPositions();
 }
@@ -142,6 +147,10 @@ void Godolmec::SwitchState(GodolmecState targetState)
 	}
 		break;
 		break;
+	case GodolmecState::Dying:
+		explosionChargeSFX->set_stream(level->godolmecChargeExplosionSFX);
+		explosionChargeSFX->play();
+		break;
 	case GodolmecState::WaitingToSwitchStatesForceJump:
 	case GodolmecState::WaitingToSwitchStates:
 	case GodolmecState::WaitingToBreakFree:
@@ -181,9 +190,39 @@ void Godolmec::_process(float delta)
 			SwitchState(GodolmecState::JumpingAtPlayer);
 		}
 		break;
+	case GodolmecState::Dying:
+		if (stateTime > 2.5f) {
+			level->godolmec = nullptr;
+			level->customCollision->erase(&jawHitbox1);
+			level->customCollision->erase(&faceHitbox1);
+			level->customCollision->erase(&faceHitbox2);
+			level->DoorSwitchHit(false);
+			level->currentShakeForce = level->camShakeForceAmount;
+			SpawnBomb(level, body.aabb.center, Vector2(0, 0))->lifetime = 2.5f;
+			level->PlayAudio(level->godolmecExplosionSFX, body.aabb.center);
+			shatter->set_position(get_global_position());
+			shatter->set_visible(true);
+			level->UnregisterHurtbox(&doorOpener->body);
+			level->UnregisterHurtbox(&body);
+			body.OnDestroy(nullptr);
+			doorOpener->body.OnDestroy(nullptr);
+			doorOpener->queue_free();
+			queue_free();
+			return;
+		}
+		if (body.isGrounded) {
+			body.vel = Vector2(0, -1000);
+		}
+		else 
+		{
+			auto target = level->spelunker->body.aabb.center;
+			float x = godot::Math::sign(target.x - body.aabb.center.x);
+			body.vel.x = x*600;
+		}
+		break;
 	case GodolmecState::WaitingToSwitchStates:
 		if (stateTime > 1.0f) {
-			if (level->Random() < .85f) {
+			if (level->Random() < .80f) {
 				SwitchState(GodolmecState::JumpingAtPlayer);
 			}
 			else {
@@ -193,7 +232,13 @@ void Godolmec::_process(float delta)
 		break;
 	case GodolmecState::FiringBombs:
 		if (stateTime > 5.0f) {
-			SwitchState(GodolmecState::WaitingToSwitchStatesForceJump);
+			if (health <= 0) 
+			{
+				SwitchState(GodolmecState::Dying);
+			}
+			else {
+				SwitchState(GodolmecState::WaitingToSwitchStatesForceJump);
+			}
 		}
 		break;
 	case GodolmecState::BreakingFree:
@@ -223,11 +268,12 @@ void Godolmec::_process(float delta)
 		}
 		faceRedFlash->set_modulate(Color(1, 0, 0, flashOpacity));
 		jawRedFlash->set_modulate(Color(1, 0, 0, flashOpacity));
-		if (flashOpacity == 0 && flashTime > 1.5f) {
+		if (flashOpacity == 0 && flashTime > 1.5f && health>0) {
 			isTakingDamage = false;
 		}
 	}
 	if (!wasGrounded && body.isGrounded && state!=GodolmecState::WaitingToBreakFree) {
+		level->currentShakeForce = level->camShakeForceAmount * .5f;
 		level->PlayAudio(level->godolmecHitSFX, body.aabb.center);
 	}
 	wasGrounded = body.isGrounded;

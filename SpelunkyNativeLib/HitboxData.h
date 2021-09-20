@@ -19,7 +19,7 @@ struct SpelAABB
 		Vector2 otherHalf= other.size/2;
 		float xOffset = uninstersect1D(other.center.x - otherHalf.x, other.center.x + otherHalf.x, center.x - half.x, center.x + half.x);
 		float yOffset = uninstersect1D(other.center.y - otherHalf.y, other.center.y + otherHalf.y, center.y - half.y, center.y + half.y);
-		if (abs(xOffset) < abs(yOffset)) 
+		if (abs(xOffset)-.05f < abs(yOffset)) //fudge to prevent stupid death
 		{
 			magnitude = xOffset;
 			other.center.x += xOffset;

@@ -5,6 +5,7 @@
 #include "Body.h"
 #include <AnimationPlayer.hpp>
 #include "ObjectMaker.h"
+#include "DoorOpener.h"
 
 enum class GodolmecState : int { 
 	BreakingFree=0,
@@ -13,7 +14,9 @@ enum class GodolmecState : int {
 	WaitingToBreakFree=3,
 	FiringBombs=4,
 	WaitingToSwitchStatesForceJump=5,
+	Dying = 6,
 };
+class DoorOpener;
 class Godolmec : public Node2D
 {
 	GODOT_CLASS(Godolmec, Node2D);
@@ -25,6 +28,8 @@ public:
 	Node2D* topPoint;
 	Node2D* bottomPoint;
 	Node2D* faceRoot;
+
+	Node2D* shatter;
 
 	GodolmecState state;
 	float stateTime = 0;
@@ -45,6 +50,9 @@ public:
 	Node2D* bombSpot3;
 	Node2D* bombSpot4;
 	Node2D* doorOpenerSpot;
+
+	AudioStreamPlayer2D* explosionChargeSFX;
+	DoorOpener* doorOpener;
 
 	Sprite* faceRedFlash;
 	Sprite* jawRedFlash;

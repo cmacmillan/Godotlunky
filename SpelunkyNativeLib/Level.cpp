@@ -91,6 +91,8 @@ void Level::_register_methods()
 	register_property("godolmecHitSFX", &Level::godolmecHitSFX, Ref<AudioStream>());
 	register_property("godolmecTakeDamageSFX", &Level::godolmecTakeDamageSFX, Ref<AudioStream>());
 	register_property("switchShatterSFX", &Level::switchShatterSFX, Ref<AudioStream>());
+	register_property("godolmecChargeSFX", &Level::godolmecChargeExplosionSFX, Ref<AudioStream>());
+	register_property("godolmecExplosionSFX", &Level::godolmecExplosionSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 
@@ -108,6 +110,7 @@ void Level::_register_methods()
 	register_property("doorSwitchScene", &Level::doorSwitchScene, Ref<PackedScene>());
 	register_property("godolmecScene", &Level::godolmecScene, Ref<PackedScene>());
 	register_property("gemShatterScene", &Level::gemShatterScene, Ref<PackedScene>());
+	register_property("shatteredGodolmecScene", &Level::shatteredGodolmecScene, Ref<PackedScene>());
 
 	//auto pickups
 	register_property("largeGoldScene", &Level::largeGoldScene, Ref<PackedScene>());
@@ -338,10 +341,10 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 			if (norm.y == -1) {
 				isGrounded = true;
 			}
-			if (norm.y != 0 && abs(mag)>.01f && customNorm.y!=0 && godot::Math::sign(norm.y) != godot::Math::sign(customNorm.y)) {
+			if (norm.y != 0 && abs(mag)>.05f && customNorm.y!=0 && godot::Math::sign(norm.y) != godot::Math::sign(customNorm.y)) {
 				isSmushed = true;
 			}
-			if (norm.x != 0 && abs(mag)>.01f && customNorm.x!=0&& godot::Math::sign(norm.x) != godot::Math::sign(customNorm.x)) {
+			if (norm.x != 0 && abs(mag)>.05f && customNorm.x!=0&& godot::Math::sign(norm.x) != godot::Math::sign(customNorm.x)) {
 				isSmushed = true;
 			}
 			hitCustom = true;

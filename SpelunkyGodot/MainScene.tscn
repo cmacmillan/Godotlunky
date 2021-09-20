@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=2]
+[gd_scene load_steps=87 format=2]
 
 [ext_resource path="res://Scenes/Spelunker.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Multimeshes/GroundMultimesh.tres" type="MultiMesh" id=2]
@@ -71,6 +71,9 @@
 [ext_resource path="res://SFX/boulderhit.wav" type="AudioStream" id=69]
 [ext_resource path="res://SFX/godolmecDamage.wav" type="AudioStream" id=70]
 [ext_resource path="res://Scenes/ShatterGem.tscn" type="PackedScene" id=71]
+[ext_resource path="res://SFX/explosioncharge.wav" type="AudioStream" id=72]
+[ext_resource path="res://FracturedGodolmec.tscn" type="PackedScene" id=73]
+[ext_resource path="res://SFX/godolmecexplosion.wav" type="AudioStream" id=74]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -276,6 +279,8 @@ itemSmushSFX = ExtResource( 67 )
 godolmecHitSFX = ExtResource( 69 )
 godolmecTakeDamageSFX = ExtResource( 70 )
 switchShatterSFX = ExtResource( 10 )
+godolmecChargeSFX = ExtResource( 72 )
+godolmecExplosionSFX = ExtResource( 74 )
 audioSourceScene = ExtResource( 32 )
 snakeScene = ExtResource( 25 )
 rockScene = ExtResource( 17 )
@@ -291,13 +296,13 @@ doorScene = ExtResource( 62 )
 doorSwitchScene = ExtResource( 64 )
 godolmecScene = ExtResource( 68 )
 gemShatterScene = ExtResource( 71 )
+shatteredGodolmecScene = ExtResource( 73 )
 largeGoldScene = ExtResource( 41 )
 ropePileScene = ExtResource( 43 )
 smallBombPileScene = ExtResource( 42 )
 largeBombBoxScene = ExtResource( 44 )
 
 [node name="Spelunker" parent="." instance=ExtResource( 1 )]
-frame = 3
 
 [node name="CameraTarget" type="Node2D" parent="."]
 position = Vector2( -0.029, 0 )

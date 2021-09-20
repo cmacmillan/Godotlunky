@@ -501,6 +501,7 @@ z_as_relative = false
 texture = ExtResource( 3 )
 
 [node name="RedEyes" type="Sprite" parent="Jaw/Face"]
+self_modulate = Color( 1, 1, 1, 0 )
 z_index = 106
 z_as_relative = false
 texture = ExtResource( 2 )
@@ -566,8 +567,9 @@ texture = ExtResource( 31 )
 visible = false
 texture = ExtResource( 30 )
 
+[node name="ExplosionChargeSFX" type="AudioStreamPlayer2D" parent="Jaw"]
+
 [node name="WholeRock1" type="Sprite" parent="."]
-visible = false
 z_index = 200
 texture = ExtResource( 6 )
 
@@ -582,28 +584,32 @@ z_index = 200
 texture = ExtResource( 5 )
 
 [node name="Fragment1" type="Sprite" parent="."]
-position = Vector2( 500, 3003.05 )
-rotation = 22.6893
+visible = false
+position = Vector2( 34, -30 )
+rotation = 1.2155
 z_index = 200
 texture = ExtResource( 8 )
 offset = Vector2( -34.358, 29.7552 )
 
 [node name="Fragment2" type="Sprite" parent="."]
-position = Vector2( -500, 3000 )
-rotation = -22.6893
+visible = false
+position = Vector2( -38, -32 )
+rotation = -0.405167
 z_index = 200
 texture = ExtResource( 10 )
 offset = Vector2( 38, 32 )
 
 [node name="Fragment3" type="Sprite" parent="."]
-position = Vector2( -500, 3000 )
+visible = false
+position = Vector2( -29, 29 )
 rotation = -22.6893
 z_index = 200
 texture = ExtResource( 9 )
 offset = Vector2( 29, -29 )
 
 [node name="Fragment4" type="Sprite" parent="."]
-position = Vector2( 500, 3000 )
+visible = false
+position = Vector2( 36, 32 )
 rotation = 22.6893
 z_index = 200
 texture = ExtResource( 11 )
@@ -620,5 +626,4 @@ max_distance = 5000.0
 [node name="RockLoop" type="AudioStreamPlayer2D" parent="."]
 position = Vector2( 0.666667, 0 )
 stream = ExtResource( 23 )
-volume_db = -80.0
 max_distance = 5000.0

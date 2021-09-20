@@ -99,6 +99,8 @@ public:
 	Ref<AudioStream> itemSmushSFX;
 	Ref<AudioStream> godolmecHitSFX;
 	Ref<AudioStream> godolmecTakeDamageSFX;
+	Ref<AudioStream> godolmecChargeExplosionSFX;
+	Ref<AudioStream> godolmecExplosionSFX;
 
 	Ref<PackedScene> snakeScene;
 	Ref<PackedScene> rockScene;
@@ -115,6 +117,7 @@ public:
 	Ref<PackedScene> doorSwitchScene;
 	Ref<PackedScene> godolmecScene;
 	Ref<PackedScene> gemShatterScene;
+	Ref<PackedScene> shatteredGodolmecScene;
 
 	//auto pickups
 	Ref<PackedScene> largeGoldScene;
