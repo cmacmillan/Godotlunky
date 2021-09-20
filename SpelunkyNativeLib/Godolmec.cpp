@@ -178,6 +178,19 @@ void Godolmec::SetColliderPositions() {
 	faceHitbox2.aabb.center = level->WorldToGrid(faceRoot->get_global_position())+Vector2(0,-1.2f);
 }
 
+void Godolmec::MoveTowardsPlayer() {
+	auto target = level->spelunker->body.aabb.center;
+	float offset = target.x - body.aabb.center.x;
+	float x = godot::Math::sign(offset);
+	if (abs(offset) > 1.0f) {
+		body.vel.x = x * 600;
+	}
+	else 
+	{
+		body.vel.x =0.0f;
+	}
+}
+
 void Godolmec::_process(float delta)
 {
 	SetColliderPositions();
@@ -215,9 +228,7 @@ void Godolmec::_process(float delta)
 		}
 		else 
 		{
-			auto target = level->spelunker->body.aabb.center;
-			float x = godot::Math::sign(target.x - body.aabb.center.x);
-			body.vel.x = x*600;
+			MoveTowardsPlayer();
 		}
 		break;
 	case GodolmecState::WaitingToSwitchStates:
@@ -252,9 +263,7 @@ void Godolmec::_process(float delta)
 		}
 		else 
 		{
-			auto target = level->spelunker->body.aabb.center;
-			float x = godot::Math::sign(target.x - body.aabb.center.x);
-			body.vel.x = x*600;
+			MoveTowardsPlayer();
 		}
 		break;
 	default:

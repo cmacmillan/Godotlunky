@@ -70,6 +70,8 @@ public:
 
 	void FireBomb(int index);
 
+	void MoveTowardsPlayer();
+
 	void FinishAnimation();
 
 	void StopShaking();
