@@ -102,6 +102,16 @@ void Spelunker::_ready()
 	level->cameraTarget->set_position(get_position());
 }
 
+Vector2 ledgeFlipOffsets[7] = {
+	Vector2(.7f,-.7f),
+	Vector2(.6f,-.7f),
+	Vector2(.5f,-.4f),
+	Vector2(.3f,-.3f),
+	Vector2(.15f,-.15f),
+	Vector2(0.0f,0),
+	Vector2(0,0),
+};
+
 void Spelunker::_process(float delta)
 {
 	if (level->isFadingOut) {
@@ -370,8 +380,16 @@ void Spelunker::_process(float delta)
 		if (input->is_action_just_pressed("rope")) {
 			if (ropeCount > 0) {
 				ropeCount--;
-				Rope* rope = SpawnRope(level, body.aabb.center);
-				rope->body.moveFastHitbox.creatorToEscape = &body;
+				if (isCrouching) 
+				{
+					Vector2 spawnPos = body.aabb.center + Vector2(body.isFacingRight ? 1 : -1, 0);
+					spawnPos.y = godot::Math::floor(spawnPos.y) - .5f;
+					Rope* rope = SpawnRope(level, spawnPos, Vector2(0, 0));
+				}
+				else {
+					Rope* rope = SpawnRope(level, body.aabb.center, Vector2(0, -2100));
+					rope->body.moveFastHitbox.creatorToEscape = &body;
+				}
 			} 
 			else
 			{
@@ -439,7 +457,20 @@ void Spelunker::_process(float delta)
 	}
 	else if (holdingLedge) {
 		if (!isWhipping && !isStunned&&!frozenInCutscene) {
-			animator->set_animation("Jump");
+			if (animator->get_animation() != "FlippingOntoLedge" || animator->get_frame()==6) {
+				animator->set_animation("HoldingLedge");
+			}
+			else 
+			{
+				float sign = -1;
+				if (body.isFacingRight)
+					sign = 1;
+				auto offset = ledgeFlipOffsets[animator->get_frame()];//inb4 crash esketit :P
+				offset.x *= sign;
+				ledgeCoords = baseLedgeCoords + offset;
+			}
+			body.aabb.center = ledgeCoords;
+			animator->set_flip_h(body.isFacingRight);
 		}
 		isIdle = false;
 	}
@@ -459,10 +490,23 @@ void Spelunker::_process(float delta)
 		if (!holdingRope) {
 			if (isCrouching && body.isGrounded)
 			{
-				body.vel.x = move_toward(body.vel.x,-walkSpeed / 2,delta*accelSpeed);
-				if (!isWhipping) {
-					animator->set_speed_scale(2);
-					animator->set_animation("Crawl");
+				Vector2 pos = body.aabb.center;
+				float xOffset = pos.x + .5f;
+				if (!level->GetBlock(xOffset - 1, pos.y + 1)->present && level->GetBlock(xOffset, pos.y + 1)->present) {
+					holdingLedge = true;
+					baseLedgeCoords = Vector2(godot::Math::floor(xOffset)-.4f,godot::Math::floor(pos.y)+1.15f);
+					ledgeCoords = baseLedgeCoords+ledgeFlipOffsets[0];
+					body.isFacingRight = true;
+					animator->set_speed_scale(2.5f);
+					animator->set_animation("FlippingOntoLedge");
+					animator->play();
+				}
+				else {
+					body.vel.x = move_toward(body.vel.x, -walkSpeed / 2, delta * accelSpeed);
+					if (!isWhipping) {
+						animator->set_speed_scale(2);
+						animator->set_animation("Crawl");
+					}
 				}
 			}
 			else
@@ -488,10 +532,25 @@ void Spelunker::_process(float delta)
 			isIdle = false;
 			if (isCrouching && body.isGrounded)
 			{
-				body.vel.x = move_toward(body.vel.x, walkSpeed / 2, delta*accelSpeed);
-				if (!isWhipping) {
-					animator->set_speed_scale(4);
-					animator->set_animation("Crawl");
+				Vector2 pos = body.aabb.center;
+				float xOffset = pos.x - .5f;
+				if (!level->GetBlock(xOffset + 1, pos.y + 1)->present && level->GetBlock(xOffset, pos.y + 1)->present) {
+					holdingLedge = true;
+					baseLedgeCoords = Vector2(godot::Math::floor(xOffset)+1.4f,godot::Math::floor(pos.y)+1.15f);
+					auto offset = ledgeFlipOffsets[0];
+					offset.x *= -1;
+					ledgeCoords = baseLedgeCoords + offset;
+					body.isFacingRight = false;
+					animator->set_speed_scale(2.5f);
+					animator->set_animation("FlippingOntoLedge");
+					animator->play();
+				}
+				else {
+					body.vel.x = move_toward(body.vel.x, walkSpeed / 2, delta * accelSpeed);
+					if (!isWhipping) {
+						animator->set_speed_scale(4);
+						animator->set_animation("Crawl");
+					}
 				}
 			}
 			else
@@ -525,7 +584,7 @@ void Spelunker::_process(float delta)
 			}
 		}
 	}
-	if (isCrouching && body.isGrounded &&!isStunned&&!frozenInCutscene) {
+	if (isCrouching && body.isGrounded &&!isStunned&&!frozenInCutscene&&!holdingLedge &&!input->is_action_pressed("right") && !input->is_action_pressed("left")) {
 		timeLookingDown += delta;
 		didSetLook = true;
 	}
@@ -534,11 +593,11 @@ void Spelunker::_process(float delta)
 		timeLookingDown = 0;
 		timeLookingUp = 0;
 	}
-	if (timeLookingDown > .3f) 
+	if (timeLookingDown > .5f) 
 	{
 		camera->set_position(Vector2(0, 700));
 	}
-	else if (timeLookingUp >.3)
+	else if (timeLookingUp >.5f)
 	{
 		camera->set_position(Vector2(0, -700));
 	}

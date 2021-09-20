@@ -22,7 +22,7 @@ Bullet* SpawnBullet(Level* level,Vector2 gridCoord);
 Rock* SpawnRock(Level* level,Vector2 gridCoord);
 Shotgun* SpawnShotgun(Level* level,Vector2 gridCoord);
 Snake* SpawnSnake(Level* level,Vector2 gridCoord);
-Rope* SpawnRope(Level* level,Vector2 gridCoord);
+Rope* SpawnRope(Level* level,Vector2 gridCoord,Vector2 startVel);
 Bomb* SpawnBomb(Level* level,Vector2 gridCoord,Vector2 startVel);
 Bat* SpawnBat(Level* level,Vector2 gridCoord);
 BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord);

@@ -208,7 +208,7 @@ position = Vector2( 0, 1 )
 
 [node name="Background" type="Sprite" parent="."]
 material = SubResource( 2 )
-position = Vector2( 2115, 2246 )
+position = Vector2( 2111, 2246 )
 scale = Vector2( 300, 300 )
 texture = ExtResource( 9 )
 
@@ -303,7 +303,7 @@ smallBombPileScene = ExtResource( 42 )
 largeBombBoxScene = ExtResource( 44 )
 
 [node name="Spelunker" parent="." instance=ExtResource( 1 )]
-frame = 4
+animation = "HoldingLedge"
 
 [node name="CameraTarget" type="Node2D" parent="."]
 position = Vector2( -0.029, 0 )

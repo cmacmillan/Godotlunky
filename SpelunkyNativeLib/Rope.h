@@ -17,6 +17,7 @@ public:
 	bool hasUnfurled;
 	Level* level;
 	Body body;
+	Vector2 startVelocity;
 
 	void SpawnSegment(float yOffset);
 	static void _register_methods();

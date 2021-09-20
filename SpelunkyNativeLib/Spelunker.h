@@ -31,6 +31,7 @@ public:
 	bool frozenInCutscene = true;
 	Camera2D* camera;
 	Vector2 grabbedLedgeBlock;
+	Vector2 baseLedgeCoords = Vector2(0, 0);
 	Vector2 ledgeCoords=Vector2(0,0);
 	Sprite* whipBack;
 	Sprite* whipForward;

@@ -20,7 +20,11 @@ Bomb* SpawnBomb(Level* level,Vector2 gridCoord,Vector2 startVel) {
 	bomb->startVelocity = startVel;
 	return PutAtAndChildToLevel(bomb, gridCoord, level,true);
 }
-Rope* SpawnRope(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Rope>(level->ropeScene->instance()), gridCoord, level,false);}
+Rope* SpawnRope(Level* level, Vector2 gridCoord, Vector2 startVel) {
+	auto rope = level->cast_to<Rope>(level->ropeScene->instance());
+	rope->startVelocity = startVel;
+	return PutAtAndChildToLevel(rope, gridCoord, level, false);
+}
 Bat* SpawnBat(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Bat>(level->batScene->instance()), gridCoord, level,false);}
 BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord) {  return PutAtAndChildToLevel(level->cast_to<BloodSpurt>(level->bloodSpurtScene->instance()), gridCoord, level,false);}
 PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<PrizeBox>(level->prizeBoxScene->instance()), gridCoord, level,true);}
