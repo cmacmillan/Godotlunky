@@ -479,17 +479,21 @@ void Level::_ready()
 	for (int i = 0; i < numMetaBlocks; i++) {
 		metaBlockMask[i] = false;
 	}
+	Vector2 start;
+	Vector2 end;
 	printf("start generating");
 	if (generateFinalBoss) {
 		CopyLayoutIntoBlocks(finalBossLevel, 1, 1, false);
 		auto node = cast_to<Node2D>(doorScene->instance());
 		this->add_child(node);
 		spawnPos = Vector2(6.5, 16.5);
+		start = Vector2(6, 17);
 		node->set_position(GridToWorld(spawnPos));
 
 		exitDoor = cast_to<Node2D>(doorScene->instance());
 		this->add_child(exitDoor);
 		auto exitDoorPos = Vector2(60.5, 16.5);
+		end = Vector2(60, 17);
 		exitDoor->set_position(GridToWorld(exitDoorPos));
 		this->exitPosition.center = exitDoorPos;
 		this->exitPosition.size = Vector2(1, 1);
@@ -570,6 +574,7 @@ void Level::_ready()
 	//////////////
 	int edgeThickness = 15;
 	int expectedCount = 2 * edgeThickness * (blocksXRes-1) + 2 * edgeThickness * (blocksYRes-1) + edgeThickness * edgeThickness * 4;
+	expectedCount += 2;//start and end
 	edgeWallMultimesh->set_instance_count(expectedCount);
 	int edgeWallIndex = 0;
 	//edgeWallMultimesh->set_instance_transform_2d(edgeWallIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
@@ -593,6 +598,10 @@ void Level::_ready()
 			edgeWallMultimesh->set_instance_transform_2d(edgeWallIndex++, Transform2D().translated(Vector2(i * worldBlockSize + worldBlockSize / 2.0f, (j + 1) * worldBlockSize - worldBlockSize / 2.0f)));
 		}
 	}
+	GetBlock(start.x, start.y)->indestructible = true;
+	GetBlock(end.x, end.y)->indestructible = true;
+	edgeWallMultimesh->set_instance_transform_2d(edgeWallIndex++, Transform2D().translated(Vector2(start.x* worldBlockSize + worldBlockSize / 2.0f, (start.y + 1)* worldBlockSize - worldBlockSize / 2.0f)));
+	edgeWallMultimesh->set_instance_transform_2d(edgeWallIndex++, Transform2D().translated(Vector2(end.x* worldBlockSize + worldBlockSize / 2.0f, (end.y + 1)* worldBlockSize - worldBlockSize / 2.0f)));
 	printf("expected %d, actual %d ", expectedCount, edgeWallIndex);
 	//CopyLayoutIntoBlocks(layout1, 0, 0);
 	UpdateMeshes();
@@ -608,7 +617,10 @@ void Level::UpdateMeshes() {
 	int biCount=0;
 	for (int i = 0; i < blocksXRes; i++) {
 		for (int j = 0; j < blocksYRes; j++) {
-			if (GetBlock(i, j)->bloody) {
+			if (GetBlock(i, j)->indestructible) {
+				drawTypes[j * blocksXRes + i] = DrawType::None;
+			}
+			else if (GetBlock(i, j)->bloody) {
 				drawTypes[j * blocksXRes + i] = DrawType::BloodySpikes;
 				bloodySpikeCount++;
 			}
@@ -620,7 +632,7 @@ void Level::UpdateMeshes() {
 				drawTypes[j * blocksXRes + i] = DrawType::Bi;
 				biCount++;
 			}
-			else if (!GetBlock(i, j)->present || GetBlock(i, j)->indestructible) {
+			else if (!GetBlock(i, j)->present) {
 				drawTypes[j * blocksXRes + i] = DrawType::None;
 			}
 			else if (j > 0 && !GetBlock(i, j - 1)->present) {

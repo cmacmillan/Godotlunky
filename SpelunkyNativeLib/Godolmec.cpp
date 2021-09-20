@@ -182,7 +182,7 @@ void Godolmec::MoveTowardsPlayer() {
 	auto target = level->spelunker->body.aabb.center;
 	float offset = target.x - body.aabb.center.x;
 	float x = godot::Math::sign(offset);
-	if (abs(offset) > 1.0f) {
+	if (abs(offset) > 1.5f) {
 		body.vel.x = x * 600;
 	}
 	else 
