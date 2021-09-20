@@ -28,6 +28,7 @@ public:
 	float timeLookingUp = 0;
 	float timeLookingDown = 0;
 	bool wasGrounded;
+	bool frozenInCutscene = true;
 	Camera2D* camera;
 	Vector2 grabbedLedgeBlock;
 	Vector2 ledgeCoords=Vector2(0,0);

@@ -3,6 +3,7 @@
 #include <AnimatedSprite.hpp>
 #include <AudioStream.hpp>
 #include <AudioStreamPlayer2D.hpp>
+#include <CPUParticles2D.hpp>
 using namespace godot::Math;
 
 void DoorOpener::_register_methods()
@@ -31,9 +32,22 @@ bool DoorOpener::TakeDamage(int damageAmount, bool stun, vector<HitboxData*>* hi
 	if (!isFlickering) {
 		if (!isGodolmec || (level->godolmec->state == GodolmecState::FiringBombs && !level->godolmec->isTakingDamage)) {
 			level->DoorSwitchHit(isGodolmec);
-			level->PlayAudio(level->switchHitSFX, body.aabb.center);
-			isFlickering = true;
-			flickerTime = 0;
+			if (level->godolmec == nullptr || isGodolmec) {
+				level->PlayAudio(level->switchHitSFX, body.aabb.center);
+				isFlickering = true;
+				flickerTime = 0;
+			}
+			else 
+			{
+				auto shatter = Object::cast_to<Node2D>(level->gemShatterScene->instance());
+				level->frontSpawnRoot->add_child(shatter);
+				shatter->set_global_position(get_global_position());
+				auto particles = shatter->get_node<CPUParticles2D>("CPUParticles2D");
+				particles->set_emitting(true);
+				level->PlayAudio(level->switchShatterSFX, body.aabb.center);
+				body.OnDestroy(nullptr);
+				queue_free();
+			}
 		}
 	}
 	return false;

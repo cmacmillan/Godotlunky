@@ -93,6 +93,7 @@ public:
 	Ref<AudioStream> walkThroughDoorSFX;
 	Ref<AudioStream> batStartFlapSFX;
 	Ref<AudioStream> switchHitSFX;
+	Ref<AudioStream> switchShatterSFX;
 	Ref<AudioStream> doorOpenSFX;
 	Ref<AudioStream> smushSFX;
 	Ref<AudioStream> itemSmushSFX;
@@ -113,6 +114,7 @@ public:
 	Ref<PackedScene> doorScene;
 	Ref<PackedScene> doorSwitchScene;
 	Ref<PackedScene> godolmecScene;
+	Ref<PackedScene> gemShatterScene;
 
 	//auto pickups
 	Ref<PackedScene> largeGoldScene;
@@ -133,8 +135,8 @@ public:
 	Label* healthCountLabel;
 	Label* moneyCountLabel;
 
-	bool overrideCamera;
-	Vector2 overrideCameraPosition;
+	bool lookAtGodolmec;
+	bool shakeFromGodolmec;
 	Camera2D* camera;
 	Node2D* cameraTarget;
 	float camShakeAmountToDampPerSecond;
@@ -142,6 +144,10 @@ public:
 	float camShakesPerSecond;
 	float currentShakeForce;
 	float shakeForceDampRate;
+
+	float lookAtGodolmecTime;
+
+	Vector2 spawnPos;
 
 	SpelAABB exitPosition;
 

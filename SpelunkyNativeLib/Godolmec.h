@@ -62,6 +62,10 @@ public:
 
 	void FireBomb(int index);
 
+	void FinishAnimation();
+
+	void StopShaking();
+
 	void SetColliderPositions();
 	Vector2 GetBodyBounds(float& center);
 

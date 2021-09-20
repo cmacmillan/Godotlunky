@@ -90,6 +90,7 @@ void Level::_register_methods()
 	register_property("itemSmushSFX", &Level::itemSmushSFX, Ref<AudioStream>());
 	register_property("godolmecHitSFX", &Level::godolmecHitSFX, Ref<AudioStream>());
 	register_property("godolmecTakeDamageSFX", &Level::godolmecTakeDamageSFX, Ref<AudioStream>());
+	register_property("switchShatterSFX", &Level::switchShatterSFX, Ref<AudioStream>());
 
 	register_property("audioSourceScene", &Level::audioSourceScene, Ref<PackedScene>());
 
@@ -106,7 +107,7 @@ void Level::_register_methods()
 	register_property("doorScene", &Level::doorScene, Ref<PackedScene>());
 	register_property("doorSwitchScene", &Level::doorSwitchScene, Ref<PackedScene>());
 	register_property("godolmecScene", &Level::godolmecScene, Ref<PackedScene>());
-	//register_property("mainScene", &Level::mainScene, Ref<PackedScene>());
+	register_property("gemShatterScene", &Level::gemShatterScene, Ref<PackedScene>());
 
 	//auto pickups
 	register_property("largeGoldScene", &Level::largeGoldScene, Ref<PackedScene>());
@@ -117,11 +118,23 @@ void Level::_register_methods()
 
 void Level::DoorSwitchHit(bool isGodolmec) {
 	if (!isGodolmec){//if not final boss
-		if (!isDoorOpen) {
-			isDoorOpen = true;
-			PlayAudio(doorOpenSFX, exitPosition.center);
-			exitDoor->get_node<Sprite>("ClosedDoor")->set_visible(false);
-			exitDoor->get_node<Sprite>("OpenDoor")->set_visible(true);
+		if (godolmec == nullptr) 
+		{
+			if (!isDoorOpen) {
+				isDoorOpen = true;
+				PlayAudio(doorOpenSFX, exitPosition.center);
+				exitDoor->get_node<Sprite>("ClosedDoor")->set_visible(false);
+				exitDoor->get_node<Sprite>("OpenDoor")->set_visible(true);
+			}
+		}
+		else 
+		{
+			spelunker->frozenInCutscene = true;
+			lookAtGodolmec = true;
+			shakeFromGodolmec = true;
+			camera->set_follow_smoothing(5.0f);
+			lookAtGodolmecTime = 0.0f;
+			godolmec->SwitchState(GodolmecState::BreakingFree);
 		}
 	}
 	else 
@@ -419,6 +432,8 @@ void Level::_ready()
 
 	godolmec = nullptr;
 
+	bool generateFinalBoss = true;
+
 	customCollision = new std::set<MovingPlatform*>();
 	//testCustomCollision.aabb.center = Vector2(12.65,5);
 	//testCustomCollision.aabb.size = Vector2(1, 1);
@@ -438,6 +453,8 @@ void Level::_ready()
 	fullscreenWipePercent = 0;
 	isFadingOut = false;
 	isDoorOpen = false;
+	lookAtGodolmec = false;
+	shakeFromGodolmec = false;
 
 	freeAudioSources = new std::vector<AudioStreamPlayer2D*>();
 	outstandingAudioSources = new std::vector<AudioStreamPlayer2D*>();
@@ -460,74 +477,91 @@ void Level::_ready()
 		metaBlockMask[i] = false;
 	}
 	printf("start generating");
-	int startIndex = 0;//(Random() * numMetaBlocksWidth);
-	for (int j = 0; j < numMetaBlocksHeight; j++) {
-		int endIndex = startIndex;
-		while (endIndex == startIndex) {
-			endIndex = (Random() * numMetaBlocksWidth);
-		}
-		int direction = godot::Math::sign(endIndex-startIndex);
-		for (int i = startIndex; i != endIndex+direction; i+=direction) {
-			string metaBlock;
-			bool flip = false;
-			if (i == startIndex && j==0) //starting platform
-			{
-				metaBlock = startingPlatforms[(int)(startingPlatformsLength * Random())];
-				flip = Random() > .5f;//randomly flip
+	if (generateFinalBoss) {
+		CopyLayoutIntoBlocks(finalBossLevel, 1, 1, false);
+		auto node = cast_to<Node2D>(doorScene->instance());
+		this->add_child(node);
+		spawnPos = Vector2(6.5, 16.5);
+		node->set_position(GridToWorld(spawnPos));
+
+		exitDoor = cast_to<Node2D>(doorScene->instance());
+		this->add_child(exitDoor);
+		auto exitDoorPos = Vector2(60.5, 16.5);
+		exitDoor->set_position(GridToWorld(exitDoorPos));
+		this->exitPosition.center = exitDoorPos;
+		this->exitPosition.size = Vector2(1, 1);
+	}
+	else {
+		int startIndex = (Random() * numMetaBlocksWidth);
+		for (int j = 0; j < numMetaBlocksHeight; j++) {
+			int endIndex = startIndex;
+			while (endIndex == startIndex) {
+				endIndex = (Random() * numMetaBlocksWidth);
 			}
-			else if (i == endIndex && j == numMetaBlocksHeight - 1) {//ending platform
-				metaBlock = endingPlatforms[(int)(endingPlatformsLength * Random())];
-				flip = Random() > .5f;//randomly flip
-			}
-			else if (i == startIndex) //recieve drop
-			{
-				metaBlock = dropRecievers[(int)(dropRecieverLength * Random())];
-				flip = startIndex>endIndex;
-			}
-			else if (i == endIndex) //do drop
-			{
-				int count = hallwayDropLength + rightRecieverDropLength;
-				int rand = count * Random();
-				if (rand < hallwayDropLength) 
+			int direction = godot::Math::sign(endIndex - startIndex);
+			for (int i = startIndex; i != endIndex + direction; i += direction) {
+				string metaBlock;
+				bool flip = false;
+				if (i == startIndex && j == 0) //starting platform
 				{
-					metaBlock = hallwayDrop[rand];
+					metaBlock = startingPlatforms[(int)(startingPlatformsLength * Random())];
 					flip = Random() > .5f;//randomly flip
 				}
-				else 
+				else if (i == endIndex && j == numMetaBlocksHeight - 1) {//ending platform
+					metaBlock = endingPlatforms[(int)(endingPlatformsLength * Random())];
+					flip = Random() > .5f;//randomly flip
+				}
+				else if (i == startIndex) //recieve drop
 				{
-					metaBlock = rightRecieverDrop[rand-hallwayDropLength];
-					flip = endIndex > startIndex;
+					metaBlock = dropRecievers[(int)(dropRecieverLength * Random())];
+					flip = startIndex > endIndex;
+				}
+				else if (i == endIndex) //do drop
+				{
+					int count = hallwayDropLength + rightRecieverDropLength;
+					int rand = count * Random();
+					if (rand < hallwayDropLength)
+					{
+						metaBlock = hallwayDrop[rand];
+						flip = Random() > .5f;//randomly flip
+					}
+					else
+					{
+						metaBlock = rightRecieverDrop[rand - hallwayDropLength];
+						flip = endIndex > startIndex;
+					}
+				}
+				else //hallway
+				{
+					int count = hallwayLength + hallwayDropLength;
+					int rand = count * Random();
+					flip = Random() > .5f;//randomly flip
+					if (rand < hallwayLength)
+					{
+						metaBlock = hallway[rand];
+					}
+					else
+					{
+						metaBlock = hallwayDrop[rand - hallwayLength];
+					}
+				}
+				Vector2 retr = CopyLayoutIntoBlocks(metaBlock, i * metaBlockWidth + 1, j * metaBlockHeight + 1, flip);
+				if (j == 0 && i == startIndex) {
+					auto node = cast_to<Node2D>(doorScene->instance());
+					this->add_child(node);
+					node->set_position(GridToWorld(retr));
+					spawnPos = retr;
+				}
+				else if (j == numMetaBlocksHeight - 1 && i == endIndex) {
+					exitDoor = cast_to<Node2D>(doorScene->instance());
+					this->add_child(exitDoor);
+					exitDoor->set_position(GridToWorld(retr));
+					this->exitPosition.center = retr;
+					this->exitPosition.size = Vector2(1, 1);
 				}
 			}
-			else //hallway
-			{
-				int count = hallwayLength + hallwayDropLength;
-				int rand = count * Random();
-				flip = Random() > .5f;//randomly flip
-				if (rand < hallwayLength) 
-				{
-					metaBlock = hallway[rand];
-				}
-				else 
-				{
-					metaBlock = hallwayDrop[rand-hallwayLength];
-				}
-			}
-			Vector2 retr = CopyLayoutIntoBlocks(metaBlock, i * metaBlockWidth+1, j * metaBlockHeight+1, flip);
-			if (j == 0 && i==startIndex) {
-				auto node = cast_to<Node2D>(doorScene->instance());
-				this->add_child(node);
-				node->set_position(GridToWorld(retr));
-			}
-			else if (j == numMetaBlocksHeight-1 && i == endIndex) {
-				exitDoor = cast_to<Node2D>(doorScene->instance());
-				this->add_child(exitDoor);
-				exitDoor->set_position(GridToWorld(retr));
-				this->exitPosition.center = retr;
-				this->exitPosition.size = Vector2(1,1);
-			}
+			startIndex = endIndex;
 		}
-		startIndex = endIndex;
 	}
 	printf("done generating");
 	//////////////
@@ -833,7 +867,18 @@ void Level::_process(float delta)
 	hitboxesToRemove->clear();
 	autopickupsToRemove->clear();
 	//update camera
-	cameraTarget->set_position(spelunker->get_position());
+	if (lookAtGodolmec) {
+		lookAtGodolmecTime += delta;
+	}
+	if (shakeFromGodolmec) {
+		currentShakeForce = camShakeForceAmount*.3f;
+	}
+	if (lookAtGodolmecTime>1.0f) {
+		cameraTarget->set_position(godolmec->get_position());
+	}
+	else {
+		cameraTarget->set_position(spelunker->get_position());
+	}
 	currentShakeForce = godot::Math::move_toward(currentShakeForce, 0, delta * shakeForceDampRate*camShakeForceAmount);
 	{
 		auto pos = camera->get_offset();

@@ -85,10 +85,12 @@ void Spelunker::_ready()
 	spaceTextLerp = 0;
 	health = 4;
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
+	set_position(level->GridToWorld(level->spawnPos));
 	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player,this,nullptr,false,false,nullptr,this);
 	camera = Object::cast_to<Camera2D>(get_node("/root/GameScene/CameraTarget/Camera2D"));
 	whipForward = get_node<Sprite>("WhipForward");
 	whipBack = get_node<Sprite>("WhipBack");
+	frozenInCutscene = false;
 	isWhipping = false;
 	isDead = false;
 	deadTime = 0;
@@ -143,7 +145,7 @@ void Spelunker::_process(float delta)
 		if (body.process(delta, !holdingLedge && !holdingRope, true)) {
 			Vector2 coordsAhead = body.endPos + Vector2((body.isFacingRight? 1 : -1), 0);
 			Vector2 coordsUp = coordsAhead - Vector2(0, 1);
-			if (!isStunned&&!isWhipping&&body.normal.x == (body.isFacingRight? -1 : 1) && body.vel.y > 0 && level->GetBlock(coordsAhead.x,coordsAhead.y)->present && !level->GetBlock(coordsUp.x,coordsUp.y)->present && godot::Math::fmod(body.endPos.y,1)<.3f)
+			if (!frozenInCutscene&&!isStunned&&!isWhipping&&body.normal.x == (body.isFacingRight? -1 : 1) && body.vel.y > 0 && level->GetBlock(coordsAhead.x,coordsAhead.y)->present && !level->GetBlock(coordsUp.x,coordsUp.y)->present && godot::Math::fmod(body.endPos.y,1)<.3f)
 			{
 				grabbedLedgeBlock = coordsAhead;
 				holdingLedge = true;
@@ -174,7 +176,7 @@ void Spelunker::_process(float delta)
 
 	auto input = Input::get_singleton();
 
-	if (body.isGrounded && !isStunned && !isDead && body.aabb.overlaps(level->exitPosition) && level->isDoorOpen) {
+	if (body.isGrounded && !frozenInCutscene && !isStunned && !isDead && body.aabb.overlaps(level->exitPosition) && level->isDoorOpen) {
 		if (input->is_action_pressed("EnterDoor")) {
 			body.aabb.center = level->exitPosition.center;
 			set_position(level->GridToWorld(body.aabb.center));
@@ -242,7 +244,7 @@ void Spelunker::_process(float delta)
 	}
 
 
-	if (isCrouching && input->is_action_just_pressed("whip")&&!isStunned&&!isWhipping&&!holdingLedge&&!holdingRope) {
+	if (isCrouching && input->is_action_just_pressed("whip")&&!isStunned&&!frozenInCutscene&&!isWhipping&&!holdingLedge&&!holdingRope) {
 		if (pickedBody == nullptr) {
 			for (auto i : *level->hurtboxes) {
 				if (body.aabb.overlaps(i->aabb) && i->pickable) {
@@ -259,7 +261,7 @@ void Spelunker::_process(float delta)
 			pickedBody = nullptr;
 		}
 	}  
-	else if (input->is_action_just_pressed("whip") && !holdingLedge && !isWhipping && !isStunned) {
+	else if (input->is_action_just_pressed("whip") && !holdingLedge && !isWhipping && !isStunned && !frozenInCutscene) {
 		if (pickedBody != nullptr) {
 			if (pickedBody->throwAction==nullptr) {
 				pickedBody->moveFastHitbox.creatorToEscape = &body;
@@ -345,7 +347,7 @@ void Spelunker::_process(float delta)
 		whipBack->set_visible(false);
 		whipForward->set_visible(false);
 	}
-	if (!isWhipping && !isStunned) {
+	if (!isWhipping && !isStunned && !frozenInCutscene) {
 		if (input->is_action_just_pressed("bomb")) {
 			if (bombCount > 0) {
 				bombCount--;
@@ -396,7 +398,7 @@ void Spelunker::_process(float delta)
 			}
 		}
 	}
-	if (input->is_action_just_pressed("jump")&&(body.isGrounded||holdingLedge||holdingRope)&&!isStunned) {
+	if (input->is_action_just_pressed("jump")&&(body.isGrounded||holdingLedge||holdingRope)&&!isStunned&&!frozenInCutscene) {
 		if (holdingRope) {
 			grabRopeDisableTime = .1f;
 		}
@@ -436,19 +438,19 @@ void Spelunker::_process(float delta)
 		}
 	}
 	else if (holdingLedge) {
-		if (!isWhipping && !isStunned) {
+		if (!isWhipping && !isStunned&&!frozenInCutscene) {
 			animator->set_animation("Jump");
 		}
 		isIdle = false;
 	}
 	else if (!body.isGrounded) {
-		if (!isWhipping && !isStunned) {
+		if (!isWhipping && !isStunned&&!frozenInCutscene) {
 			animator->set_animation("Jump");
 		}
 		isIdle = false;
 	}
 	bool didSetLook = false;
-	if (input->is_action_pressed("left") && !holdingLedge && !isStunned){
+	if (input->is_action_pressed("left") && !holdingLedge && !isStunned&&!frozenInCutscene){
 		isIdle = false;
 		if (!isWhipping) {
 			animator->set_flip_h(true);
@@ -477,7 +479,7 @@ void Spelunker::_process(float delta)
 			}
 		}
 	}
-	else if (input->is_action_pressed("right")&&!holdingLedge && !isStunned) {
+	else if (input->is_action_pressed("right")&&!holdingLedge && !isStunned&&!frozenInCutscene) {
 		if (!isWhipping) {
 			animator->set_flip_h(false);
 			body.isFacingRight = true;
@@ -506,7 +508,7 @@ void Spelunker::_process(float delta)
 			}
 		}
 	} 
-	else if (!holdingRope && !isStunned)
+	else if (!holdingRope && !isStunned && !frozenInCutscene)
 	{
 		body.vel.x = move_toward(body.vel.x, 0, delta * accelSpeed);
 		if (body.isGrounded && isIdle && !isWhipping) {
@@ -523,7 +525,7 @@ void Spelunker::_process(float delta)
 			}
 		}
 	}
-	if (isCrouching && body.isGrounded &&!isStunned) {
+	if (isCrouching && body.isGrounded &&!isStunned&&!frozenInCutscene) {
 		timeLookingDown += delta;
 		didSetLook = true;
 	}

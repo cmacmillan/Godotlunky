@@ -12,6 +12,8 @@ void Godolmec::_register_methods()
 	register_method("_process", &Godolmec::_process);
 
 	register_method("FireBomb", &Godolmec::FireBomb);
+	register_method("FinishAnimation", &Godolmec::FinishAnimation);
+	register_method("StopShaking", &Godolmec::StopShaking);
 }
 
 void Godolmec::_init(){}
@@ -56,8 +58,7 @@ void Godolmec::_ready()
 	auto doorOpener = SpawnDoorOpener(level, level->WorldToGrid(doorOpenerSpot->get_global_position()));
 	flashTime = 0;
 	doorOpener->isGodolmec = true;
-	//SwitchState(GodolmecState::WaitingToBreakFree);
-	SwitchState(GodolmecState::BreakingFree);
+	SwitchState(GodolmecState::WaitingToBreakFree);
 	SetColliderPositions();
 }
 
@@ -91,6 +92,16 @@ void Godolmec::TakeDamage() {
 	flashTime = 0;
 	flashDirection = 1;
 	flashOpacity = 0;
+}
+
+void Godolmec::StopShaking() {
+	level->shakeFromGodolmec = false;
+}
+
+void Godolmec::FinishAnimation() {
+	level->spelunker->frozenInCutscene = false;
+	level->lookAtGodolmec=false;
+	level->lookAtGodolmecTime = 0.0f;
 }
 
 void Godolmec::FireBomb(int index) 
@@ -172,7 +183,7 @@ void Godolmec::_process(float delta)
 		break;
 	case GodolmecState::WaitingToSwitchStates:
 		if (stateTime > 1.0f) {
-			if (level->Random() < .7f) {
+			if (level->Random() < .85f) {
 				SwitchState(GodolmecState::JumpingAtPlayer);
 			}
 			else {
@@ -182,7 +193,7 @@ void Godolmec::_process(float delta)
 		break;
 	case GodolmecState::FiringBombs:
 		if (stateTime > 5.0f) {
-			SwitchState(GodolmecState::WaitingToSwitchStates);
+			SwitchState(GodolmecState::WaitingToSwitchStatesForceJump);
 		}
 		break;
 	case GodolmecState::BreakingFree:
@@ -216,7 +227,7 @@ void Godolmec::_process(float delta)
 			isTakingDamage = false;
 		}
 	}
-	if (!wasGrounded && body.isGrounded) {
+	if (!wasGrounded && body.isGrounded && state!=GodolmecState::WaitingToBreakFree) {
 		level->PlayAudio(level->godolmecHitSFX, body.aabb.center);
 	}
 	wasGrounded = body.isGrounded;
