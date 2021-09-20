@@ -380,10 +380,18 @@ void Spelunker::_process(float delta)
 		if (input->is_action_just_pressed("rope")) {
 			if (ropeCount > 0) {
 				ropeCount--;
-				if (isCrouching) 
-				{
-					Vector2 spawnPos = body.aabb.center + Vector2(body.isFacingRight ? 1 : -1, 0);
+				if (isCrouching && !holdingLedge) {
+					Vector2 spawnPos = body.aabb.center+Vector2(body.isFacingRight ? 1 : -1, 0);
 					spawnPos.y = godot::Math::floor(spawnPos.y) - .5f;
+					Rope* rope = SpawnRope(level, spawnPos, Vector2(0, 0));
+				}
+				else if (isCrouching && animator->get_animation() == "FlippingOntoLedge")
+				{
+					Vector2 spawnPos = baseLedgeCoords;
+					Rope* rope = SpawnRope(level, spawnPos, Vector2(0, 0));
+				}
+				else if (isCrouching && holdingLedge) {
+					Vector2 spawnPos = body.aabb.center;
 					Rope* rope = SpawnRope(level, spawnPos, Vector2(0, 0));
 				}
 				else {
