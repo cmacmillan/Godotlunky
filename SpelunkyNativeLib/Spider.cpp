@@ -22,7 +22,7 @@ void Spider::TakeSmush() {
 void Spider::_ready()
 {
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.8,.4),Vector2(0,0),.2f,9999999,this,level,Vector2(0,0),false,1,HitboxMask::Enemy,this,nullptr,false,true,level->spiderJumpSFX,this);
+	body.Init(Vector2(.8,.4),Vector2(0,0),.2f,9999999,this,level,Vector2(0,0),false,1,HitboxMask::Enemy,this,nullptr,false,true,level->spiderJumpSFX,this,HeldItem::Unknown);
 	hitbox.creatorToEscape = nullptr;
 	hitbox.SetValues(body.aabb, 1, HitboxMask::Player, Vector2(0, 0), 0, false,&body,DamageSource::SpiderDamage);
 	animatedSprite = get_node<AnimatedSprite>("AnimatedSprite");

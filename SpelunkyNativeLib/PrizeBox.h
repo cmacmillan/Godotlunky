@@ -13,6 +13,7 @@ public:
 	Body body;
 	Level* level;
 	bool hasOpened;
+	IPicker* startPickedBy;
 
 	void TakeSmush();
 

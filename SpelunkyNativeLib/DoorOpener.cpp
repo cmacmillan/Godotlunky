@@ -20,7 +20,7 @@ void DoorOpener::_init(){}
 void DoorOpener::_ready()
 {
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(1,1),Vector2(0,0),0,0,this,level,Vector2(0,0),false,1,HitboxMask::Item,this,nullptr,false,false,nullptr,nullptr);
+	body.Init(Vector2(1,1),Vector2(0,0),0,0,this,level,Vector2(0,0),false,1,HitboxMask::Item,this,nullptr,false,false,nullptr,nullptr,HeldItem::Unknown);
 	level->RegisterHurtbox(&body);
 	sprite = get_node<Sprite>("Sprite");
 	sprite->set_modulate(normalColor);

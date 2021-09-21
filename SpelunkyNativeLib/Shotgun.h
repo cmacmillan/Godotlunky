@@ -14,6 +14,7 @@ public:
 	Level* level;
 	Sprite* sprite;
 	float cooldownTime;
+	IPicker* startPickedBy;
 
 	void TakeSmush();
 

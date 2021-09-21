@@ -24,7 +24,8 @@ void Rock::TakeSmush() {
 void Rock::_ready()
 {
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.5,.5),Vector2(0,0),.3,10000,this,level,Vector2(0,0),true,1,HitboxMask::Item,nullptr,nullptr,true,true,nullptr,this);
+	body.Init(Vector2(.5,.5),Vector2(0,0),.3,10000,this,level,Vector2(0,0),true,1,HitboxMask::Item,nullptr,nullptr,true,true,nullptr,this,HeldItem::Rock);
+	body.pickedBy = startPickedBy;
 	level->RegisterHurtbox(&body);
 }
 

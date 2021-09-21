@@ -26,11 +26,10 @@ void Godolmec::_ready()
 	topPoint = get_node<Node2D>("Jaw/Face/TopPoint");
 	bottomPoint = get_node<Node2D>("Jaw/BottomPoint");
 	faceRoot = get_node<Node2D>("Jaw/Face");
-	//health = 4;
-	health = 1;
+	health = 4;
 	float center;
 	Vector2 bounds = GetBodyBounds(center);
-	body.Init(Vector2(4.3f,(bounds.x-bounds.y)),Vector2(0,center),0,100000,this,level,Vector2(0,0),false,100,HitboxMask::Nothing,nullptr,nullptr,false,false,nullptr,nullptr);
+	body.Init(Vector2(4.3f,(bounds.x-bounds.y)),Vector2(0,center),0,100000,this,level,Vector2(0,0),false,100,HitboxMask::Nothing,nullptr,nullptr,false,false,nullptr,nullptr,HeldItem::Unknown);
 	level->RegisterHurtbox(&body);
 	level->customCollision->insert(&jawHitbox1);
 	level->customCollision->insert(&faceHitbox1);
@@ -105,6 +104,7 @@ void Godolmec::StopShaking() {
 
 void Godolmec::FinishAnimation() {
 	level->spelunker->frozenInCutscene = false;
+	level->camera->set_follow_smoothing(15.0f);
 	level->lookAtGodolmec=false;
 	level->lookAtGodolmecTime = 0.0f;
 }

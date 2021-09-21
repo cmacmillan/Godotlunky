@@ -321,8 +321,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 22.0
 margin_top = 16.0
-margin_right = 22.0
-margin_bottom = 16.0
+margin_right = -22.0
+margin_bottom = -22.0
 theme = ExtResource( 47 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -386,6 +386,16 @@ texture = ExtResource( 52 )
 margin_top = 11.0
 margin_right = 69.0
 margin_bottom = 38.0
+
+[node name="CurrentLevel" type="Label" parent="CameraTarget/Camera2D/CanvasLayer/Control"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -153.0
+margin_bottom = 27.0
+grow_horizontal = 0
+text = "1/4"
+align = 2
+valign = 1
 
 [node name="FullscreenWipe" type="ColorRect" parent="CameraTarget/Camera2D/CanvasLayer"]
 material = SubResource( 12 )

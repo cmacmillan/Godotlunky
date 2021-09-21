@@ -12,8 +12,16 @@ T* PutAtAndChildToLevel(T* node,Vector2 gridCoord, Level* level,bool spawnInFron
 }
 
 Bullet* SpawnBullet(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Bullet>(level->bulletScene->instance()), gridCoord, level,true);}
-Rock* SpawnRock(Level* level,Vector2 gridCoord) {return PutAtAndChildToLevel(level->cast_to<Rock>(level->rockScene->instance()), gridCoord, level,true);}
-Shotgun* SpawnShotgun(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Shotgun>(level->shotgunScene->instance()), gridCoord, level,true);}
+Rock* SpawnRock(Level* level,Vector2 gridCoord,IPicker* startPickedBy) {
+	auto rock = level->cast_to<Rock>(level->rockScene->instance());
+	rock->startPickedBy = startPickedBy;
+	return PutAtAndChildToLevel(rock, gridCoord, level,true);
+}
+Shotgun* SpawnShotgun(Level* level,Vector2 gridCoord,IPicker* startPickedBy) { 
+	auto shotgun = level->cast_to<Shotgun>(level->shotgunScene->instance());
+	shotgun->startPickedBy = startPickedBy;
+	return PutAtAndChildToLevel(shotgun, gridCoord, level,true);
+}
 Snake* SpawnSnake(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Snake>(level->snakeScene->instance()), gridCoord, level,false);}
 Bomb* SpawnBomb(Level* level,Vector2 gridCoord,Vector2 startVel) { 
 	auto bomb = level->cast_to<Bomb>(level->bombScene->instance());
@@ -27,7 +35,11 @@ Rope* SpawnRope(Level* level, Vector2 gridCoord, Vector2 startVel) {
 }
 Bat* SpawnBat(Level* level,Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Bat>(level->batScene->instance()), gridCoord, level,false);}
 BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord) {  return PutAtAndChildToLevel(level->cast_to<BloodSpurt>(level->bloodSpurtScene->instance()), gridCoord, level,false);}
-PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<PrizeBox>(level->prizeBoxScene->instance()), gridCoord, level,true);}
+PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord,IPicker* startPickedBy) { 
+	auto prizeBox = level->cast_to<PrizeBox>(level->prizeBoxScene->instance());
+	prizeBox->startPickedBy = startPickedBy;
+	return PutAtAndChildToLevel(prizeBox, gridCoord, level,true);
+}
 Spider* SpawnSpider(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Spider>(level->spiderScene->instance()), gridCoord, level,true);}
 DoorOpener* SpawnDoorOpener(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<DoorOpener>(level->doorSwitchScene->instance()), gridCoord, level,false);}
 Godolmec* SpawnGodolmec(Level* level, Vector2 gridCoord) { return PutAtAndChildToLevel(level->cast_to<Godolmec>(level->godolmecScene->instance()), gridCoord, level,false);}

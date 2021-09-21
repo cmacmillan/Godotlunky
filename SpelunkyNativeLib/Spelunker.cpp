@@ -85,26 +85,10 @@ void Spelunker::TakeSmush() {
 }
 void Spelunker::_ready()
 {
-	auto globals = get_node<Globals>("/root/Globals");
-	if (globals->shouldRead) {
-		health = globals->healthCount;
-		ropeCount = globals->ropeCount;
-		bombCount = globals->bombCount;
-		goldCollected = globals->cashCount;
-	}
-	else 
-	{
-		health = 4;
-		ropeCount = 4;
-		bombCount = 4;
-		goldCollected = 0;
-		globals->levelIndex = 0;
-	}
-
 	spaceTextLerp = 0;
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	set_position(level->GridToWorld(level->spawnPos));
-	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player,this,nullptr,false,false,nullptr,this);
+	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player,this,nullptr,false,false,nullptr,this,HeldItem::Unknown);
 	camera = Object::cast_to<Camera2D>(get_node("/root/GameScene/CameraTarget/Camera2D"));
 	whipForward = get_node<Sprite>("WhipForward");
 	whipBack = get_node<Sprite>("WhipBack");
@@ -118,6 +102,41 @@ void Spelunker::_ready()
 	level->RegisterHurtbox(&body);
 	level->spelunker = this;
 	level->cameraTarget->set_position(get_position());
+
+	auto globals = get_node<Globals>("/root/Globals");
+	if (globals->shouldRead) {
+		health = globals->healthCount;
+		ropeCount = globals->ropeCount;
+		bombCount = globals->bombCount;
+		goldCollected = globals->cashCount;
+		levelIndex = globals->levelIndex;
+		Body* spawned=nullptr;
+		switch (globals->heldItem) {
+		case HeldItem::Shotgun:
+			spawned = &SpawnShotgun(level, body.aabb.center,this)->body;
+			break;
+		case HeldItem::Rock:
+			spawned = &SpawnRock(level, body.aabb.center,this)->body;
+			break;
+		case HeldItem::PrizeBox:
+			spawned = &SpawnPrizeBox(level, body.aabb.center,this)->body;
+			break;
+		case HeldItem::Unknown:
+			break;
+		}
+		if (spawned != nullptr) {
+			pickedBody = spawned;
+		}
+	}
+	else 
+	{
+		health = 4;
+		ropeCount = 4;
+		bombCount = 4;
+		goldCollected = 0;
+		globals->levelIndex = 0;
+		levelIndex = 0;
+	}
 }
 
 Vector2 ledgeFlipOffsets[7] = {
@@ -211,6 +230,17 @@ void Spelunker::_process(float delta)
 			isEnteringDoor = true;
 			auto globals = get_node<Globals>("/root/Globals");
 			globals->shouldRead = true;
+			if (pickedBody != nullptr) {
+				globals->heldItem = pickedBody->heldItemType;
+				if (pickedBody->heldItemType == HeldItem::Unknown) {
+					pickedBody->pickedBy = nullptr;
+					pickedBody = nullptr;
+				}
+			}
+			else 
+			{
+				globals->heldItem = HeldItem::Unknown;
+			}
 			globals->levelIndex++;
 			globals->healthCount = health;
 			globals->ropeCount = ropeCount;
@@ -460,6 +490,9 @@ void Spelunker::_process(float delta)
 		if (!isCrouching) {
 			body.vel.y = -jumpHeight;
 		}
+		if (holdingLedge) {
+			body.isFacingRight = !body.isFacingRight;
+		}
 		holdingLedge = false;
 		holdingRope = false;
 	}
@@ -676,6 +709,7 @@ void Spelunker::_process(float delta)
 	level->bombCountLabel->set_text(String(std::to_string(this->bombCount).c_str()));
 	level->ropeCountLabel->set_text(String(std::to_string(this->ropeCount).c_str()));
 	level->moneyCountLabel->set_text(String(std::to_string(this->goldCollected).c_str()));
+	level->levelIndexLabel->set_text(String((std::to_string(this->levelIndex+1)+"/4").c_str()));
 }
 Spelunker::Spelunker() {
 	printf("const");

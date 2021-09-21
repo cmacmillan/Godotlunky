@@ -24,7 +24,7 @@ void Bomb::_ready()
 	AnimatedSprite* animator = get_node<AnimatedSprite>("AnimatedSprite");
 	animator->_set_playing(true);
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
-	body.Init(Vector2(.5f, .5f), Vector2(0, 0), .3, 3000, this, level, startVelocity,true,1,HitboxMask::Item,nullptr,nullptr,true,true,nullptr,this);
+	body.Init(Vector2(.5f, .5f), Vector2(0, 0), .3, 3000, this, level, startVelocity,true,1,HitboxMask::Item,nullptr,nullptr,true,true,nullptr,this,HeldItem::Unknown);
 	level->RegisterHurtbox(&body);
 	auto audio = get_node<AudioStreamPlayer2D>("Audio");
 	audio->set_stream(level->bombTimerSFX);

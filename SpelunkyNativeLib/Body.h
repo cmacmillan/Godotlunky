@@ -5,6 +5,7 @@
 #include <Node2D.hpp>
 #include <AudioStreamPlayer2D.hpp>
 #include <AudioStream.hpp>
+#include "Globals.h"
 
 class Level;
 
@@ -29,6 +30,7 @@ public:
 	bool isSmushed;
 	ISmushReciever* smushReciever;
 	bool ignoreCustomCollision;
+	HeldItem heldItemType;
 
 	bool pickable;
 	bool dealDamageWhenMovingFast;
@@ -39,6 +41,6 @@ public:
 	Vector2 endPos;//basically just out
 	Vector2 normal;//basically just out
 	void OnDestroy(vector<HitboxData*>* hitboxesToRemove);
-	void Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level, Vector2 initialVelocity, bool pickable, float weight, HitboxMask takeDamageMask, IDamageReciever* damageReceiver, IThrowAction* throwAction, bool dealDamageWhenMovingFast, bool playHitSFX, Ref<AudioStream> hitSFX,ISmushReciever* smushReciever);
+	void Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level, Vector2 initialVelocity, bool pickable, float weight, HitboxMask takeDamageMask, IDamageReciever* damageReceiver, IThrowAction* throwAction, bool dealDamageWhenMovingFast, bool playHitSFX, Ref<AudioStream> hitSFX,ISmushReciever* smushReciever,HeldItem heldType);
 	bool process(float delta, bool applyGravity, bool applyFriction);
 };

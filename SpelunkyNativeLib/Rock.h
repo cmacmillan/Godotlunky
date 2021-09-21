@@ -11,6 +11,7 @@ class Rock : public Node2D, ISmushReciever
 public:
 	Body body;
 	Level* level;
+	IPicker* startPickedBy;
 
 	void TakeSmush();
 

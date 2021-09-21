@@ -453,6 +453,7 @@ void Level::_ready()
 	ropeCountLabel= uiRoot->get_node<Label>("TopLeftContainer/RopeCountContainer/Label");
 	healthCountLabel= uiRoot->get_node<Label>("TopLeftContainer/HealthCountContainer/Label");
 	moneyCountLabel = uiRoot->get_node<Label>("TopLeftContainer/MoneyCountContainer/Label");
+	levelIndexLabel = uiRoot->get_node<Label>("CurrentLevel");
 
 	auto fullscreenWipe = get_node<ColorRect>("/root/GameScene/CameraTarget/Camera2D/CanvasLayer/FullscreenWipe");
 	this->fullscreenWipeMaterial = fullscreenWipe->get_material();

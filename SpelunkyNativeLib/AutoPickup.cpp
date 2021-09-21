@@ -60,7 +60,7 @@ void AutoPickup::_ready()
 {
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	type = (AutoPickupType)typeInt;
-	body.Init(hitboxSize, hitboxOffset, .1, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Item,nullptr,nullptr,true,true,nullptr,this);
+	body.Init(hitboxSize, hitboxOffset, .1, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Item,nullptr,nullptr,true,true,nullptr,this,HeldItem::Unknown);
 	level->RegisterHurtbox(&body);
 	if (timeUntilActive <= 0) {
 		level->autoPickups->insert(this);

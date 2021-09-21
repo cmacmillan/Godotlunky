@@ -1,8 +1,13 @@
 #pragma once
 #include "Common.h"
 #include <Node2D.hpp>
-#include "Level.h"
-#include "Body.h"
+
+enum class HeldItem :unsigned int {
+	Unknown=0,
+	PrizeBox=1,
+	Shotgun=2,
+	Rock=3,
+};
 
 class Globals : public Node2D
 {
@@ -13,6 +18,7 @@ public:
 	int healthCount;
 	int cashCount;
 	int levelIndex;
+	HeldItem heldItem;
 	bool shouldRead;
 
 	static void _register_methods();

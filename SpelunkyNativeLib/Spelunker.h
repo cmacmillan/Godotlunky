@@ -45,6 +45,7 @@ public:
 	HitboxData whipHitbox;
 	HitboxData footHitbox;
 
+	int levelIndex;
 	float spaceTextLerp;
 
 	int ropeCount = 4;

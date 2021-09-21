@@ -22,6 +22,7 @@
 #include <SceneTree.hpp>
 #include <Math.hpp>
 #include <Camera2D.hpp>
+#include "Globals.h"
 
 enum class DrawType {
 	Normal = 0,
@@ -137,6 +138,7 @@ public:
 	Label* ropeCountLabel;
 	Label* healthCountLabel;
 	Label* moneyCountLabel;
+	Label* levelIndexLabel;
 
 	bool lookAtGodolmec;
 	bool shakeFromGodolmec;

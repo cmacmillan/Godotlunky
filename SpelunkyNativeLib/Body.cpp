@@ -3,7 +3,7 @@
 #include "Level.h"
 using namespace godot::Math;
 
-void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level,Vector2 initialVelocity,bool pickable, float weight,HitboxMask takeDamageMask, IDamageReciever* damageReceiver, IThrowAction* throwAction,bool dealDamageWhenMovingFast,bool playHitSFX, Ref<AudioStream> hitSFX,ISmushReciever* smushReciever)
+void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, Node2D* node, Level* level,Vector2 initialVelocity,bool pickable, float weight,HitboxMask takeDamageMask, IDamageReciever* damageReceiver, IThrowAction* throwAction,bool dealDamageWhenMovingFast,bool playHitSFX, Ref<AudioStream> hitSFX,ISmushReciever* smushReciever,HeldItem heldItemType)
 {
 	this->aabb = SpelAABB();
 	aabb.size = size;
@@ -29,6 +29,7 @@ void Body::Init(Vector2 size, Vector2 offset, float bounciness, float friction, 
 	this->isGrounded = false;
 	this->isSmushed= false;
 	this->smushReciever = smushReciever;
+	this->heldItemType = heldItemType;
 	process(0, false, false);
 }
 

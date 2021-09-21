@@ -19,14 +19,14 @@ class Godolmec;
 class DoorOpener;
 
 Bullet* SpawnBullet(Level* level,Vector2 gridCoord);
-Rock* SpawnRock(Level* level,Vector2 gridCoord);
-Shotgun* SpawnShotgun(Level* level,Vector2 gridCoord);
+Rock* SpawnRock(Level* level,Vector2 gridCoord,IPicker* startPickedBy=nullptr);
+Shotgun* SpawnShotgun(Level* level,Vector2 gridCoord,IPicker* startPickedBy=nullptr);
 Snake* SpawnSnake(Level* level,Vector2 gridCoord);
 Rope* SpawnRope(Level* level,Vector2 gridCoord,Vector2 startVel);
 Bomb* SpawnBomb(Level* level,Vector2 gridCoord,Vector2 startVel);
 Bat* SpawnBat(Level* level,Vector2 gridCoord);
 BloodSpurt* SpawnBloodSpurt(Level* level,Vector2 gridCoord);
-PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord);
+PrizeBox* SpawnPrizeBox(Level* level, Vector2 gridCoord,IPicker* startPickedBy=nullptr);
 Spider* SpawnSpider(Level* level, Vector2 gridCoord);
 DoorOpener* SpawnDoorOpener(Level* level, Vector2 gridCoord);
 Godolmec* SpawnGodolmec(Level* level, Vector2 gridCoord);
