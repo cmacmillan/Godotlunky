@@ -18,6 +18,10 @@ config/name="Spelunky"
 run/main_scene="res://MainScene.tscn"
 config/icon="res://CaveTex/icon.png"
 
+[autoload]
+
+Globals="*res://NativeScripts/Globals.gdns"
+
 [display]
 
 window/size/width=1536

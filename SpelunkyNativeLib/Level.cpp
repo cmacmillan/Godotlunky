@@ -17,6 +17,7 @@
 #include <ColorRect.hpp>
 #include <CanvasItemMaterial.hpp>
 #include <ShaderMaterial.hpp>
+#include "Globals.h"
 
 void HitboxData::InitOrClearBodiesAlreadyDamagedList() {
 	if (bodiesAlreadyDamaged == nullptr) {
@@ -435,7 +436,9 @@ void Level::_ready()
 
 	godolmec = nullptr;
 
-	bool generateFinalBoss = true;
+	auto globals = get_node<Globals>("/root/Globals");
+
+	bool generateFinalBoss = globals->levelIndex==3;
 
 	customCollision = new std::set<MovingPlatform*>();
 	//testCustomCollision.aabb.center = Vector2(12.65,5);

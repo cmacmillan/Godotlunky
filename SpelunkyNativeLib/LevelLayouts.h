@@ -67,11 +67,10 @@ const string rightRecieverDrop1=
  XXXX00000XXX0\n\
  XXXXX000XXXXX";
 
-/*
 const string startingPlatform1 = 
 "XXXXXXXXXXXXX\n\
  0000000000000\n\
- 0000000000900\n\
+ 0000000000000\n\
  000000Q000000\n\
  0000RXXX00000\n\
  0000XXXXX0000\n\
@@ -79,8 +78,8 @@ const string startingPlatform1 =
  00XXXXXXXXX00\n\
  0XXXXXXXXXXX0\n\
  XXXXXXXXXXXXX";
-*/
 
+/*
 const string startingPlatform1 = 
 "XXXXXXXXXXXXX\n\
  000000Q000000\n\
@@ -88,10 +87,11 @@ const string startingPlatform1 =
  0000000000000\n\
  0000000000000\n\
  0000000000000\n\
- 0090000000G00\n\
+ 0000000000000\n\
  0000000000000\n\
  0000000000000\n\
  XXXXXXXXXXXXX";
+*/
 
 const string endingPlatform1= 
 "XXXXXXXXXXXXX\n\

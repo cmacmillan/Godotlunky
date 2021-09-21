@@ -15,6 +15,7 @@
 #include "Spider.h"
 #include "DoorOpener.h"
 #include "Godolmec.h"
+#include "Globals.h"
 
 extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
 	godot::Godot::gdnative_init(o);
@@ -42,4 +43,5 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 	godot::register_class<Spider>();
 	godot::register_class<DoorOpener>();
 	godot::register_class<Godolmec>();
+	godot::register_class<Globals>();
 }

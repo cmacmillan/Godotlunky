@@ -10,6 +10,7 @@
 #include <AudioStream.hpp>
 #include "ObjectMaker.h"
 #include <string>
+#include "Globals.h"
 using namespace godot::Math;
 
 void Spelunker::_register_methods()
@@ -50,6 +51,8 @@ bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitbo
 }
 void Spelunker::Die(DamageSource source,bool playSound) {
 	if (!isDead && !isEnteringDoor) {
+		auto globals = get_node<Globals>("/root/Globals");
+		globals->shouldRead = false;
 		if (playSound)
 			level->PlayAudio(level->hitSFX, body.aabb.center);
 		for (int i = 0; i < 10; i++) {
@@ -82,8 +85,23 @@ void Spelunker::TakeSmush() {
 }
 void Spelunker::_ready()
 {
+	auto globals = get_node<Globals>("/root/Globals");
+	if (globals->shouldRead) {
+		health = globals->healthCount;
+		ropeCount = globals->ropeCount;
+		bombCount = globals->bombCount;
+		goldCollected = globals->cashCount;
+	}
+	else 
+	{
+		health = 4;
+		ropeCount = 4;
+		bombCount = 4;
+		goldCollected = 0;
+		globals->levelIndex = 0;
+	}
+
 	spaceTextLerp = 0;
-	health = 4;
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	set_position(level->GridToWorld(level->spawnPos));
 	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player,this,nullptr,false,false,nullptr,this);
@@ -191,6 +209,13 @@ void Spelunker::_process(float delta)
 			body.aabb.center = level->exitPosition.center;
 			set_position(level->GridToWorld(body.aabb.center));
 			isEnteringDoor = true;
+			auto globals = get_node<Globals>("/root/Globals");
+			globals->shouldRead = true;
+			globals->levelIndex++;
+			globals->healthCount = health;
+			globals->ropeCount = ropeCount;
+			globals->bombCount = bombCount;
+			globals->cashCount = goldCollected;
 			animator->set_animation("EnterDoor");
 			animator->set_speed_scale(2);
 			level->PlayAudio(level->walkThroughDoorSFX, body.aabb.center);
