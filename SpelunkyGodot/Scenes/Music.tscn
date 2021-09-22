@@ -1,0 +1,17 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://NativeScripts/Music.gdns" type="Script" id=1]
+[ext_resource path="res://Music/06-Boss.mp3" type="AudioStream" id=2]
+[ext_resource path="res://Music/08-Ending.mp3" type="AudioStream" id=3]
+[ext_resource path="res://Music/01-Title.mp3" type="AudioStream" id=4]
+[ext_resource path="res://Music/02-Cave.mp3" type="AudioStream" id=5]
+
+[node name="Music" type="Node2D"]
+script = ExtResource( 1 )
+bossThemeMusic = ExtResource( 2 )
+caveThemeMusic = ExtResource( 5 )
+creditsTheme = ExtResource( 3 )
+mainMenuTheme = ExtResource( 4 )
+
+[node name="audioSource" type="AudioStreamPlayer" parent="."]
+volume_db = -12.0

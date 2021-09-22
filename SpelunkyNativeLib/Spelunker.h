@@ -6,6 +6,8 @@
 #include <Sprite.hpp>
 #include "Body.h"
 #include "DamageSource.h"
+#include "Globals.h"
+#include "Music.h"
 
 class Spelunker : public Node2D, IDamageReciever, IPicker, ISmushReciever
 {
@@ -44,6 +46,9 @@ public:
 	Body* pickedBody = nullptr;
 	HitboxData whipHitbox;
 	HitboxData footHitbox;
+
+	Globals* globals;
+	Music* music;
 
 	int levelIndex;
 	float spaceTextLerp;

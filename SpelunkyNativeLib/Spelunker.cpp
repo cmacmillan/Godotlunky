@@ -10,7 +10,6 @@
 #include <AudioStream.hpp>
 #include "ObjectMaker.h"
 #include <string>
-#include "Globals.h"
 using namespace godot::Math;
 
 void Spelunker::_register_methods()
@@ -51,7 +50,6 @@ bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitbo
 }
 void Spelunker::Die(DamageSource source,bool playSound) {
 	if (!isDead && !isEnteringDoor) {
-		auto globals = get_node<Globals>("/root/Globals");
 		globals->shouldRead = false;
 		if (playSound)
 			level->PlayAudio(level->hitSFX, body.aabb.center);
@@ -88,7 +86,7 @@ void Spelunker::_ready()
 	spaceTextLerp = 0;
 	level = Object::cast_to<Level>(this->get_node("/root/GameScene/Level"));
 	set_position(level->GridToWorld(level->spawnPos));
-	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player,this,nullptr,false,false,nullptr,this,HeldItem::Unknown);
+	body.Init(Vector2(.72f, .9f), Vector2(0, .11f), 0, 5000, this, level, Vector2(0, 0), false, 1, HitboxMask::Player, this, nullptr, false, false, nullptr, this, HeldItem::Unknown);
 	camera = Object::cast_to<Camera2D>(get_node("/root/GameScene/CameraTarget/Camera2D"));
 	whipForward = get_node<Sprite>("WhipForward");
 	whipBack = get_node<Sprite>("WhipBack");
@@ -103,23 +101,24 @@ void Spelunker::_ready()
 	level->spelunker = this;
 	level->cameraTarget->set_position(get_position());
 
-	auto globals = get_node<Globals>("/root/Globals");
+	globals = get_node<Globals>("/root/Globals");
+	music = get_node<Music>("/root/Music");
 	if (globals->shouldRead) {
 		health = globals->healthCount;
 		ropeCount = globals->ropeCount;
 		bombCount = globals->bombCount;
 		goldCollected = globals->cashCount;
 		levelIndex = globals->levelIndex;
-		Body* spawned=nullptr;
+		Body* spawned = nullptr;
 		switch (globals->heldItem) {
 		case HeldItem::Shotgun:
-			spawned = &SpawnShotgun(level, body.aabb.center,this)->body;
+			spawned = &SpawnShotgun(level, body.aabb.center, this)->body;
 			break;
 		case HeldItem::Rock:
-			spawned = &SpawnRock(level, body.aabb.center,this)->body;
+			spawned = &SpawnRock(level, body.aabb.center, this)->body;
 			break;
 		case HeldItem::PrizeBox:
-			spawned = &SpawnPrizeBox(level, body.aabb.center,this)->body;
+			spawned = &SpawnPrizeBox(level, body.aabb.center, this)->body;
 			break;
 		case HeldItem::Unknown:
 			break;
@@ -127,8 +126,11 @@ void Spelunker::_ready()
 		if (spawned != nullptr) {
 			pickedBody = spawned;
 		}
+		if (levelIndex == 3) {
+			music->nextAudio = nullptr;
+		}
 	}
-	else 
+	else
 	{
 		health = 4;
 		ropeCount = 4;
@@ -136,6 +138,9 @@ void Spelunker::_ready()
 		goldCollected = 0;
 		globals->levelIndex = 0;
 		levelIndex = 0;
+		music->nextAudio = music->caveThemeMusic;
+		music->currentVolume = 1.0f;
+		music->audioSource->set_stream(music->caveThemeMusic);
 	}
 }
 
@@ -228,7 +233,6 @@ void Spelunker::_process(float delta)
 			body.aabb.center = level->exitPosition.center;
 			set_position(level->GridToWorld(body.aabb.center));
 			isEnteringDoor = true;
-			auto globals = get_node<Globals>("/root/Globals");
 			globals->shouldRead = true;
 			if (pickedBody != nullptr) {
 				globals->heldItem = pickedBody->heldItemType;

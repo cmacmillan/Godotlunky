@@ -21,6 +21,7 @@ config/icon="res://CaveTex/icon.png"
 [autoload]
 
 Globals="*res://NativeScripts/Globals.gdns"
+Music="*res://Scenes/Music.tscn"
 
 [display]
 
