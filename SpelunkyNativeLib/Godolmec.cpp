@@ -107,6 +107,10 @@ void Godolmec::FinishAnimation() {
 	level->camera->set_follow_smoothing(15.0f);
 	level->lookAtGodolmec=false;
 	level->lookAtGodolmecTime = 0.0f;
+	auto music = get_node<Music>("/root/Music");
+	music->nextAudio = music->bossThemeMusic;
+	music->currentVolume = 1.0f;
+	music->audioSource->set_stream(music->bossThemeMusic);
 }
 
 void Godolmec::FireBomb(int index) 
@@ -217,9 +221,12 @@ void Godolmec::_process(float delta)
 			shatter->set_visible(true);
 			level->UnregisterHurtbox(&doorOpener->body);
 			level->UnregisterHurtbox(&body);
+			auto music = get_node<Music>("/root/Music");
+			music->nextAudio = nullptr;
 			body.OnDestroy(nullptr);
 			doorOpener->body.OnDestroy(nullptr);
 			doorOpener->queue_free();
+
 			queue_free();
 			return;
 		}
