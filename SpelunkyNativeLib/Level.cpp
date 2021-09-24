@@ -735,7 +735,18 @@ void Level::_process(float delta)
 		fadeOutLerp -= delta;
 		((ShaderMaterial*)fullscreenWipeMaterial.ptr())->set_shader_param("C", fadeOutLerp);
 		if (fadeOutLerp <= 0) {
-			get_tree()->change_scene("res://MainScene.tscn");
+			auto globals = get_node<Globals>("/root/Globals");
+			auto music = get_node<Music>("/root/Music");
+			if (!spelunker->isDead && globals->levelIndex == 1) {
+				music->nextAudio = music->creditsTheme;
+				music->audioSource->set_stream(music->creditsTheme);
+				music->audioSource->play();
+				music->currentVolume = 1.0f;
+				get_tree()->change_scene("res://Credits.tscn");
+			}
+			else {
+				get_tree()->change_scene("res://MainScene.tscn");
+			}
 			return;
 		}
 	}

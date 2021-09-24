@@ -208,7 +208,7 @@ position = Vector2( 0, 1 )
 
 [node name="Background" type="Sprite" parent="."]
 material = SubResource( 2 )
-position = Vector2( 2111, 2246 )
+position = Vector2( 2461, 1805 )
 scale = Vector2( 300, 300 )
 texture = ExtResource( 9 )
 
@@ -396,6 +396,9 @@ grow_horizontal = 0
 text = "1/4"
 align = 2
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="FullscreenWipe" type="ColorRect" parent="CameraTarget/Camera2D/CanvasLayer"]
 material = SubResource( 12 )

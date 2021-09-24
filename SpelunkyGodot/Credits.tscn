@@ -1,0 +1,141 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://UITheme.tres" type="Theme" id=1]
+[ext_resource path="res://DefaultFont.tres" type="DynamicFont" id=2]
+[ext_resource path="res://BigFont.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Credits.gd" type="Script" id=4]
+
+[sub_resource type="Theme" id=1]
+default_font = ExtResource( 2 )
+
+[node name="Credits" type="Node2D"]
+script = ExtResource( 4 )
+height = 650
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GODOLUNKY" type="Label" parent="CanvasLayer/VBoxContainer"]
+margin_right = 1536.0
+margin_bottom = 50.0
+theme = SubResource( 1 )
+custom_fonts/font = ExtResource( 3 )
+text = "GODOLUNKY"
+align = 1
+
+[node name="ACloneByChase" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+margin_top = 54.0
+margin_right = 1536.0
+margin_bottom = 201.679
+rect_min_size = Vector2( 0, 147.679 )
+rect_clip_content = false
+bbcode_enabled = true
+bbcode_text = "
+
+
+
+[center]a clone by [rainbow freq=.2 sat=.5]Chase MacMillan[/rainbow][/center]"
+text = "
+
+
+
+a clone by Chase MacMillan"
+
+[node name="BorrowedFromDerekYu" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+margin_top = 205.0
+margin_right = 1536.0
+margin_bottom = 273.857
+rect_min_size = Vector2( 0, 68.857 )
+rect_clip_content = false
+bbcode_enabled = true
+bbcode_text = "[center]art, sound, game design [wave amp=15]borrowed[/wave][/center] from Spelunky Classic by [rainbow freq=.2 sat=.5]Derek Yu[/rainbow]"
+text = "art, sound, game design borrowed from Spelunky Classic by Derek Yu"
+
+[node name="WithAdditionalSoundFrom" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+margin_top = 277.0
+margin_right = 1536.0
+margin_bottom = 312.24
+rect_min_size = Vector2( 0, 35.24 )
+rect_clip_content = false
+bbcode_enabled = true
+bbcode_text = "[center]additional sound:"
+text = "additional sound:"
+
+[node name="WithAdditionalSoundFrom2" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+margin_top = 316.0
+margin_right = 1536.0
+margin_bottom = 351.24
+rect_min_size = Vector2( 0, 35.24 )
+rect_clip_content = false
+bbcode_enabled = true
+bbcode_text = "[center]Tank fire Mixed (freesound.org/s/127845/) [rainbow freq=.2 sat=.5]GaryQ[/rainbow]"
+text = "Tank fire Mixed (freesound.org/s/127845/) GaryQ"
+
+[node name="WithAdditionalSoundFrom3" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+margin_top = 355.0
+margin_right = 1536.0
+margin_bottom = 390.24
+rect_min_size = Vector2( 0, 35.24 )
+rect_clip_content = false
+bbcode_enabled = true
+bbcode_text = "[center]M-327 Mortar Shots (freesound.org/s/187542/) [rainbow freq=.2 sat=.5]qubodup[/rainbow]"
+text = "M-327 Mortar Shots (freesound.org/s/187542/) qubodup"
+
+[node name="WithAdditionalSoundFrom4" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+margin_top = 394.0
+margin_right = 1536.0
+margin_bottom = 429.24
+rect_min_size = Vector2( 0, 35.24 )
+rect_clip_content = false
+bbcode_enabled = true
+bbcode_text = "[center]air_hiss_cola (freesound.org/s/521506/) [rainbow freq=.2 sat=.5]typeoo[/rainbow]"
+text = "air_hiss_cola (freesound.org/s/521506/) typeoo"
+
+[node name="WithAdditionalSoundFrom5" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+margin_top = 433.0
+margin_right = 1536.0
+margin_bottom = 468.24
+rect_min_size = Vector2( 0, 35.24 )
+rect_clip_content = false
+bbcode_enabled = true
+bbcode_text = "[center]Glass of crystal (freesound.org/s/417981/) [rainbow freq=.2 sat=.5]PappaBert[/rainbow]"
+text = "Glass of crystal (freesound.org/s/417981/) PappaBert"
+
+[node name="WithAdditionalSoundFrom6" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+margin_top = 472.0
+margin_right = 1536.0
+margin_bottom = 507.24
+rect_min_size = Vector2( 0, 35.24 )
+rect_clip_content = false
+bbcode_enabled = true
+bbcode_text = "[center]Evil monster laugh (freesound.org/s/459345/) [rainbow freq=.2 sat=.5]Domarius[/rainbow]"
+text = "Evil monster laugh (freesound.org/s/459345/) Domarius"
+
+[node name="Thanks For Playing" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+margin_top = 511.0
+margin_right = 1536.0
+margin_bottom = 655.615
+rect_min_size = Vector2( 0, 144.615 )
+rect_clip_content = false
+custom_fonts/normal_font = ExtResource( 3 )
+bbcode_enabled = true
+bbcode_text = "
+[center][wave][rainbow freq=.2 sat=.5]THANKS FOR PLAYING[/rainbow]"
+text = "
+THANKS FOR PLAYING"

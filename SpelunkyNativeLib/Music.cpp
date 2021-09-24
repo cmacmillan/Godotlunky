@@ -24,7 +24,7 @@ void Music::_ready()
 void Music::_process(float delta)
 {
 	auto currentStream = audioSource->get_stream();
-	if (!audioSource->is_playing() && currentStream!=nullptr)
+	if (!audioSource->is_playing() && currentStream!=nullptr && currentStream!=creditsTheme)
 		audioSource->play();
 	if (currentStream != nextAudio) {
 		currentVolume = godot::Math::move_toward(currentVolume, 0.0f, delta);
@@ -40,5 +40,5 @@ void Music::_process(float delta)
 		}
 		currentVolume = godot::Math::move_toward(currentVolume, 1.0f, delta);
 	}
-	audioSource->set_volume_db(godot::Math::lerp(-100,-13,currentVolume));
+	audioSource->set_volume_db(godot::Math::lerp(-100,-15,currentVolume));
 }
