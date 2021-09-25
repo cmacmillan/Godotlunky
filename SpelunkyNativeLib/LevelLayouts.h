@@ -55,6 +55,97 @@ const string hallway1 =
  0XXXXXPXXXXX0\n\
  XXXXXXXXXXXXX";
 
+//updown
+ const string hallway2 = 
+"XXXXXXXXXXXXX\n\
+ 000TTTXTTT000\n\
+ 00X000X000000\n\
+ 00X00XX000000\n\
+ 0X2002000XX00\n\
+ 00XX00X00XX00\n\
+ 0XXX00XX0XXX0\n\
+ XXXXX0000XXX0\n\
+ XXXXXX77XXXXX\n\
+ XXXXXXXXXXXXX";
+
+//roofprize
+ const string hallway3 = 
+"XXXXXXXXXXXXX\n\
+ 0002X2P2Xg=00\n\
+ 0002X2XX2X0X=\n\
+ 0002X2XT000g0\n\
+ 000X0X00000X0\n\
+ 000XX000000g0\n\
+ 000X0000000X0\n\
+ 00000000000g0\n\
+ 00000007g7WX0\n\
+ XXXXXXXXXXXXX";
+
+//pit
+const string hallway4 = 
+"XXXXXXXXXXXXX\n\
+ 00T000000T000\n\
+ 0000000000000\n\
+ =0XX0gg00XX0=\n\
+ 00XX0220XX?00\n\
+ 00XX00000XXX0\n\
+ 00XXWWWWWXX00\n\
+ 0XXXXXXXXXXg0\n\
+ XXXXXXPXXXXXX\n\
+ XXXXXXXXXXXXX";
+
+//vertical bar
+const string hallway5 = 
+"XXXXXXXXXXXXX\n\
+ 00T000T00XX00\n\
+ 0000000000000\n\
+ 000000000gX00\n\
+ 000000000XXX0\n\
+ 0000000X0XXXX\n\
+ 00000XXX0XXg0\n\
+ 00XX00000XXXX\n\
+ 0XXX72g07XX00\n\
+ XXXXXXXXXXXXX";
+
+//maze
+const string hallway6 = 
+"XXXXXXXXXXXXX\n\
+ 0XXTX0g00XXXX\n\
+ 220000X200022\n\
+ 0XX00X22X000X\n\
+ 000020000g000\n\
+ 00XX0000XXXX0\n\
+ 02200000X0000\n\
+ 0XXXXX00X0XX0\n\
+ 000g02X0g0XXX\n\
+ XXXXXXXXXXXXX";
+
+//platforms
+const string hallway7 = 
+"XXXXXXXXXXXXX\n\
+ 00g00T0T00T00\n\
+ 0XX00000000g0\n\
+ 00000000000XX\n\
+ 0000020g00000\n\
+ 0020X2XX00200\n\
+ 0XX00020002X0\n\
+ 0000000000000\n\
+ WWWWWWWWWWWWW\n\
+ XXXXXXXXXXXXX";
+
+//challenge
+const string hallway8 = 
+"XXXXXXXXXXXXX\n\
+ X00T0T000XXXX\n\
+ X0000000g0PXX\n\
+ 00000000XXXXX\n\
+ XX000000000XX\n\
+ XWWWWWWWWWWXX\n\
+ 0XXXXXXXXXXX0\n\
+ 00T0000000000\n\
+ 00000g272g000\n\
+ XXXXXXXXXXXXX";
+
 const string rightRecieverDrop1= 
 "XXXXXXXXXXXXX\n\
  X00000B000000\n\
@@ -160,8 +251,8 @@ const string startingPlatforms[startingPlatformsLength] = { startingPlatform1 };
 #define endingPlatformsLength 1
 const string endingPlatforms[endingPlatformsLength] = { endingPlatform1 };
 
-#define hallwayLength 1
-const string hallway[hallwayLength] = { hallway1 };
+#define hallwayLength 8
+const string hallway[hallwayLength] = { hallway1,hallway2,hallway3,hallway4,hallway5,hallway6,hallway7,hallway8 };
 
 #define hallwayDropLength 1
 const string hallwayDrop[hallwayDropLength] = { hallwayDrop1};
@@ -172,7 +263,8 @@ const string hallwayDrop[hallwayDropLength] = { hallwayDrop1};
 //S Snake
 //W Spike
 //R Rock
-//P PrizeBox
+//G Shotgun
+//P PrizeBox (or gold chance)
 //r SmallRopePile
 //K LargeBombBox
 //k SmallBombBox
@@ -182,3 +274,8 @@ const string hallwayDrop[hallwayDropLength] = { hallwayDrop1};
 //Q entrance/exit
 //O door button
 //9 godolmec
+//= rope
+//7 50% spike block
+//2 50% block
+//T roof item w/chance of nothing
+//g ground item w/chance of nothing

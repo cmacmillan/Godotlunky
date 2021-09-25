@@ -183,6 +183,7 @@ Vector2 Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 				gridCoord = Vector2(xCurr+x+.5f, yCurr+ y + .5f);
 				block = GetBlock(xCurr + x, yCurr + y);
 			}
+			float random = Random();
 			if (line[i] == 'k') {
 				SpawnSmallBombPile(this, gridCoord, 0.0f);
 			} else if (line[i] == 'O') {
@@ -196,7 +197,7 @@ Vector2 Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 			} else if(line[i] == 'r') {
 				SpawnSmallRopePile(this, gridCoord,0.0f);
 			} else if (line[i] == 'P') {
-				SpawnPrizeBox(this,gridCoord);
+				SpawnPrizeBox(this,gridCoord);//chance of this just being gold?
 			} else if(line[i] == '9') {
 				SpawnGodolmec(this, gridCoord);
 			} else if (line[i] == 'B') {
@@ -205,8 +206,45 @@ Vector2 Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 				SpawnShotgun(this,gridCoord);
 			} else if (line[i] == 'R') {
 				SpawnRock(this,gridCoord);
-			} else if (line[i] == 'S') {
-				SpawnSnake(this,gridCoord);
+			}
+			else if (line[i] == 'S') {
+				SpawnSnake(this, gridCoord);
+			} else if (line[i]=='2') {
+				if (random > .5f) {
+					setPresent = true;
+				}
+				else 
+				{
+					setPresent = false;
+				}
+			} else if (line[i]=='=') {
+				SpawnRope(this, gridCoord, Vector2(0, 0));
+			} else if (line[i]=='7') {
+				if (random > .5f) {
+					block->hasSpikes = true;
+				}
+				else {
+					block->hasSpikes = false;
+				}
+			} else if (line[i]=='T') {
+				if (random > .5f) {
+					SpawnSpider(this, gridCoord);
+				}
+				else {
+					SpawnBat(this,gridCoord);
+				}
+			} else if (line[i]=='g') {
+				if (random < .45f) {
+					//nothing
+				} else if (random <.75f) {
+					SpawnSnake(this, gridCoord);
+				}
+				else if (random < .95f) {
+					SpawnLargeGoldPile(this, gridCoord,0.0f);
+				}
+				else {
+					SpawnRock(this,gridCoord);
+				}
 			} else if (line[i] == 'W') {
 				block->hasSpikes = true;
 			} else if (line[i] == 'Q') {
@@ -216,6 +254,9 @@ Vector2 Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 				setPresent = true;
 			}
 			else {
+				if (line[i]!='\n' && line[i]!=' ') {
+					printf("Error %c not found!", line[i]);
+				}
 				valid = false;
 			}
 			if (valid) {
