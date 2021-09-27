@@ -624,10 +624,10 @@ void Level::_ready()
 			if (curr->present) {
 				if (!up->present && !up->hasSpikes) {
 					auto gridCoord = Vector2(i + .5f, j - 1 + .5f);
-					if (random < .90f) {
+					if (random < .91f) {
 						//nothing
 					}
-					else if (random < .96f) {
+					else if (random < .97f) {
 						SpawnLargeGoldPile(this, gridCoord, 0.0f);
 					}
 					else if (random < .99f) {
@@ -639,10 +639,10 @@ void Level::_ready()
 				}
 				if (!down->present && !down2->present) {
 					auto gridCoord = Vector2(i + .5f, j + 1 + .5f);
-					if (random < .97f) {
+					if (random < .98f) {
 						//nothing
 					}
-					else if (random < .985f) {
+					else if (random < .99f) {
 						SpawnSpider(this, gridCoord);
 					}
 					else {

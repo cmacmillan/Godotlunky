@@ -23,6 +23,12 @@ void Rope::_ready()
 	Vector2 start = level->WorldToGrid(get_position());
 	start.x = godot::Math::floor(start.x) + .5f;
 	set_position(level->GridToWorld(start));
+	if (startVelocity == Vector2(0, 0)) {
+		forceUnfurl = true;
+	}
+	else {
+		forceUnfurl = false;
+	}
 	body.Init(Vector2(.5f, .5f), Vector2(0, 0), 0.0f, 0.0f, this, level, startVelocity, false, 1, HitboxMask::Nothing, nullptr, nullptr, true, false, nullptr, nullptr,HeldItem::Unknown);
 	auto audio = get_node<AudioStreamPlayer2D>("Audio");
 	audio->set_stream(level->ropeThrowSFX);
@@ -33,8 +39,9 @@ void Rope::_process(float delta)
 {
 	if (!hasUnfurled) {
 		Vector2 ogStartPos = body.startPos;
-		body.process(delta, true, false);
-		if (body.vel.y>=-100 && (int)(ogStartPos.y+.5f)!=(int)(body.endPos.y+.5f)) {
+		if (!forceUnfurl)
+			body.process(delta, true, false);
+		if (body.vel.y>=-100 && (int)(ogStartPos.y+.5f)!=(int)(body.endPos.y+.5f)||forceUnfurl) {
 			auto audio = get_node<AudioStreamPlayer2D>("Audio");
 			audio->set_stream(level->ropeCatchSFX);
 			audio->play();

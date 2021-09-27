@@ -18,6 +18,7 @@ public:
 	Level* level;
 	Body body;
 	Vector2 startVelocity;
+	bool forceUnfurl;
 
 	void SpawnSegment(float yOffset);
 	static void _register_methods();

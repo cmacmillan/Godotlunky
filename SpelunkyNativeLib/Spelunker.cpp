@@ -441,7 +441,10 @@ void Spelunker::_process(float delta)
 				ropeCount--;
 				if (isCrouching && !holdingLedge) {
 					Vector2 spawnPos = body.aabb.center+Vector2(body.isFacingRight ? 1 : -1, 0);
-					spawnPos.y = godot::Math::floor(spawnPos.y) - .5f;
+					spawnPos.y = godot::Math::floor(spawnPos.y) - .5f+1;
+					if (level->GetBlock(spawnPos.x, spawnPos.y)->present) {
+						spawnPos.x = body.aabb.center.x;
+					}
 					Rope* rope = SpawnRope(level, spawnPos, Vector2(0, 0));
 				}
 				else if (isCrouching && animator->get_animation() == "FlippingOntoLedge")
@@ -692,10 +695,9 @@ void Spelunker::_process(float delta)
 		}
 	}
 	{
-		auto footPos = body.aabb.center + body.aabb.size / 2;
-		float footHeight = godot::Math::fmod(footPos.y,1.0f);
-		auto coord = level->WorldToGrid(get_position());
-		auto block = level->GetBlock(footPos.x,footPos.y);
+		float footPos = body.aabb.center.y + body.aabb.size.y / 2;
+		float footHeight = godot::Math::fmod(footPos,1.0f);
+		auto block = level->GetBlock(body.aabb.center.x,footPos);
 		if (block->hasSpikes && body.vel.y>0 && !isDead && footHeight<.5f && !holdingRope) {
 			auto audio = get_node<AudioStreamPlayer2D>("JumpAudio");
 			audio->set_volume_db(0.0f);
