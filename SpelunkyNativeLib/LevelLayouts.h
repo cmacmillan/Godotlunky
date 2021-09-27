@@ -1,4 +1,5 @@
 #pragma once
+#include "Common.h"
 #include <string>
 
 #define metaBlockWidth 13
@@ -17,6 +18,33 @@ const string dropRecieverBi1 =
  000XXXXXXX000\n\
  00XXXXXXXXX00\n\
  0XXXXXXXXXXX0\n\
+ XXXXXXXXXXXXX";
+
+/*
+const string dropRecieverBi1 = 
+"XXXXX000XXXXX\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ XXXXXXXXXXXXX";
+ */
+
+//spikes
+const string dropRecieverBi2 = 
+"XXXXX000XXXXX\n\
+ 0000000000000\n\
+ 00000XXX00000\n\
+ 000000000000\n\
+ 0077000007770\n\
+ 02XX00200XXX0\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 7777777777777\n\
  XXXXXXXXXXXXX";
 
 const string dropRecieverRight1 = 
@@ -58,75 +86,75 @@ const string hallway1 =
 //updown
  const string hallway2 = 
 "XXXXXXXXXXXXX\n\
- 000TTTXTTT000\n\
- 00X000X000000\n\
- 00X00XX000000\n\
- 0X2002000XX00\n\
- 00XX00X00XX00\n\
- 0XXX00XX0XXX0\n\
+ 000000X000000\n\
+ 000000X000000\n\
+ 00X0002000000\n\
+ 0X20002000X00\n\
+ 00XX00X000X00\n\
+ 0XXX00000XXX0\n\
  XXXXX0000XXX0\n\
- XXXXXX77XXXXX\n\
+ XXXXX777XXXXX\n\
  XXXXXXXXXXXXX";
 
 //roofprize
  const string hallway3 = 
 "XXXXXXXXXXXXX\n\
- 0002X2P2Xg=00\n\
- 0002X2XX2X0X=\n\
- 0002X2XT000g0\n\
+ 0002X2P2X0000\n\
+ 0002X2XX2X0X0\n\
+ 0002X2X000000\n\
  000X0X00000X0\n\
- 000XX000000g0\n\
+ 000XX00000000\n\
  000X0000000X0\n\
- 00000000000g0\n\
- 00000007g7WX0\n\
+ 0000000000000\n\
+ 0000000707WX0\n\
  XXXXXXXXXXXXX";
 
 //pit
 const string hallway4 = 
 "XXXXXXXXXXXXX\n\
- 00T000000T000\n\
  0000000000000\n\
- =0XX0gg00XX0=\n\
- 00XX0220XX?00\n\
+ 0000000000000\n\
+ =0XX00000XX0=\n\
+ 00XX0220XX000\n\
  00XX00000XXX0\n\
  00XXWWWWWXX00\n\
- 0XXXXXXXXXXg0\n\
+ 0XXXXXXXXXX00\n\
  XXXXXXPXXXXXX\n\
  XXXXXXXXXXXXX";
 
 //vertical bar
 const string hallway5 = 
 "XXXXXXXXXXXXX\n\
- 00T000T00XX00\n\
+ 000000000XX00\n\
  0000000000000\n\
- 000000000gX00\n\
+ 0000000000X00\n\
  000000000XXX0\n\
  0000000X0XXXX\n\
- 00000XXX0XXg0\n\
+ 00000XXX0XX00\n\
  00XX00000XXXX\n\
- 0XXX72g07XX00\n\
+ 0XXX72007XX00\n\
  XXXXXXXXXXXXX";
 
 //maze
 const string hallway6 = 
 "XXXXXXXXXXXXX\n\
- 0XXTX0g00XXXX\n\
+ 0XX0X0000XXXX\n\
  220000X200022\n\
  0XX00X22X000X\n\
- 000020000g000\n\
+ 0000200000000\n\
  00XX0000XXXX0\n\
  02200000X0000\n\
  0XXXXX00X0XX0\n\
- 000g02X0g0XXX\n\
+ 000002X000XXX\n\
  XXXXXXXXXXXXX";
 
 //platforms
 const string hallway7 = 
 "XXXXXXXXXXXXX\n\
- 00g00T0T00T00\n\
- 0XX00000000g0\n\
+ 0000000000000\n\
+ 0XX0000000000\n\
  00000000000XX\n\
- 0000020g00000\n\
+ 0000020000000\n\
  0020X2XX00200\n\
  0XX00020002X0\n\
  0000000000000\n\
@@ -136,14 +164,14 @@ const string hallway7 =
 //challenge
 const string hallway8 = 
 "XXXXXXXXXXXXX\n\
- X00T0T000XXXX\n\
- X0000000g0PXX\n\
+ X00000000XXXX\n\
+ X000000000PXX\n\
  00000000XXXXX\n\
  XX000000000XX\n\
  XWWWWWWWWWWXX\n\
  0XXXXXXXXXXX0\n\
- 00T0000000000\n\
- 00000g272g000\n\
+ 0000000000000\n\
+ 0000000000000\n\
  XXXXXXXXXXXXX";
 
 const string rightRecieverDrop1= 
@@ -163,7 +191,7 @@ const string startingPlatform1 =
  0000000000000\n\
  0000000000000\n\
  000000Q000000\n\
- 0000RXXX00000\n\
+ 00000XXX00000\n\
  0000XXXXX0000\n\
  000XXXXXXX000\n\
  00XXXXXXXXX00\n\
@@ -242,8 +270,8 @@ const string finalBossLevel =
 #define rightRecieverDropLength 1
 const string rightRecieverDrop[rightRecieverDropLength] = { rightRecieverDrop1 };
 
-#define dropRecieverLength 2
-const string dropRecievers[dropRecieverLength] = { dropRecieverRight1,dropRecieverBi1 };
+#define dropRecieverLength 3
+const string dropRecievers[dropRecieverLength] = { dropRecieverRight1,dropRecieverBi1,dropRecieverBi2 };
 
 #define startingPlatformsLength 1
 const string startingPlatforms[startingPlatformsLength] = { startingPlatform1 };
@@ -278,4 +306,4 @@ const string hallwayDrop[hallwayDropLength] = { hallwayDrop1};
 //7 50% spike block
 //2 50% block
 //T roof item w/chance of nothing
-//g ground item w/chance of nothing
+//g chance of snake

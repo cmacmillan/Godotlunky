@@ -1,4 +1,5 @@
 #pragma once
+#include "LevelLayouts.h"
 #include "Level.h"
 #include <Node2D.hpp>
 #include <stdlib.h>
@@ -227,23 +228,21 @@ Vector2 Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 					block->hasSpikes = false;
 				}
 			} else if (line[i]=='T') {
-				if (random > .5f) {
+				if (random < .7f) {
+					//nothing
+				}
+				else if (random <.85f) {
 					SpawnSpider(this, gridCoord);
 				}
 				else {
 					SpawnBat(this,gridCoord);
 				}
 			} else if (line[i]=='g') {
-				if (random < .45f) {
+				if (random < .5f) {
 					//nothing
-				} else if (random <.75f) {
-					SpawnSnake(this, gridCoord);
-				}
-				else if (random < .95f) {
-					SpawnLargeGoldPile(this, gridCoord,0.0f);
-				}
+				} 
 				else {
-					SpawnRock(this,gridCoord);
+					SpawnSnake(this, gridCoord);
 				}
 			} else if (line[i] == 'W') {
 				block->hasSpikes = true;
@@ -615,6 +614,44 @@ void Level::_ready()
 			startIndex = endIndex;
 		}
 	}
+	for (int i = 0; i < blocksXRes; i++) {
+		for (int j = 1; j < blocksYRes - 2; j++) {
+			float random = Random();
+			auto curr = GetBlock(i, j);
+			auto up = GetBlock(i, j - 1);
+			auto down = GetBlock(i, j + 1);
+			auto down2 = GetBlock(i, j + 2);
+			if (curr->present) {
+				if (!up->present && !up->hasSpikes) {
+					auto gridCoord = Vector2(i + .5f, j - 1 + .5f);
+					if (random < .90f) {
+						//nothing
+					}
+					else if (random < .96f) {
+						SpawnLargeGoldPile(this, gridCoord, 0.0f);
+					}
+					else if (random < .99f) {
+						SpawnSnake(this, gridCoord);
+					}
+					else {
+						SpawnRock(this, gridCoord);
+					}
+				}
+				if (!down->present && !down2->present) {
+					auto gridCoord = Vector2(i + .5f, j + 1 + .5f);
+					if (random < .97f) {
+						//nothing
+					}
+					else if (random < .985f) {
+						SpawnSpider(this, gridCoord);
+					}
+					else {
+						SpawnBat(this, gridCoord);
+					}
+				}
+			}
+		}
+	}
 	printf("done generating");
 	//////////////
 	int edgeThickness = 15;
@@ -778,7 +815,7 @@ void Level::_process(float delta)
 		if (fadeOutLerp <= 0) {
 			auto globals = get_node<Globals>("/root/Globals");
 			auto music = get_node<Music>("/root/Music");
-			if (!spelunker->isDead && globals->levelIndex == 1) {
+			if (!spelunker->isDead && globals->levelIndex == 4) {
 				music->nextAudio = music->creditsTheme;
 				music->audioSource->set_stream(music->creditsTheme);
 				music->audioSource->play();

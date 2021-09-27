@@ -17,7 +17,6 @@
 #include "AutoPickup.h"
 #include <Control.hpp>
 #include <Label.hpp>
-#include "LevelLayouts.h"
 #include <RandomNumberGenerator.hpp>
 #include <SceneTree.hpp>
 #include <Math.hpp>

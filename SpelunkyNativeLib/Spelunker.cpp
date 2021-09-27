@@ -380,12 +380,12 @@ void Spelunker::_process(float delta)
 		if (whipTime < .3f) 
 		{
 			whipHitbox.aabb.center = body.aabb.center+Vector2(.9*(body.isFacingRight?-1:1),-.7);
-			whipHitbox.aabb.size = Vector2(1, 1);
+			whipHitbox.aabb.size = Vector2(.9, .9);
 		}
 		else 
 		{
 			whipHitbox.aabb.center = body.aabb.center+Vector2(.9*(body.isFacingRight?1:-1),.1);
-			whipHitbox.aabb.size = Vector2(1.3, .5);
+			whipHitbox.aabb.size = Vector2(1.5, .6);
 		}
 		if (whipTime < .1) {
 			whipBack->set_visible(false);
@@ -692,10 +692,11 @@ void Spelunker::_process(float delta)
 		}
 	}
 	{
+		auto footPos = body.aabb.center + body.aabb.size / 2;
+		float footHeight = godot::Math::fmod(footPos.y,1.0f);
 		auto coord = level->WorldToGrid(get_position());
-		float footHeight = godot::Math::fmod((coord.y + body.aabb.center.y + body.aabb.size.y / 2),1.0f);
-		auto block = level->GetBlock(coord.x, coord.y);
-		if (block->hasSpikes && body.vel.y>0 && !isDead && footHeight>.5f) {
+		auto block = level->GetBlock(footPos.x,footPos.y);
+		if (block->hasSpikes && body.vel.y>0 && !isDead && footHeight<.5f && !holdingRope) {
 			auto audio = get_node<AudioStreamPlayer2D>("JumpAudio");
 			audio->set_volume_db(0.0f);
 			audio->set_stream(level->skewerSFX);
