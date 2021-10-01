@@ -64,7 +64,7 @@ margin_bottom = 273.857
 rect_min_size = Vector2( 0, 68.857 )
 rect_clip_content = false
 bbcode_enabled = true
-bbcode_text = "[center]art, sound, game design [wave amp=15]borrowed[/wave][/center] from Spelunky Classic by [rainbow freq=.2 sat=.5]Derek Yu[/rainbow]"
+bbcode_text = "[center]art, sound, game design [wave amp=25]borrowed[/wave][/center] from Spelunky Classic by [rainbow freq=.2 sat=.5]Derek Yu[/rainbow]"
 text = "art, sound, game design borrowed from Spelunky Classic by Derek Yu"
 
 [node name="WithAdditionalSoundFrom" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]

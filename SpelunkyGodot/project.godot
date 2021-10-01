@@ -15,7 +15,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Spelunky"
-run/main_scene="res://MainScene.tscn"
+run/main_scene="res://MainMenuScene.tscn"
 config/icon="res://CaveTex/icon.png"
 
 [autoload]
