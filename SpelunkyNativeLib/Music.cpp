@@ -11,6 +11,9 @@ void Music::_register_methods()
 	register_property("caveThemeMusic", &Music::caveThemeMusic, Ref<AudioStream>());
 	register_property("creditsTheme", &Music::creditsTheme, Ref<AudioStream>());
 	register_property("mainMenuTheme", &Music::mainMenuTheme, Ref<AudioStream>());
+
+	register_property("nextAudio", &Music::nextAudio, Ref<AudioStream>());
+	register_property("currentVolume", &Music::currentVolume, 0.0f);
 }
 
 void Music::_init(){}

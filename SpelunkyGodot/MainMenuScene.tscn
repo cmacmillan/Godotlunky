@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=2]
+[gd_scene load_steps=87 format=2]
 
 [ext_resource path="res://CaveTex/sBrick_0.png" type="Texture" id=1]
 [ext_resource path="res://GodolunkyLogo.png" type="Texture" id=2]
@@ -21,6 +21,11 @@
 [ext_resource path="res://MainMenuFont.tres" type="DynamicFont" id=19]
 [ext_resource path="res://StartButtonHovered.png" type="Texture" id=20]
 [ext_resource path="res://StartButtonPressed.png" type="Texture" id=21]
+[ext_resource path="res://SFX/ice_crack3.wav" type="AudioStream" id=22]
+[ext_resource path="res://SFX/ice_crack2.wav" type="AudioStream" id=23]
+[ext_resource path="res://StartButton.gd" type="Script" id=24]
+[ext_resource path="res://SFX/fadein.wav" type="AudioStream" id=25]
+[ext_resource path="res://SFX/fadeout.wav" type="AudioStream" id=26]
 
 [sub_resource type="VisualShaderNodeTexture" id=1]
 texture = ExtResource( 1 )
@@ -465,6 +470,124 @@ shader_param/LightPos2 = Vector3( 217.589, 500, 0 )
 [sub_resource type="Theme" id=50]
 default_font = ExtResource( 19 )
 
+[sub_resource type="VisualShaderNodeColorConstant" id=51]
+constant = Color( 0, 0, 0, 1 )
+
+[sub_resource type="VisualShaderNodeInput" id=52]
+input_name = "screen_uv"
+
+[sub_resource type="VisualShaderNodeExpression" id=53]
+size = Vector2( 544, 287 )
+expression = "//output0 = vec3(SCREEN_PIXEL_SIZE*SCREEN_UV*1000.0f,0);
+vec2 scrnCoord = SCREEN_PIXEL_SIZE.x*UV/SCREEN_PIXEL_SIZE;
+vec2 center = SCREEN_PIXEL_SIZE.x*vec2(.5,.5)/SCREEN_PIXEL_SIZE;
+float dist = distance(scrnCoord,center);
+output0=dist;"
+
+[sub_resource type="VisualShaderNodeScalarFunc" id=54]
+function = 18
+
+[sub_resource type="VisualShaderNodeScalarOp" id=55]
+operator = 1
+
+[sub_resource type="VisualShaderNodeScalarOp" id=56]
+operator = 2
+
+[sub_resource type="VisualShaderNodeScalarUniform" id=57]
+uniform_name = "C"
+
+[sub_resource type="VisualShaderNodeScalarUniform" id=58]
+uniform_name = "F"
+
+[sub_resource type="VisualShader" id=59]
+code = "shader_type canvas_item;
+uniform float C;
+uniform float F;
+
+
+
+void vertex() {
+// Output:0
+
+}
+
+void fragment() {
+// Color:2
+	vec3 n_out2p0 = vec3(0.000000, 0.000000, 0.000000);
+	float n_out2p1 = 1.000000;
+
+// Expression:4
+	float n_out4p0;
+	n_out4p0 = 0.0;
+	{
+		//n_out4p0 = vec3(SCREEN_PIXEL_SIZE*SCREEN_UV*1000.0f,0);
+		vec2 scrnCoord = SCREEN_PIXEL_SIZE.x*UV/SCREEN_PIXEL_SIZE;
+		vec2 center = SCREEN_PIXEL_SIZE.x*vec2(.5,.5)/SCREEN_PIXEL_SIZE;
+		float dist = distance(scrnCoord,center);
+		n_out4p0=dist;
+	}
+
+// ScalarUniform:8
+	float n_out8p0 = C;
+
+// ScalarOp:6
+	float n_out6p0 = n_out4p0 - n_out8p0;
+
+// ScalarUniform:9
+	float n_out9p0 = F;
+
+// ScalarOp:7
+	float n_out7p0 = n_out6p0 * n_out9p0;
+
+// ScalarFunc:5
+	float n_out5p0 = min(max(n_out7p0, 0.0), 1.0);
+
+// Output:0
+	COLOR.rgb = n_out2p0;
+	COLOR.a = n_out5p0;
+
+}
+
+void light() {
+// Output:0
+
+}
+"
+graph_offset = Vector2( -701, 61.25 )
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2( 580, 120 )
+nodes/fragment/2/node = SubResource( 51 )
+nodes/fragment/2/position = Vector2( -80, 60 )
+nodes/fragment/3/node = SubResource( 52 )
+nodes/fragment/3/position = Vector2( -340, 100 )
+nodes/fragment/4/node = SubResource( 53 )
+nodes/fragment/4/position = Vector2( -1140, 220 )
+nodes/fragment/4/size = Vector2( 544, 287 )
+nodes/fragment/4/input_ports = ""
+nodes/fragment/4/output_ports = "0,0,output0;"
+nodes/fragment/4/expression = "//output0 = vec3(SCREEN_PIXEL_SIZE*SCREEN_UV*1000.0f,0);
+vec2 scrnCoord = SCREEN_PIXEL_SIZE.x*UV/SCREEN_PIXEL_SIZE;
+vec2 center = SCREEN_PIXEL_SIZE.x*vec2(.5,.5)/SCREEN_PIXEL_SIZE;
+float dist = distance(scrnCoord,center);
+output0=dist;"
+nodes/fragment/5/node = SubResource( 54 )
+nodes/fragment/5/position = Vector2( 80, 260 )
+nodes/fragment/6/node = SubResource( 55 )
+nodes/fragment/6/position = Vector2( -280, 280 )
+nodes/fragment/7/node = SubResource( 56 )
+nodes/fragment/7/position = Vector2( -100, 360 )
+nodes/fragment/8/node = SubResource( 57 )
+nodes/fragment/8/position = Vector2( -520, 360 )
+nodes/fragment/9/node = SubResource( 58 )
+nodes/fragment/9/position = Vector2( -340, 473 )
+nodes/fragment/connections = PoolIntArray( 2, 0, 0, 0, 4, 0, 6, 0, 6, 0, 7, 0, 7, 0, 5, 0, 8, 0, 6, 1, 9, 0, 7, 1, 5, 0, 0, 1 )
+
+[sub_resource type="ShaderMaterial" id=60]
+shader = SubResource( 59 )
+shader_param/C = 0.0
+shader_param/F = 9000.0
+
 [node name="MainMenuScene" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -501,7 +624,6 @@ position = Vector2( 238.851, 361.357 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 41 )
 animation = "Flicker"
-frame = 3
 speed_scale = 2.0
 playing = true
 
@@ -511,7 +633,7 @@ position = Vector2( 1279.44, 361.357 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 41 )
 animation = "Flicker"
-frame = 2
+frame = 4
 speed_scale = 2.0
 playing = true
 
@@ -557,9 +679,14 @@ texture_normal = ExtResource( 18 )
 texture_pressed = ExtResource( 21 )
 texture_hover = ExtResource( 20 )
 expand = true
+script = ExtResource( 24 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+hoverStream = ExtResource( 23 )
+clickStream = ExtResource( 22 )
+fadeInAudio = ExtResource( 25 )
+fadeOutAudio = ExtResource( 26 )
 
 [node name="Label" type="Label" parent="StartButton"]
 anchor_right = 1.0
@@ -574,6 +701,11 @@ text = "START"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="StartButton"]
+
+[node name="FadeAudioPlayer" type="AudioStreamPlayer" parent="StartButton"]
+volume_db = -7.255
 
 [node name="Github" type="TextureButton" parent="."]
 anchor_left = 1.0
@@ -592,6 +724,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 url = "https://github.com/cmacmillan/Godotlunky"
+hoverStream = ExtResource( 23 )
+clickStream = ExtResource( 22 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Github"]
 
 [node name="Itch" type="TextureButton" parent="."]
 anchor_left = 1.0
@@ -610,6 +746,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 url = "https://cha5m.itch.io/godolunky"
+hoverStream = ExtResource( 23 )
+clickStream = ExtResource( 22 )
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Itch"]
+
+[node name="FullscreenWipe" type="ColorRect" parent="."]
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="mouse_entered" from="StartButton" to="StartButton" method="_on_mouse_entered"]
+[connection signal="pressed" from="StartButton" to="StartButton" method="OnButtonPressed"]
+[connection signal="mouse_entered" from="Github" to="Github" method="_on_mouse_entered"]
 [connection signal="pressed" from="Github" to="Github" method="OnButtonPressed"]
+[connection signal="mouse_entered" from="Itch" to="Itch" method="_on_mouse_entered"]
 [connection signal="pressed" from="Itch" to="Itch" method="OnButtonPressed"]

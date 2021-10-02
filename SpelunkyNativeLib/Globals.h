@@ -20,6 +20,7 @@ public:
 	int levelIndex;
 	HeldItem heldItem;
 	bool shouldRead;
+	bool isFirstLoad = true;
 
 	static void _register_methods();
 	void _init();

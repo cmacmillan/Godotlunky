@@ -21,3 +21,7 @@ func _process(delta):
 	sm.set_shader_param("LightPos1",light1)
 	sm.set_shader_param("LightPos2",light2)
 	pass
+
+
+func _ob_mouse_entered():
+	pass # Replace with function body.

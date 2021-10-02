@@ -13,5 +13,5 @@ func _ready():
 func _process(delta):
 	vBox.margin_top-=delta*45
 	if (vBox.margin_top<-(get_viewport().get_visible_rect().size.y+height)):
-		get_tree().change_scene("res://MainScene.tscn")
+		get_tree().change_scene("res://MainMenuScene.tscn")
 	pass
