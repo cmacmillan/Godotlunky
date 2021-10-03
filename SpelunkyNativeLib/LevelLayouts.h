@@ -80,7 +80,7 @@ const string hallway1 =
  0000000000000\n\
  0000000000000\n\
  00XSSS0SSSX00\n\
- 0XXXXXPXXXXX0\n\
+ 0XXXXXWXXXXX0\n\
  XXXXXXXXXXXXX";
 
 //updown
@@ -165,11 +165,107 @@ const string hallway7 =
 const string hallway8 = 
 "XXXXXXXXXXXXX\n\
  X00000000XXXX\n\
- X000000000PXX\n\
+ X000000000pXX\n\
  00000000XXXXX\n\
  XX000000000XX\n\
  XWWWWWWWWWWXX\n\
  0XXXXXXXXXXX0\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ XXXXXXXXXXXXX";
+
+const string sideRoom1 = 
+"XXXXX222XXXXX\n\
+ 2200000000000\n\
+ XXX0000000000\n\
+ XXX00000XXXX0\n\
+ XXX00000XXXX0\n\
+ XXX000XXXX000\n\
+ XXX000XXXX000\n\
+ XXXX0000XX000\n\
+ 000000000XXX0\n\
+ XXXXXX222XXXX";
+
+const string sideRoom2 = 
+"XXXXX222XXXXX\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 00XXXXXXX0000\n\
+ 0000000XXX000\n\
+ 00000000XXX00\n\
+ 00000000XXXX0\n\
+ XXXXX222XXXXX";
+
+const string sideRoom3 = 
+"XXXXX222XXXXX\n\
+ 0000000000002\n\
+ XXXXXXXXX0022\n\
+ XXX00000000XX\n\
+ XXX000000X0XX\n\
+ XXX000000X0XX\n\
+ XXXXXXXXX00XX\n\
+ 0000000000002\n\
+ XXXXX000XXXXX\n\
+ XXXXX222XXXXX";
+
+const string sideRoom4 = 
+"XXXXXXXXXXXXX\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ X00000000000X\n\
+ XX000000000XX\n\
+ XXX0000000XXX\n\
+ XXXX2000XXXX\n\
+ XXXXX222XXXXX";
+
+const string sideRoom5 =
+"XXXXXXXXXXXXX\n\
+ XXXXXXXXXXXXX\n\
+ XXXXXXXXXXXXX\n\
+ XXX00W0W00XXX\n\
+ XXX00XpX00XXX\n\
+ XXX00XXX00XXX\n\
+ XXX0000000XXX\n\
+ XXXWWWWWWWXXX\n\
+ XXXXXXXXXXXXX\n\
+ XXXXXXXXXXXXX";
+
+const string sideRoom6 = 
+"XXXXXXXXXXXXX\n\
+ 0000000000000\n\
+ 00000XXXX0000\n\
+ 0X00000000000\n\
+ 0XX00000000XX\n\
+ 0000XXX000000\n\
+ 000000000XX00\n\
+ 00XXX00000000\n\
+ 0000000000000\n\
+ 00000XXX00000";
+
+const string sideRoom7 = 
+"XXXXXXXXXXXXX\n\
+ 0XXXXXXXXXXX0\n\
+ 00XXXXXXXXX00\n\
+ 000XXXXXXX000\n\
+ 0000022222000\n\
+ 0002022220000\n\
+ 000XX7777200\n\
+ 00XXXXXXXXX0\n\
+ 0XXXXXXXXXXX0\n\
+ XXXXXXXXXXXXX";
+
+const string sideRoomX = 
+"XXXXXXXXXXXXX\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
  0000000000000\n\
  0000000000000\n\
  XXXXXXXXXXXXX";
@@ -282,6 +378,9 @@ const string endingPlatforms[endingPlatformsLength] = { endingPlatform1 };
 #define hallwayLength 8
 const string hallway[hallwayLength] = { hallway1,hallway2,hallway3,hallway4,hallway5,hallway6,hallway7,hallway8 };
 
+#define sideRoomLength 7
+const string sideRooms[sideRoomLength] = { sideRoom1,sideRoom2,sideRoom3,sideRoom4,sideRoom5,sideRoom6,sideRoom7};
+
 #define hallwayDropLength 1
 const string hallwayDrop[hallwayDropLength] = { hallwayDrop1};
 
@@ -292,7 +391,8 @@ const string hallwayDrop[hallwayDropLength] = { hallwayDrop1};
 //W Spike
 //R Rock
 //G Shotgun
-//P PrizeBox (or gold chance)
+//P PrizeBox (or nothing chance)
+//p PrizeBox (100%)
 //r SmallRopePile
 //K LargeBombBox
 //k SmallBombBox

@@ -198,8 +198,12 @@ Vector2 Level::CopyLayoutIntoBlocks(string layout, int x, int y,bool flipX)
 				SpawnLargeGoldPile(this, gridCoord,0.0f);
 			} else if(line[i] == 'r') {
 				SpawnSmallRopePile(this, gridCoord,0.0f);
+			} else if (line[i] == 'p') {
+				SpawnPrizeBox(this, gridCoord);
 			} else if (line[i] == 'P') {
-				SpawnPrizeBox(this,gridCoord);//chance of this just being gold?
+				if (random > .5f) {//50% chance of nothing
+					SpawnPrizeBox(this, gridCoord);
+				}
 			} else if(line[i] == '9') {
 				SpawnGodolmec(this, gridCoord);
 			} else if (line[i] == 'B') {
@@ -552,6 +556,7 @@ void Level::_ready()
 			}
 			int direction = godot::Math::sign(endIndex - startIndex);
 			for (int i = startIndex; i != endIndex + direction; i += direction) {
+				metaBlockMask[i + j*numMetaBlocksWidth] = true;
 				string metaBlock;
 				bool flip = false;
 				if (i == startIndex && j == 0) //starting platform
@@ -613,6 +618,15 @@ void Level::_ready()
 				}
 			}
 			startIndex = endIndex;
+		}
+		for (int i = 0; i < numMetaBlocksWidth; i++) {
+			for (int j = 0; j < numMetaBlocksHeight; j++) {
+				if (!metaBlockMask[i+j*numMetaBlocksWidth]) {
+					auto metaBlock = sideRooms[(int)(sideRoomLength* Random())];
+					auto flip = Random() > .5f;
+					CopyLayoutIntoBlocks(metaBlock, i * metaBlockWidth + 1, j * metaBlockHeight + 1, flip);
+				}
+			}
 		}
 	}
 	for (int i = 0; i < blocksXRes; i++) {
