@@ -21,6 +21,10 @@ public:
 	HeldItem heldItem;
 	bool shouldRead;
 	bool isFirstLoad = true;
+	int damageSource;
+
+	int highScore;
+	int maxDepthBeaten;
 
 	static void _register_methods();
 	void _init();

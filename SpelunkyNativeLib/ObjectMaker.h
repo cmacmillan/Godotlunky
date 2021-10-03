@@ -33,6 +33,7 @@ Godolmec* SpawnGodolmec(Level* level, Vector2 gridCoord);
 
 //AutoPickup
 AutoPickup* SpawnLargeGoldPile(Level* level, Vector2 gridCoord,float timeUntilActive);
+AutoPickup* SpawnSmallGoldPile(Level* level, Vector2 gridCoord,float timeUntilActive);
 AutoPickup* SpawnLargeBombBox(Level* level, Vector2 gridCoord,float timeUntilActive);
 AutoPickup* SpawnSmallBombPile(Level* level, Vector2 gridCoord,float timeUntilActive);
 AutoPickup* SpawnSmallRopePile(Level* level, Vector2 gridCoord,float timeUntilActive);

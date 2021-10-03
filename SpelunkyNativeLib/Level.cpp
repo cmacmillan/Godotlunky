@@ -116,6 +116,7 @@ void Level::_register_methods()
 
 	//auto pickups
 	register_property("largeGoldScene", &Level::largeGoldScene, Ref<PackedScene>());
+	register_property("smallGoldScene", &Level::smallGoldScene, Ref<PackedScene>());
 	register_property("ropePileScene", &Level::ropePileScene, Ref<PackedScene>());
 	register_property("smallBombPileScene", &Level::smallBombPileScene, Ref<PackedScene>());
 	register_property("largeBombBoxScene", &Level::largeBombBoxScene, Ref<PackedScene>());
@@ -616,6 +617,8 @@ void Level::_ready()
 	}
 	for (int i = 0; i < blocksXRes; i++) {
 		for (int j = 1; j < blocksYRes - 2; j++) {
+			if (spawnPos.distance_to(Vector2(i, j)) < 7)
+				continue;
 			float random = Random();
 			auto curr = GetBlock(i, j);
 			auto up = GetBlock(i, j - 1);
@@ -627,7 +630,11 @@ void Level::_ready()
 					if (random < .91f) {
 						//nothing
 					}
-					else if (random < .97f) {
+					else if (random < .94f)
+					{
+						SpawnSmallGoldPile(this, gridCoord, 0.0f);
+					}
+					else if (random < .96f) {
 						SpawnLargeGoldPile(this, gridCoord, 0.0f);
 					}
 					else if (random < .99f) {
@@ -791,6 +798,15 @@ RID Level::GetRid(VisualServer* vs) {
 }
 #endif
 
+void Level::WriteHighScoreToGlobals() {
+	auto globals = get_node<Globals>("/root/Globals");
+	globals->highScore = godot::Math::max(globals->highScore, globals->cashCount);
+	globals->maxDepthBeaten = godot::Math::max(globals->maxDepthBeaten, globals->levelIndex);
+	globals->shouldRead = false;
+	globals->levelIndex = 0;
+}
+
+
 std::vector<Body*>* hurtboxesToRemove = nullptr;
 std::vector<HitboxData*>* hitboxesToRemove= nullptr;
 std::vector<AutoPickup*>* autopickupsToRemove= nullptr;
@@ -820,10 +836,18 @@ void Level::_process(float delta)
 				music->audioSource->set_stream(music->creditsTheme);
 				music->audioSource->play();
 				music->currentVolume = 1.0f;
+				WriteHighScoreToGlobals();
 				get_tree()->change_scene("res://Credits.tscn");
 			}
 			else {
-				get_tree()->change_scene("res://MainScene.tscn");
+				if (spelunker->isDead) {
+					music->nextAudio = nullptr;
+					get_tree()->change_scene("res://RetryScreen.tscn");
+				}
+				else
+				{
+					get_tree()->change_scene("res://MainScene.tscn");
+				}
 			}
 			return;
 		}

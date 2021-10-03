@@ -10,6 +10,7 @@ void Globals::_register_methods()
 	register_method("_ready", &Globals::_ready);
 	register_method("_process", &Globals::_process);
 	register_property("isFirstLoad", &Globals::isFirstLoad, true);
+	register_property("damageSource", &Globals::damageSource, 0);
 }
 
 void Globals::_init(){}

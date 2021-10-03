@@ -67,7 +67,7 @@ bool Body::process(float delta, bool applyGravity, bool applyFriction)
 	}
 	if (hitTerrain)
 	{
-		if (playHitSFX && pickedBy==nullptr) {
+		if (playHitSFX && pickedBy==nullptr && level->fullscreenWipePercent==1) {
 			if ((normal.x != 0 || normal.y != 0) && (vel.dot(-normal) > 500))
 			{
 				level->PlayAudio(hitSFX==nullptr?level->defaultImpactSFX:hitSFX, aabb.center);

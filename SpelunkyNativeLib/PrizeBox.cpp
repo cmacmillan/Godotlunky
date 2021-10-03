@@ -14,10 +14,10 @@ void PrizeBox::_register_methods()
 
 #define prizeBoxProbabilitiesLength 4
 constexpr float prizeBoxProbabilities[prizeBoxProbabilitiesLength] = {
-	10.0f,//rope
-	10.0f,//small bomb
-	2.0f,//big bomb
-	2.0f,//shotgun
+	25.0f,//rope
+	20.0f,//small bomb
+	1.0f,//big bomb
+	5.0f,//shotgun
 };
 
 constexpr float PrizeBoxProbSum() {

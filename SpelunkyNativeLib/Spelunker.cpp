@@ -50,7 +50,9 @@ bool Spelunker::TakeDamage(int damageAmount,bool stun,vector<HitboxData*>* hitbo
 }
 void Spelunker::Die(DamageSource source,bool playSound) {
 	if (!isDead && !isEnteringDoor) {
-		globals->shouldRead = false;
+		auto globals = get_node<Globals>("/root/Globals");
+		globals->damageSource = (int)source;
+		level->WriteHighScoreToGlobals();
 		if (playSound)
 			level->PlayAudio(level->hitSFX, body.aabb.center);
 		for (int i = 0; i < 10; i++) {

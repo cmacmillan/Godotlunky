@@ -51,7 +51,7 @@ class AutoPickup;
 class Godolmec;
 
 
-#define showDebugHitboxes
+//#define showDebugHitboxes
 
 class Level : public Node2D
 {
@@ -121,6 +121,7 @@ public:
 
 	//auto pickups
 	Ref<PackedScene> largeGoldScene;
+	Ref<PackedScene> smallGoldScene;
 	Ref<PackedScene> ropePileScene;
 	Ref<PackedScene> smallBombPileScene;
 	Ref<PackedScene> largeBombBoxScene;
@@ -207,6 +208,7 @@ public:
 	Vector2 CopyLayoutIntoBlocks(string layout, int x, int y, bool flipX);
 	float Random();
 	void UpdateMeshes();
+	void WriteHighScoreToGlobals();
 	Level();
 	~Level();
 };

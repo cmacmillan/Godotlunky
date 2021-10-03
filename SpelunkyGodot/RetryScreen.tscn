@@ -1,0 +1,132 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://SwitchToSceneButton.gd" type="Script" id=1]
+[ext_resource path="res://MainMenuFont.tres" type="DynamicFont" id=2]
+[ext_resource path="res://StartButtonHovered.png" type="Texture" id=3]
+[ext_resource path="res://StartButtonPressed.png" type="Texture" id=4]
+[ext_resource path="res://StartButton.png" type="Texture" id=5]
+[ext_resource path="res://SFX/ice_crack3.wav" type="AudioStream" id=6]
+[ext_resource path="res://SFX/ice_crack2.wav" type="AudioStream" id=7]
+[ext_resource path="res://DeathReason.gd" type="Script" id=8]
+
+[sub_resource type="Theme" id=1]
+default_font = ExtResource( 2 )
+
+[node name="RetryScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Retry" type="TextureButton" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -169.5
+margin_top = -54.343
+margin_right = 169.5
+margin_bottom = 51.657
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 3 )
+expand = true
+stretch_mode = 4
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+hoverStream = ExtResource( 7 )
+clickStream = ExtResource( 6 )
+sceneName = "res://MainScene.tscn"
+
+[node name="Label" type="Label" parent="Retry"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 15.0
+margin_top = 22.0
+margin_right = 15.0
+margin_bottom = 22.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "RETRY (K)"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Retry"]
+
+[node name="Menu" type="TextureButton" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -169.5
+margin_top = 78.017
+margin_right = 169.5
+margin_bottom = 184.016
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 3 )
+expand = true
+stretch_mode = 4
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+hoverStream = ExtResource( 7 )
+clickStream = ExtResource( 6 )
+sceneName = "res://MainMenuScene.tscn"
+
+[node name="Label" type="Label" parent="Menu"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 62.0
+margin_top = 25.0
+margin_right = 62.0
+margin_bottom = 25.0
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "MENU"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Menu"]
+
+[node name="Label" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -661.0
+margin_top = -150.712
+margin_right = 661.0
+margin_bottom = -70.712
+theme = SubResource( 1 )
+custom_colors/font_color = Color( 1, 0.501961, 0.501961, 1 )
+text = "You got smushed..."
+align = 1
+valign = 1
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="mouse_entered" from="Retry" to="Retry" method="_on_mouse_entered"]
+[connection signal="pressed" from="Retry" to="Retry" method="OnButtonPressed"]
+[connection signal="mouse_entered" from="Menu" to="Menu" method="_on_mouse_entered"]
+[connection signal="pressed" from="Menu" to="Menu" method="OnButtonPressed"]

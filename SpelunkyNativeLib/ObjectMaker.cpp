@@ -50,6 +50,13 @@ AutoPickup* SpawnLargeGoldPile(Level* level, Vector2 gridCoord,float timeUntilAc
 	pickup->timeUntilActive = timeUntilActive;
 	return PutAtAndChildToLevel(pickup, gridCoord, level,true);
 }
+
+AutoPickup* SpawnSmallGoldPile(Level* level, Vector2 gridCoord, float timeUntilActive) 
+{
+	auto pickup = level->cast_to<AutoPickup>(level->smallGoldScene->instance());
+	pickup->timeUntilActive = timeUntilActive;
+	return PutAtAndChildToLevel(pickup, gridCoord, level,true);
+}
 AutoPickup* SpawnLargeBombBox(Level* level, Vector2 gridCoord,float timeUntilActive) { 
 	auto pickup = level->cast_to<AutoPickup>(level->largeBombBoxScene->instance());
 	pickup->timeUntilActive = timeUntilActive;

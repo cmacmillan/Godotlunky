@@ -61,7 +61,7 @@ const string dropRecieverRight1 =
 
 const string hallwayDrop1 = 
 "XXXXXXXXXXXXX\n\
- 0000000M00000\n\
+ 0000000000000\n\
  0000000000000\n\
  0000000000000\n\
  0000000000000\n\
@@ -176,7 +176,7 @@ const string hallway8 =
 
 const string rightRecieverDrop1= 
 "XXXXXXXXXXXXX\n\
- X00000B000000\n\
+ X000000000000\n\
  X000000000000\n\
  X000000000000\n\
  X000000000000\n\
