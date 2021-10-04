@@ -408,6 +408,8 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 	Vector2 lowerLeft = center + Vector2(-half.x, half.y);
 	Vector2 lowerRight = center + half;
 
+	endPos = center;
+
 	//this only really needs to be in the correct cell, not even in exactly the previous pos
 	Vector2 prevUpperLeft = previousPos- half;
 	Vector2 prevUpperRight = previousPos + Vector2(half.x, -half.y);
@@ -436,9 +438,14 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 		}
 	}
 
+	upperLeft = endPos - half;
+	upperRight = endPos + Vector2(half.x, -half.y);
+	lowerLeft = endPos + Vector2(-half.x, half.y);
+	lowerRight = endPos + half;
+
 	bool horizHit= false;
 	if (center.x > previousPos.x) {
-		endPos.x = MarchHorizontal(previousPos.x+half.x,upperRight.x,prevUpperRight.y,prevLowerRight.y,horizHit)-half.x;
+		endPos.x = MarchHorizontal(previousPos.x+half.x,upperRight.x,upperRight.y,lowerRight.y,horizHit)-half.x;
 		if (horizHit) {
 			if (customNorm.x>0) {
 				isSmushed = true;
@@ -447,7 +454,7 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 		}
 	}
 	else if (center.x < previousPos.x) {
-		endPos.x = MarchHorizontal(previousPos.x - half.x, upperLeft.x, prevUpperLeft.y, prevLowerLeft.y,horizHit)+half.x;
+		endPos.x = MarchHorizontal(previousPos.x - half.x, upperLeft.x, upperLeft.y, lowerLeft.y,horizHit)+half.x;
 		if (horizHit) {
 			if (customNorm.x<0) {
 				isSmushed = true;
@@ -455,6 +462,7 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 			normal += Vector2(1,0);
 		}
 	}
+
 
 	bool retr;
 	retr = vertHit || horizHit || hitCustom;
@@ -604,12 +612,14 @@ void Level::_ready()
 				}
 				Vector2 retr = CopyLayoutIntoBlocks(metaBlock, i * metaBlockWidth + 1, j * metaBlockHeight + 1, flip);
 				if (j == 0 && i == startIndex) {
+					start = retr+Vector2(-.5f,.5f);
 					auto node = cast_to<Node2D>(doorScene->instance());
 					this->add_child(node);
 					node->set_position(GridToWorld(retr));
 					spawnPos = retr;
 				}
 				else if (j == numMetaBlocksHeight - 1 && i == endIndex) {
+					end = retr+Vector2(-.5f,.5f);
 					exitDoor = cast_to<Node2D>(doorScene->instance());
 					this->add_child(exitDoor);
 					exitDoor->set_position(GridToWorld(retr));
@@ -622,52 +632,58 @@ void Level::_ready()
 		for (int i = 0; i < numMetaBlocksWidth; i++) {
 			for (int j = 0; j < numMetaBlocksHeight; j++) {
 				if (!metaBlockMask[i+j*numMetaBlocksWidth]) {
-					auto metaBlock = sideRooms[(int)(sideRoomLength* Random())];
-					auto flip = Random() > .5f;
-					CopyLayoutIntoBlocks(metaBlock, i * metaBlockWidth + 1, j * metaBlockHeight + 1, flip);
+					if (Random() < .05f) {
+						auto flip = Random() > .5f;
+						CopyLayoutIntoBlocks(sidePrizeRoom, i * metaBlockWidth + 1, j * metaBlockHeight + 1, flip);
+					}
+					else {
+						auto metaBlock = sideRooms[(int)(sideRoomLength * Random())];
+						auto flip = Random() > .5f;
+						CopyLayoutIntoBlocks(metaBlock, i * metaBlockWidth + 1, j * metaBlockHeight + 1, flip);
+					}
 				}
 			}
 		}
-	}
-	for (int i = 0; i < blocksXRes; i++) {
-		for (int j = 1; j < blocksYRes - 2; j++) {
-			if (spawnPos.distance_to(Vector2(i, j)) < 7)
-				continue;
-			float random = Random();
-			auto curr = GetBlock(i, j);
-			auto up = GetBlock(i, j - 1);
-			auto down = GetBlock(i, j + 1);
-			auto down2 = GetBlock(i, j + 2);
-			if (curr->present) {
-				if (!up->present && !up->hasSpikes) {
-					auto gridCoord = Vector2(i + .5f, j - 1 + .5f);
-					if (random < .91f) {
-						//nothing
+		for (int i = 0; i < blocksXRes; i++) {
+			for (int j = 1; j < blocksYRes - 2; j++) {
+				if (spawnPos.distance_to(Vector2(i, j)) < 7)
+					continue;
+				float random = Random();
+				auto curr = GetBlock(i, j);
+				auto up = GetBlock(i, j - 1);
+				auto down = GetBlock(i, j + 1);
+				auto down2 = GetBlock(i, j + 2);
+				if (curr->present) {
+					if (!up->present && !up->hasSpikes) {
+						auto gridCoord = Vector2(i + .5f, j - 1 + .5f);
+						if (random < .91f) {
+							//nothing
+						}
+						else if (random < .94f)
+						{
+							SpawnSmallGoldPile(this, gridCoord, 0.0f);
+						}
+						else if (random < .96f) {
+							SpawnLargeGoldPile(this, gridCoord, 0.0f);
+						}
+						else if (random < .99f) {
+							SpawnSnake(this, gridCoord);
+						}
+						else {
+							SpawnRock(this, gridCoord);
+						}
 					}
-					else if (random < .94f)
-					{
-						SpawnSmallGoldPile(this, gridCoord, 0.0f);
-					}
-					else if (random < .96f) {
-						SpawnLargeGoldPile(this, gridCoord, 0.0f);
-					}
-					else if (random < .99f) {
-						SpawnSnake(this, gridCoord);
-					}
-					else {
-						SpawnRock(this, gridCoord);
-					}
-				}
-				if (!down->present && !down2->present) {
-					auto gridCoord = Vector2(i + .5f, j + 1 + .5f);
-					if (random < .98f) {
-						//nothing
-					}
-					else if (random < .99f) {
-						SpawnSpider(this, gridCoord);
-					}
-					else {
-						SpawnBat(this, gridCoord);
+					if (!down->present && !down2->present) {
+						auto gridCoord = Vector2(i + .5f, j + 1 + .5f);
+						if (random < .98f) {
+							//nothing
+						}
+						else if (random < .99f) {
+							SpawnSpider(this, gridCoord);
+						}
+						else {
+							SpawnBat(this, gridCoord);
+						}
 					}
 				}
 			}

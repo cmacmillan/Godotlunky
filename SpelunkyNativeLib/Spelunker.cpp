@@ -567,7 +567,7 @@ void Spelunker::_process(float delta)
 			{
 				Vector2 pos = body.aabb.center;
 				float xOffset = pos.x + .5f;
-				if (!level->GetBlock(xOffset - 1, pos.y + 1)->present && level->GetBlock(xOffset, pos.y + 1)->present) {
+				if (!level->GetBlock(xOffset - 1, pos.y + 1)->present && level->GetBlock(xOffset, pos.y + 1)->present &&!level->GetBlock(xOffset-1, pos.y)->present) {
 					holdingLedge = true;
 					baseLedgeCoords = Vector2(godot::Math::floor(xOffset)-.4f,godot::Math::floor(pos.y)+1.15f);
 					ledgeCoords = baseLedgeCoords+ledgeFlipOffsets[0];
@@ -609,7 +609,7 @@ void Spelunker::_process(float delta)
 			{
 				Vector2 pos = body.aabb.center;
 				float xOffset = pos.x - .5f;
-				if (!level->GetBlock(xOffset + 1, pos.y + 1)->present && level->GetBlock(xOffset, pos.y + 1)->present) {
+				if (!level->GetBlock(xOffset + 1, pos.y + 1)->present && level->GetBlock(xOffset, pos.y + 1)->present && !level->GetBlock(xOffset+1, pos.y)->present) {
 					holdingLedge = true;
 					baseLedgeCoords = Vector2(godot::Math::floor(xOffset)+1.4f,godot::Math::floor(pos.y)+1.15f);
 					auto offset = ledgeFlipOffsets[0];

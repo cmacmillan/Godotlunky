@@ -12,12 +12,12 @@ const string dropRecieverBi1 =
 "XXXXX000XXXXX\n\
  0000000000000\n\
  0000000000000\n\
- 000000X000000\n\
- 00000XXX00000\n\
- 0000XXXXX0000\n\
- 000XXXXXXX000\n\
- 00XXXXXXXXX00\n\
- 0XXXXXXXXXXX0\n\
+ 0000002000000\n\
+ 0000022200000\n\
+ 00002XXX20000\n\
+ 0002XXXXX2000\n\
+ 002XXXXXXX200\n\
+ 02XXXXXXXXX20\n\
  XXXXXXXXXXXXX";
 
 /*
@@ -47,15 +47,39 @@ const string dropRecieverBi2 =
  7777777777777\n\
  XXXXXXXXXXXXX";
 
+const string dropRecieverBi3 = 
+"XXXXX000XXXXX\n\
+ 222XX000XX222\n\
+ 0022200022200\n\
+ 002220000X200\n\
+ 00222000X220\n\
+ 0022200022200\n\
+ 0002200022200\n\
+ 0000000000002\n\
+ X00000020000X\n\
+ XXXXXXXXXXXXX";
+
+const string dropRecieverBi4 = 
+"XXXXX000XXXXX\n\
+ 2222X000000X0\n\
+ 0002XX2XX20X0\n\
+ 0000000000000\n\
+ 00000000X2200\n\
+ 0000000000000\n\
+ 00002X2000000\n\
+ 0000000000000\n\
+ XX00777777700\n\
+ XXXXXXXXXXXXX";
+
 const string dropRecieverRight1 = 
 "XXXXX000XXXXX\n\
  XXXXX00000000\n\
- XXXXXX0000000\n\
- XXXXXXX000000\n\
- X0000XXX00000\n\
- X000XXXXX0000\n\
- X00XXXXXXX000\n\
- XPXXXXXXXXX00\n\
+ XXXX220000000\n\
+ XXXX222000000\n\
+ 0000022X00000\n\
+ 0000XXXX20000\n\
+ 000XXXXXXX000\n\
+ 00XXXXXXXX200\n\
  XXXXXXXXXXXX0\n\
  XXXXXXXXXXXXX";
 
@@ -222,10 +246,10 @@ const string sideRoom4 =
  XXXX2000XXXX\n\
  XXXXX222XXXXX";
 
-const string sideRoom5 =
+const string sidePrizeRoom =
 "XXXXXXXXXXXXX\n\
  XXXXXXXXXXXXX\n\
- XXXXXXXXXXXXX\n\
+ XXX0000000XXX\n\
  XXX00W0W00XXX\n\
  XXX00XpX00XXX\n\
  XXX00XXX00XXX\n\
@@ -272,13 +296,13 @@ const string sideRoomX =
 
 const string rightRecieverDrop1= 
 "XXXXXXXXXXXXX\n\
- X000000000000\n\
- X000000000000\n\
- X000000000000\n\
- X000000000000\n\
- X000000000000\n\
- X000000000000\n\
- X0XXX000XXX00\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 0000000000000\n\
+ 00XXX000XXX00\n\
  XXXX00000XXX0\n\
  XXXXX000XXXXX";
 
@@ -288,9 +312,9 @@ const string startingPlatform1 =
  0000000000000\n\
  000000Q000000\n\
  00000XXX00000\n\
- 0000XXXXX0000\n\
- 000XXXXXXX000\n\
- 00XXXXXXXXX00\n\
+ 00002XXX20000\n\
+ 000XXXXX2X000\n\
+ 002XXXXXXX200\n\
  0XXXXXXXXXXX0\n\
  XXXXXXXXXXXXX";
 
@@ -366,8 +390,8 @@ const string finalBossLevel =
 #define rightRecieverDropLength 1
 const string rightRecieverDrop[rightRecieverDropLength] = { rightRecieverDrop1 };
 
-#define dropRecieverLength 3
-const string dropRecievers[dropRecieverLength] = { dropRecieverRight1,dropRecieverBi1,dropRecieverBi2 };
+#define dropRecieverLength 5
+const string dropRecievers[dropRecieverLength] = { dropRecieverRight1,dropRecieverBi1,dropRecieverBi2,dropRecieverBi3,dropRecieverBi4 };
 
 #define startingPlatformsLength 1
 const string startingPlatforms[startingPlatformsLength] = { startingPlatform1 };
@@ -378,8 +402,8 @@ const string endingPlatforms[endingPlatformsLength] = { endingPlatform1 };
 #define hallwayLength 8
 const string hallway[hallwayLength] = { hallway1,hallway2,hallway3,hallway4,hallway5,hallway6,hallway7,hallway8 };
 
-#define sideRoomLength 7
-const string sideRooms[sideRoomLength] = { sideRoom1,sideRoom2,sideRoom3,sideRoom4,sideRoom5,sideRoom6,sideRoom7};
+#define sideRoomLength 6
+const string sideRooms[sideRoomLength] = { sideRoom1,sideRoom2,sideRoom3,sideRoom4,sideRoom6,sideRoom7};
 
 #define hallwayDropLength 1
 const string hallwayDrop[hallwayDropLength] = { hallwayDrop1};
