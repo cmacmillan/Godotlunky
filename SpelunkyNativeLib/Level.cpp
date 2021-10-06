@@ -418,7 +418,7 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 
 	bool vertHit= false;
 	if (center.y > previousPos.y) {
-		endPos.y = MarchVertical(previousPos.y + half.y, lowerLeft.y, prevLowerLeft.x, prevLowerRight.x,vertHit)-half.y;
+		endPos.y = MarchVertical(previousPos.y + half.y, lowerLeft.y, prevLowerLeft.x, prevLowerRight.x,vertHit)-half.y;//these need to use prev because we can't prematurely handle the x-offset
 		if (vertHit) {
 			if (customNorm.y>0) {
 				isSmushed = true;
@@ -429,7 +429,7 @@ bool Level::CheckCollisionWithTerrain(SpelAABB aabb, Vector2 previousPos, Vector
 	}
 	else if (center.y < previousPos.y)
 	{
-		endPos.y = MarchVertical(previousPos.y - half.y, upperLeft.y, prevUpperLeft.x, prevUpperRight.x,vertHit)+half.y;
+		endPos.y = MarchVertical(previousPos.y - half.y, upperLeft.y, prevUpperLeft.x, prevUpperRight.x,vertHit)+half.y;//these need to use prev because we can't prematurely handle the x-offset
 		if (vertHit) {
 			if (customNorm.y<0) {
 				isSmushed = true;

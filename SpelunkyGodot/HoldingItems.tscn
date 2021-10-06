@@ -1,0 +1,43 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://KeybindFontSmall.tres" type="DynamicFont" id=1]
+[ext_resource path="res://StartButton.png" type="Texture" id=2]
+
+[node name="HoldingItems" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 193.0
+margin_top = 676.0
+margin_right = -673.0
+margin_bottom = 50.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Small" type="Label" parent="TextureRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -1.0
+margin_top = -117.0
+margin_right = -14.0
+margin_bottom = 106.0
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "Holding Items
+crouch + whip = pickup
+whip = throw
+crouch + whip = drop"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -1,0 +1,342 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://KeybindFontSmall.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Scenes/ClassicLayout.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/NouveauLayout.tscn" type="PackedScene" id=3]
+[ext_resource path="res://StartButton.png" type="Texture" id=4]
+[ext_resource path="res://ArrowLeft.png" type="Texture" id=5]
+[ext_resource path="res://ArrowRightPressed.png" type="Texture" id=6]
+[ext_resource path="res://ArrowRightHovered.png" type="Texture" id=7]
+[ext_resource path="res://ArrowRight.png" type="Texture" id=8]
+[ext_resource path="res://ArrowLeftPressed.png" type="Texture" id=9]
+[ext_resource path="res://ArrowLeftHovered.png" type="Texture" id=10]
+[ext_resource path="res://KeybindFontLarge.tres" type="DynamicFont" id=11]
+[ext_resource path="res://Settings.gd" type="Script" id=12]
+[ext_resource path="res://SFX/ice_crack2.wav" type="AudioStream" id=13]
+[ext_resource path="res://SFX/ice_crack3.wav" type="AudioStream" id=14]
+[ext_resource path="res://CheckboxChecked.png" type="Texture" id=15]
+[ext_resource path="res://CheckboxCheckedHovered.png" type="Texture" id=16]
+[ext_resource path="res://StartButtonPressed.png" type="Texture" id=17]
+[ext_resource path="res://StartButtonHovered.png" type="Texture" id=18]
+[ext_resource path="res://CheckboxUnchecked.png" type="Texture" id=19]
+[ext_resource path="res://CheckboxUncheckedHovered.png" type="Texture" id=20]
+
+[node name="Settings" type="Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -768.0
+margin_top = -432.0
+margin_right = 768.0
+margin_bottom = 432.0
+script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+hoverSFX = ExtResource( 13 )
+clickSFX = ExtResource( 14 )
+hoverCheckedTexture = ExtResource( 16 )
+checkedTexture = ExtResource( 15 )
+hoverUncheckedTexture = ExtResource( 20 )
+uncheckedTexture = ExtResource( 19 )
+attentionColor = Color( 0.972549, 1, 0.211765, 1 )
+
+[node name="NouveauLayout" parent="." instance=ExtResource( 3 )]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -1916.0
+margin_top = -690.0
+margin_right = -380.0
+margin_bottom = 174.0
+
+[node name="ClassicLayout" parent="." instance=ExtResource( 2 )]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -1665.0
+margin_top = -817.0
+margin_right = -129.0
+margin_bottom = 47.0
+
+[node name="pickupinfo" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -1441.0
+margin_top = -193.0
+margin_right = -771.0
+margin_bottom = 45.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="pickupinfo"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Small" type="Label" parent="pickupinfo/TextureRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -3.0
+margin_top = -119.0
+margin_right = -16.0
+margin_bottom = 104.0
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "whip + crouch = pick up
+whip = throw
+whip + crouch = drop"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ControlModeSelector" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -1437.0
+margin_top = -1062.0
+margin_right = -770.0
+margin_bottom = -824.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Left" type="TextureButton" parent="ControlModeSelector"]
+margin_left = -108.0
+margin_top = 61.0
+margin_right = -39.0
+margin_bottom = 179.0
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 9 )
+texture_hover = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Right" type="TextureButton" parent="ControlModeSelector"]
+margin_left = 699.0
+margin_top = 61.0
+margin_right = 768.0
+margin_bottom = 179.0
+texture_normal = ExtResource( 8 )
+texture_pressed = ExtResource( 6 )
+texture_hover = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Small" type="Label" parent="ControlModeSelector"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 4.0
+margin_top = -121.0
+margin_right = -6.0
+margin_bottom = -57.0
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "Control Layout"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Large" type="Label" parent="ControlModeSelector"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -3.0
+margin_top = -80.0
+margin_right = -13.0
+margin_bottom = 106.0
+custom_fonts/font = ExtResource( 11 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "Nouveau"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Music" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -1437.0
+margin_top = -1648.0
+margin_right = -770.0
+margin_bottom = -1410.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Large" type="Label" parent="Music"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -3.0
+margin_top = -119.0
+margin_right = -13.0
+margin_bottom = 103.033
+custom_fonts/font = ExtResource( 11 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "Music"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureButton" type="TextureButton" parent="Music"]
+margin_left = 767.0
+margin_top = 49.0
+margin_right = 919.0
+margin_bottom = 201.0
+texture_normal = ExtResource( 15 )
+texture_hover = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AutoRun" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -1437.0
+margin_top = -1359.0
+margin_right = -770.0
+margin_bottom = -1121.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Large" type="Label" parent="AutoRun"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -3.0
+margin_top = -119.0
+margin_right = -13.0
+margin_bottom = 103.033
+custom_fonts/font = ExtResource( 11 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "Auto-Run"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureButton" type="TextureButton" parent="AutoRun"]
+margin_left = 767.0
+margin_top = 55.0
+margin_right = 919.0
+margin_bottom = 207.0
+texture_normal = ExtResource( 15 )
+texture_hover = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Quit" type="TextureButton" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -1437.0
+margin_top = 191.0
+margin_right = -770.0
+margin_bottom = 429.0
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 17 )
+texture_hover = ExtResource( 18 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Large" type="Label" parent="Quit"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -328.5
+margin_top = -111.016
+margin_right = 328.5
+margin_bottom = 111.016
+custom_fonts/font = ExtResource( 11 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "Quit"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ResumeAndBack" type="TextureButton" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -1440.0
+margin_top = -1959.0
+margin_right = -773.0
+margin_bottom = -1721.0
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 17 )
+texture_hover = ExtResource( 18 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Large" type="Label" parent="ResumeAndBack"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -328.5
+margin_top = -111.016
+margin_right = 328.5
+margin_bottom = 111.016
+custom_fonts/font = ExtResource( 11 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "Resume"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="mouse_entered" from="ControlModeSelector/Left" to="." method="ButtonHovered"]
+[connection signal="pressed" from="ControlModeSelector/Left" to="." method="ChangeModeButtonPressed"]
+[connection signal="mouse_entered" from="ControlModeSelector/Right" to="." method="ButtonHovered"]
+[connection signal="pressed" from="ControlModeSelector/Right" to="." method="ChangeModeButtonPressed"]
+[connection signal="mouse_entered" from="Music/TextureButton" to="." method="ButtonHovered"]
+[connection signal="pressed" from="Music/TextureButton" to="." method="MusicPressed"]
+[connection signal="mouse_entered" from="AutoRun/TextureButton" to="." method="ButtonHovered"]
+[connection signal="pressed" from="AutoRun/TextureButton" to="." method="AutoRunPressed"]
+[connection signal="mouse_entered" from="Quit" to="." method="ButtonHovered"]
+[connection signal="pressed" from="Quit" to="." method="QuitPressed"]
+[connection signal="mouse_entered" from="ResumeAndBack" to="." method="ButtonHovered"]
+[connection signal="pressed" from="ResumeAndBack" to="." method="ResumeAndBackPressed"]

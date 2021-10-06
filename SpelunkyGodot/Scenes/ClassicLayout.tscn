@@ -1,0 +1,313 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Scenes/Key.tscn" type="PackedScene" id=1]
+[ext_resource path="res://KeySpot2.png" type="Texture" id=2]
+[ext_resource path="res://KeySpot3.png" type="Texture" id=3]
+[ext_resource path="res://ArrowDirection.png" type="Texture" id=4]
+[ext_resource path="res://KeySpot1.png" type="Texture" id=5]
+[ext_resource path="res://KeybindFontSmall.tres" type="DynamicFont" id=6]
+[ext_resource path="res://KeybindFontLarge.tres" type="DynamicFont" id=7]
+[ext_resource path="res://StartButton.png" type="Texture" id=8]
+
+[node name="ClassicLayout" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Z" parent="." instance=ExtResource( 1 )]
+margin_left = 198.0
+margin_top = 309.0
+margin_right = -1100.0
+margin_bottom = -317.0
+
+[node name="Big" parent="Z/TextureRect" index="0"]
+text = "Z"
+
+[node name="Small" parent="Z/TextureRect" index="1"]
+text = "jump"
+
+[node name="X" parent="." instance=ExtResource( 1 )]
+margin_left = 447.0
+margin_top = 313.0
+margin_right = -851.0
+margin_bottom = -313.0
+
+[node name="TextureRect" parent="X" index="0"]
+texture = ExtResource( 3 )
+
+[node name="Big" parent="X/TextureRect" index="0"]
+text = "X"
+
+[node name="Small" parent="X/TextureRect" index="1"]
+text = "whip"
+
+[node name="D" parent="." instance=ExtResource( 1 )]
+margin_left = 561.0
+margin_top = 62.0
+margin_right = -737.0
+margin_bottom = -564.0
+
+[node name="Big" parent="D/TextureRect" index="0"]
+text = "D"
+
+[node name="Small" parent="D/TextureRect" index="1"]
+text = "rope"
+
+[node name="C" parent="." instance=ExtResource( 1 )]
+margin_left = 699.0
+margin_top = 315.0
+margin_right = -599.0
+margin_bottom = -311.0
+
+[node name="TextureRect" parent="C" index="0"]
+texture = ExtResource( 2 )
+
+[node name="Big" parent="C/TextureRect" index="0"]
+text = "C"
+
+[node name="Small" parent="C/TextureRect" index="1"]
+margin_top = 18.0
+margin_bottom = 68.0
+text = "bomb"
+
+[node name="Up" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1247.0
+margin_top = 68.0
+margin_right = -51.0
+margin_bottom = -558.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="Up"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Small" type="Label" parent="Up/TextureRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = 18.275
+margin_right = -13.0
+margin_bottom = 68.2751
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "up"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Arrow" type="TextureRect" parent="Up/TextureRect"]
+modulate = Color( 0.376471, 0.423529, 0.439216, 1 )
+margin_left = 56.0
+margin_top = 48.0
+margin_right = 171.0
+margin_bottom = 117.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Down" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1251.0
+margin_top = 320.0
+margin_right = -47.0
+margin_bottom = -306.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="Down"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Small" type="Label" parent="Down/TextureRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = 18.275
+margin_right = -13.0
+margin_bottom = 68.2751
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "down"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Arrow" type="TextureRect" parent="Down/TextureRect"]
+modulate = Color( 0.376471, 0.423529, 0.439216, 1 )
+margin_left = 169.0
+margin_top = 128.0
+margin_right = 284.0
+margin_bottom = 197.0
+rect_rotation = 180.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Left" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 993.0
+margin_top = 314.0
+margin_right = -305.0
+margin_bottom = -312.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="Left"]
+margin_top = 7.0
+margin_right = 238.0
+margin_bottom = 245.0
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Small" type="Label" parent="Left/TextureRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = 18.275
+margin_right = -13.0
+margin_bottom = 68.2751
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "left"
+align = 1
+valign = 1
+
+[node name="Arrow" type="TextureRect" parent="Left/TextureRect"]
+modulate = Color( 0.376471, 0.423529, 0.439216, 1 )
+margin_left = 65.0
+margin_top = 135.0
+margin_right = 180.0
+margin_bottom = 204.0
+rect_rotation = -90.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Right" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1507.0
+margin_top = 318.0
+margin_right = 209.0
+margin_bottom = -308.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="Right"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Small" type="Label" parent="Right/TextureRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = 18.275
+margin_right = -13.0
+margin_bottom = 68.2751
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "right"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Arrow" type="TextureRect" parent="Right/TextureRect"]
+modulate = Color( 0.376471, 0.423529, 0.439216, 1 )
+margin_left = 161.0
+margin_top = 19.0
+margin_right = 276.0
+margin_bottom = 88.0
+rect_rotation = 90.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Shift" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -489.0
+margin_top = 308.0
+margin_right = -1355.0
+margin_bottom = -318.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="Shift"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Big" type="Label" parent="Shift/TextureRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 3.0
+margin_top = -85.0
+margin_right = -10.0
+margin_bottom = 36.0001
+custom_fonts/font = ExtResource( 7 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "SHIFT"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Small" type="Label" parent="Shift/TextureRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -3.0
+margin_top = 38.0
+margin_right = -16.0
+margin_bottom = 88.0001
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
+text = "run"
+align = 1
+valign = 1
+
+[editable path="Z"]
+[editable path="X"]
+[editable path="D"]
+[editable path="C"]

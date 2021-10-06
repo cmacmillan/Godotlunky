@@ -51,7 +51,7 @@ class AutoPickup;
 class Godolmec;
 
 
-#define showDebugHitboxes
+//#define showDebugHitboxes
 
 class Level : public Node2D
 {

@@ -22,6 +22,9 @@ public:
 	bool shouldRead;
 	bool isFirstLoad = true;
 	int damageSource;
+	bool useAutoRun=true;
+	bool useClassicControls=true;
+	bool useMusic = true;
 
 	int highScore;
 	int maxDepthBeaten;
