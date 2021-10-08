@@ -1,6 +1,7 @@
 #include "Music.h"
 #include <AnimatedSprite.hpp>
 #include <AudioStream.hpp>
+#include "Globals.h"
 
 void Music::_register_methods()
 {
@@ -43,5 +44,6 @@ void Music::_process(float delta)
 		}
 		currentVolume = godot::Math::move_toward(currentVolume, 1.0f, delta);
 	}
-	audioSource->set_volume_db(godot::Math::lerp(-100,-15,currentVolume));
+	auto globals = get_node<Globals>("/root/Globals");
+	audioSource->set_volume_db(godot::Math::lerp(-100,-15,currentVolume*(globals->useMusic?1.0f:0.0f)));
 }

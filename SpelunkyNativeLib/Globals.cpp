@@ -15,6 +15,7 @@ void Globals::_register_methods()
 	register_property("useAutoRun", &Globals::useAutoRun, true);
 	register_property("useClassicControls", &Globals::useClassicControls, true);
 	register_property("useMusic", &Globals::useMusic, true);
+	register_property("isInMainMenu", &Globals::isInMainMenu, true);
 }
 
 void Globals::_init(){}

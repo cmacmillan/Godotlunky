@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=2]
+[gd_scene load_steps=89 format=2]
 
 [ext_resource path="res://Scenes/Spelunker.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Multimeshes/GroundMultimesh.tres" type="MultiMesh" id=2]
@@ -75,6 +75,7 @@
 [ext_resource path="res://FracturedGodolmec.tscn" type="PackedScene" id=73]
 [ext_resource path="res://SFX/godolmecexplosion.wav" type="AudioStream" id=74]
 [ext_resource path="res://Scenes/SmallGoldPile.tscn" type="PackedScene" id=75]
+[ext_resource path="res://Scenes/Settings.tscn" type="PackedScene" id=76]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -402,10 +403,29 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="SettingsBackground" type="ColorRect" parent="CameraTarget/Camera2D/CanvasLayer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 0.521569 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Settings" parent="CameraTarget/Camera2D/CanvasLayer" instance=ExtResource( 76 )]
+visible = false
+margin_left = 91.0
+margin_top = 102.0
+margin_right = 1627.0
+margin_bottom = 966.0
+rect_scale = Vector2( 0.3, 0.3 )
+
 [node name="FullscreenWipe" type="ColorRect" parent="CameraTarget/Camera2D/CanvasLayer"]
 material = SubResource( 12 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }

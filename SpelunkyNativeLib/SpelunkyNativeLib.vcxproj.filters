@@ -69,6 +69,12 @@
     <ClCompile Include="Godolmec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Globals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Music.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -122,9 +128,6 @@
     <ClInclude Include="AutoPickup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LevelLayouts.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Spider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -135,6 +138,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DamageSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Music.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelLayouts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

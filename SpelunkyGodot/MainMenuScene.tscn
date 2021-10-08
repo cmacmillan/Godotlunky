@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=2]
+[gd_scene load_steps=90 format=2]
 
 [ext_resource path="res://CaveTex/sBrick_0.png" type="Texture" id=1]
 [ext_resource path="res://GodolunkyLogo.png" type="Texture" id=2]
@@ -28,6 +28,7 @@
 [ext_resource path="res://SFX/fadeout.wav" type="AudioStream" id=26]
 [ext_resource path="res://Scenes/Settings.tscn" type="PackedScene" id=27]
 [ext_resource path="res://SettingsButton.gd" type="Script" id=28]
+[ext_resource path="res://MainMenuScene.gd" type="Script" id=29]
 
 [sub_resource type="VisualShaderNodeTexture" id=1]
 texture = ExtResource( 1 )
@@ -78,7 +79,6 @@ void light() {
 
 }
 "
-graph_offset = Vector2( 50, 286 )
 mode = 1
 flags/light_only = false
 nodes/fragment/4/node = SubResource( 1 )
@@ -593,6 +593,7 @@ shader_param/F = 9000.0
 [node name="MainMenuScene" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 29 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -626,7 +627,6 @@ position = Vector2( 238.851, 361.357 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 7 )
 animation = "Flicker"
-frame = 4
 speed_scale = 2.0
 playing = true
 
@@ -636,7 +636,7 @@ position = Vector2( 1279.44, 361.357 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 7 )
 animation = "Flicker"
-frame = 3
+frame = 4
 speed_scale = 2.0
 playing = true
 
@@ -795,7 +795,6 @@ clickStream = ExtResource( 22 )
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Itch"]
 
 [node name="FullscreenWipe" type="ColorRect" parent="."]
-visible = false
 material = SubResource( 60 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -806,12 +805,13 @@ __meta__ = {
 
 [node name="Settings" parent="." instance=ExtResource( 27 )]
 visible = false
-margin_left = 330.0
+margin_left = 320.215
 margin_top = 242.0
-margin_right = 330.0
+margin_right = 320.215
 margin_bottom = 242.0
 rect_scale = Vector2( 0.3, 0.3 )
 
+[connection signal="tree_exited" from="." to="." method="_on_MainMenuScene_tree_exited"]
 [connection signal="mouse_entered" from="StartButton" to="StartButton" method="_on_mouse_entered"]
 [connection signal="pressed" from="StartButton" to="StartButton" method="OnButtonPressed"]
 [connection signal="mouse_entered" from="SettingsButton" to="SettingsButton" method="_on_SettingsButton_mouse_entered"]

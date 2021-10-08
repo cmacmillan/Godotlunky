@@ -25,6 +25,7 @@ public:
 	bool useAutoRun=true;
 	bool useClassicControls=true;
 	bool useMusic = true;
+	bool isInMainMenu = true;
 
 	int highScore;
 	int maxDepthBeaten;

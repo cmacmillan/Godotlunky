@@ -275,12 +275,11 @@ void Spelunker::_process(float delta)
 	if (input->is_action_pressed("run")) {
 		isRunning = true;
 	}
+	if (globals->useAutoRun) {
+		isRunning = !isRunning;
+	}
 	if (input->is_action_pressed("crouch")) {
 		isCrouching = true;
-	}
-	if (input->is_action_just_pressed("debugstun")) {
-		isStunned = true;
-		stunTime = 0;
 	}
 	if (isDead) {
 		holdingLedge = false;
