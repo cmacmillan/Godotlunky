@@ -46,6 +46,7 @@ void Level::_register_methods()
 {
 	register_method("_ready", &Level::_ready);
 	register_method("_process", &Level::_process);
+	register_method("WriteHighScoreToGlobals", &Level::WriteHighScoreToGlobals);
 
 	register_property("groundMultimesh", &Level::groundMultimesh, Ref<MultiMesh>());
 	register_property("topMultimesh", &Level::topMultimesh, Ref<MultiMesh>());
@@ -830,8 +831,7 @@ RID Level::GetRid(VisualServer* vs) {
 
 void Level::WriteHighScoreToGlobals() {
 	auto globals = get_node<Globals>("/root/Globals");
-	globals->highScore = godot::Math::max(globals->highScore, globals->cashCount);
-	globals->maxDepthBeaten = godot::Math::max(globals->maxDepthBeaten, globals->levelIndex);
+	globals->Save();
 	globals->shouldRead = false;
 	globals->levelIndex = 0;
 }

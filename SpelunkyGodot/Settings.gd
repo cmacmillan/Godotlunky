@@ -131,6 +131,9 @@ func AutoRunPressed():
 func QuitPressed():
 	audioStreamPlayer.stream=clickSFX
 	audioStreamPlayer.play()
+	get_node("/root/GameScene/Level").WriteHighScoreToGlobals()
+	get_tree().paused=false
+	get_tree().change_scene("res://MainMenuScene.tscn")
 		
 func ResumeAndBackPressed():
 	audioStreamPlayer.stream=clickSFX
@@ -140,6 +143,7 @@ func ResumeAndBackPressed():
 		get_node("../StartButton").visible=true
 		get_node("../SettingsButton").visible=true
 		get_node("../Logo").visible=true
+		get_node("../Highscore").visible=true
 	else:
 		Globals.UnPause();
 	
@@ -155,3 +159,7 @@ func ChangeModeButtonPressed():
 		UseNouveauLayout()
 	audioStreamPlayer.stream = clickSFX
 	audioStreamPlayer.play()
+
+func _on_Settings_visibility_changed():
+	if (!visible):
+		Globals.Save()

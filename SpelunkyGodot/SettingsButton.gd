@@ -3,6 +3,7 @@ extends TextureButton
 var StartButton:Control
 var Logo:Control
 var Settings:Control
+var Highscore:Control
 var audioStreamPlayer:AudioStreamPlayer
 export var hoverSFX:AudioStream
 export var clickSFX:AudioStream
@@ -12,6 +13,7 @@ func _ready():
 	audioStreamPlayer = get_node("AudioStreamPlayer")
 	StartButton = get_node("../StartButton")
 	Settings = get_node("../Settings")
+	Highscore = get_node("../Highscore")
 	Logo = get_node("../Logo")
 
 func _on_SettingsButton_pressed():
@@ -20,6 +22,7 @@ func _on_SettingsButton_pressed():
 	Settings.visible = true
 	Logo.visible = false
 	StartButton.visible = false
+	Highscore.visible = false
 	visible = false
 	
 

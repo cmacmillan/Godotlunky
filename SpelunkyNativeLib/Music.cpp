@@ -28,6 +28,7 @@ void Music::_ready()
 void Music::_process(float delta)
 {
 	auto currentStream = audioSource->get_stream();
+	auto globals = get_node<Globals>("/root/Globals");
 	if (!audioSource->is_playing() && currentStream!=nullptr && currentStream!=creditsTheme)
 		audioSource->play();
 	if (currentStream != nextAudio) {
@@ -44,6 +45,5 @@ void Music::_process(float delta)
 		}
 		currentVolume = godot::Math::move_toward(currentVolume, 1.0f, delta);
 	}
-	auto globals = get_node<Globals>("/root/Globals");
 	audioSource->set_volume_db(godot::Math::lerp(-100,-15,currentVolume*(globals->useMusic?1.0f:0.0f)));
 }

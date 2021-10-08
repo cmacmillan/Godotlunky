@@ -184,6 +184,8 @@ void Spelunker::_process(float delta)
 		}
 		return;
 	}
+	globals->cashCount = goldCollected;
+	globals->levelIndex = levelIndex;
 	if (invulTime > 0) {
 		invulTime -= delta;
 		invulFlicker = !invulFlicker;

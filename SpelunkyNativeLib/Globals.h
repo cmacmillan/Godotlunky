@@ -8,6 +8,7 @@ class Level;
 #include <Node2D.hpp>
 #include <Input.hpp>
 #include "Level.h"
+#include <File.hpp>
 
 class Globals : public Node2D
 {
@@ -33,6 +34,7 @@ public:
 	int maxDepthBeaten;
 
 	static void _register_methods();
+	void Save();
 	void UnPause();
 	void _init();
 	void _ready();

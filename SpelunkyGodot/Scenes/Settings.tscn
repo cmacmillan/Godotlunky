@@ -328,6 +328,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[connection signal="visibility_changed" from="." to="." method="_on_Settings_visibility_changed"]
 [connection signal="mouse_entered" from="ControlModeSelector/Left" to="." method="ButtonHovered"]
 [connection signal="pressed" from="ControlModeSelector/Left" to="." method="ChangeModeButtonPressed"]
 [connection signal="mouse_entered" from="ControlModeSelector/Right" to="." method="ButtonHovered"]

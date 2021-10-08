@@ -13,11 +13,15 @@ var LoadingScene = false
 var wipeLerp = 0
 
 func _ready():
+	LoadingScene = false
 	wipe = get_node("../FullscreenWipe") as ColorRect
 	shaderMat = wipe.material as ShaderMaterial
 	wipeLerp=-.5
 	shaderMat.set_shader_param("C",0)
-	Music.currentVolume=1.0
+	if (Globals.useMusic):
+		Music.currentVolume=1.0
+	else:
+		Music.currentVolume=0.0
 	Music.nextAudio = Music.mainMenuTheme
 	var fadeAudioPlayer = get_node("FadeAudioPlayer")
 	fadeAudioPlayer.stream = fadeInAudio
@@ -25,7 +29,8 @@ func _ready():
 	if (Globals.isFirstLoad):
 		var audio = (Music.get_node("audioSource") as AudioStreamPlayer)
 		audio.stream = Music.mainMenuTheme
-		audio.play()
+		if (Globals.useMusic):
+			audio.play()
 	Revealing = true
 	
 func _process(delta):
