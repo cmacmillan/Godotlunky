@@ -1,13 +1,13 @@
+class Body;
+class Spelunker;
+class AutoPickup;
+class Godolmec;
+class Level;
 #pragma once
 #include "Common.h"
 #include <Node2D.hpp>
-
-enum class HeldItem :unsigned int {
-	Unknown=0,
-	PrizeBox=1,
-	Shotgun=2,
-	Rock=3,
-};
+#include <Input.hpp>
+#include "Level.h"
 
 class Globals : public Node2D
 {
@@ -26,11 +26,14 @@ public:
 	bool useClassicControls=true;
 	bool useMusic = true;
 	bool isInMainMenu = true;
+	bool isPaused = false;
+	Level* level;
 
 	int highScore;
 	int maxDepthBeaten;
 
 	static void _register_methods();
+	void UnPause();
 	void _init();
 	void _ready();
 	void _process(float delta);

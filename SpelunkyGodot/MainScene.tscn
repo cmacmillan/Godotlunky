@@ -414,6 +414,7 @@ __meta__ = {
 }
 
 [node name="Settings" parent="CameraTarget/Camera2D/CanvasLayer" instance=ExtResource( 76 )]
+pause_mode = 2
 visible = false
 margin_left = 91.0
 margin_top = 102.0

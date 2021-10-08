@@ -627,6 +627,7 @@ position = Vector2( 238.851, 361.357 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 7 )
 animation = "Flicker"
+frame = 2
 speed_scale = 2.0
 playing = true
 
@@ -636,7 +637,7 @@ position = Vector2( 1279.44, 361.357 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 7 )
 animation = "Flicker"
-frame = 4
+frame = 1
 speed_scale = 2.0
 playing = true
 

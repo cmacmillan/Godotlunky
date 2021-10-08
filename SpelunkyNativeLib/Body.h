@@ -5,9 +5,13 @@
 #include <Node2D.hpp>
 #include <AudioStreamPlayer2D.hpp>
 #include <AudioStream.hpp>
-#include "Globals.h"
+#include "HeldItem.h"
 
 class Level;
+class IThrowAction;
+class IPicker;
+class Level;
+class ISmushReciever;
 
 class Body
 {

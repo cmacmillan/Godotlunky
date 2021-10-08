@@ -7,6 +7,7 @@
 [ext_resource path="res://Music/02-Cave.mp3" type="AudioStream" id=5]
 
 [node name="Music" type="Node2D"]
+pause_mode = 2
 script = ExtResource( 1 )
 bossThemeMusic = ExtResource( 2 )
 caveThemeMusic = ExtResource( 5 )

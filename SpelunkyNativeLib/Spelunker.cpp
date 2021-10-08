@@ -158,6 +158,8 @@ Vector2 ledgeFlipOffsets[7] = {
 
 void Spelunker::_process(float delta)
 {
+	auto globals = get_node<Globals>("/root/Globals");
+	auto input = Input::get_singleton();
 	if (level->isFadingOut) {
 		return;
 	}
@@ -227,8 +229,6 @@ void Spelunker::_process(float delta)
 	footHitbox.SetValues(footAABB, 1, HitboxMask::Enemy, Vector2(0, 0), 0, true, &body,DamageSource::SpelunkerDamage);
 
 	float accelSpeed=20000;
-
-	auto input = Input::get_singleton();
 
 	if (body.isGrounded && !frozenInCutscene && !isStunned && !isDead && body.aabb.overlaps(level->exitPosition) && level->isDoorOpen) {
 		if (input->is_action_pressed("EnterDoor")) {

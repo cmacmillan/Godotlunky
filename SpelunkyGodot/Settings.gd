@@ -131,15 +131,17 @@ func AutoRunPressed():
 func QuitPressed():
 	audioStreamPlayer.stream=clickSFX
 	audioStreamPlayer.play()
-	
+		
 func ResumeAndBackPressed():
 	audioStreamPlayer.stream=clickSFX
 	audioStreamPlayer.play()
 	if (Globals.isInMainMenu):
+		visible=false
 		get_node("../StartButton").visible=true
 		get_node("../SettingsButton").visible=true
 		get_node("../Logo").visible=true
-		visible=false
+	else:
+		Globals.UnPause();
 	
 func ButtonHovered():
 	audioStreamPlayer.stream=hoverSFX

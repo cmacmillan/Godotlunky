@@ -1,3 +1,4 @@
+class Globals;
 #pragma once
 #include "DamageSource.h"
 #include "IDamageReciever.h"

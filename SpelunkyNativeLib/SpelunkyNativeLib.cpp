@@ -1,5 +1,7 @@
 #pragma once
 #include "Common.h"
+#include "Body.h"
+#include "Globals.h"
 #include "Level.h"
 #include "Spelunker.h"
 #include "Bomb.h"
@@ -15,7 +17,6 @@
 #include "Spider.h"
 #include "DoorOpener.h"
 #include "Godolmec.h"
-#include "Globals.h"
 #include "Music.h"
 
 extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
