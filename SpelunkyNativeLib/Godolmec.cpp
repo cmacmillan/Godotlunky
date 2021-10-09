@@ -64,6 +64,7 @@ void Godolmec::_ready()
 	level->frontSpawnRoot->add_child(shatter);
 	SwitchState(GodolmecState::WaitingToBreakFree);
 	SetColliderPositions();
+	RandomizeJumpCount();
 }
 
 void Godolmec::TakeDamage() {
@@ -155,7 +156,6 @@ void Godolmec::SwitchState(GodolmecState targetState)
 		explosionChargeSFX->set_stream(level->godolmecChargeExplosionSFX);
 		explosionChargeSFX->play();
 		break;
-	case GodolmecState::WaitingToSwitchStatesForceJump:
 	case GodolmecState::WaitingToSwitchStates:
 	case GodolmecState::WaitingToBreakFree:
 		break;
@@ -195,6 +195,10 @@ void Godolmec::MoveTowardsPlayer() {
 	}
 }
 
+void Godolmec::RandomizeJumpCount() {
+	jumpsUntilBombs = 2 + level->Random() * 3;
+}
+
 void Godolmec::_process(float delta)
 {
 	SetColliderPositions();
@@ -202,11 +206,6 @@ void Godolmec::_process(float delta)
 	stateTime += delta;
 	switch (state)
 	{
-	case GodolmecState::WaitingToSwitchStatesForceJump:
-		if (stateTime > 1.0f) {
-			SwitchState(GodolmecState::JumpingAtPlayer);
-		}
-		break;
 	case GodolmecState::Dying:
 		if (stateTime > 2.5f) {
 			level->godolmec = nullptr;
@@ -240,7 +239,8 @@ void Godolmec::_process(float delta)
 		break;
 	case GodolmecState::WaitingToSwitchStates:
 		if (stateTime > 1.0f) {
-			if (level->Random() < .80f) {
+			if (jumpsUntilBombs>0) {
+				jumpsUntilBombs--;
 				SwitchState(GodolmecState::JumpingAtPlayer);
 			}
 			else {
@@ -255,13 +255,14 @@ void Godolmec::_process(float delta)
 				SwitchState(GodolmecState::Dying);
 			}
 			else {
-				SwitchState(GodolmecState::WaitingToSwitchStatesForceJump);
+				RandomizeJumpCount();
+				SwitchState(GodolmecState::WaitingToSwitchStates);
 			}
 		}
 		break;
 	case GodolmecState::BreakingFree:
 		if (stateTime > 10.0f) {
-			SwitchState(GodolmecState::JumpingAtPlayer);
+			SwitchState(GodolmecState::WaitingToSwitchStates);
 		}
 		break;
 	case GodolmecState::JumpingAtPlayer:

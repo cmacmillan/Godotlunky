@@ -22,6 +22,7 @@ void Globals::_register_methods()
 	register_property("isPaused", &Globals::isPaused, false);
 	register_property("maxDepthBeaten", &Globals::maxDepthBeaten, 0);
 	register_property("highScore", &Globals::highScore, 0);
+	register_property("bestPlayTime", &Globals::bestPlayTime, 0.0f);
 }
 
 void Globals::_init(){}
@@ -32,14 +33,13 @@ void Globals::_ready()
 	cashCount = 0;
 	bombCount = 0;
 	ropeCount = 0;
+	currentPlayTime = 0;
 	shouldRead = false;
 	isFirstLoad = true;
 	this->set_pause_mode(PAUSE_MODE_PROCESS);	
 }
 
 void Globals::Save() {
-	printf("highScore: %d", highScore);
-	printf("cashCount: %d", cashCount);
 	highScore = godot::Math::max(highScore, cashCount);
 	maxDepthBeaten = godot::Math::max(maxDepthBeaten, levelIndex);
 	auto file = File::_new();
@@ -58,6 +58,7 @@ void Globals::Save() {
 		file->store_8(0);
 	file->store_8(maxDepthBeaten);
 	file->store_32(highScore);
+	file->store_float(bestPlayTime);
 	file->close();
 }
 
@@ -72,9 +73,10 @@ void Globals::_process(float delta)
 {
 	if (isInMainMenu)
 		return;
-	level = this->get_node<Level>("/root/GameScene/Level");
-	if (level == nullptr)
+	auto nodeOrNull =  this->get_node_or_null("/root/GameScene/Level");
+	if (nodeOrNull == nullptr)
 		return;
+	auto level = Object::cast_to<Level>(nodeOrNull);
 	if (level->spelunker->isDead || level->isFadingOut)
 		return;
 	auto input = Input::get_singleton();

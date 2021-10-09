@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=2]
+[gd_scene load_steps=90 format=2]
 
 [ext_resource path="res://Scenes/Spelunker.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Multimeshes/GroundMultimesh.tres" type="MultiMesh" id=2]
@@ -76,6 +76,7 @@
 [ext_resource path="res://SFX/godolmecexplosion.wav" type="AudioStream" id=74]
 [ext_resource path="res://Scenes/SmallGoldPile.tscn" type="PackedScene" id=75]
 [ext_resource path="res://Scenes/Settings.tscn" type="PackedScene" id=76]
+[ext_resource path="res://CaveTex/sTimerIcon_0.png" type="Texture" id=77]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -390,6 +391,20 @@ margin_top = 11.0
 margin_right = 69.0
 margin_bottom = 38.0
 
+[node name="TimerContainer" parent="CameraTarget/Camera2D/CanvasLayer/Control/TopLeftContainer" instance=ExtResource( 48 )]
+margin_left = 380.0
+margin_top = 0.0
+margin_right = 460.0
+margin_bottom = 50.0
+
+[node name="TextureRect" parent="CameraTarget/Camera2D/CanvasLayer/Control/TopLeftContainer/TimerContainer" index="0"]
+texture = ExtResource( 77 )
+
+[node name="Label" parent="CameraTarget/Camera2D/CanvasLayer/Control/TopLeftContainer/TimerContainer" index="1"]
+margin_top = 11.0
+margin_right = 69.0
+margin_bottom = 38.0
+
 [node name="CurrentLevel" type="Label" parent="CameraTarget/Camera2D/CanvasLayer/Control"]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -445,3 +460,4 @@ texture = ExtResource( 23 )
 [editable path="CameraTarget/Camera2D/CanvasLayer/Control/TopLeftContainer/BombCountContainer"]
 [editable path="CameraTarget/Camera2D/CanvasLayer/Control/TopLeftContainer/RopeCountContainer"]
 [editable path="CameraTarget/Camera2D/CanvasLayer/Control/TopLeftContainer/MoneyCountContainer"]
+[editable path="CameraTarget/Camera2D/CanvasLayer/Control/TopLeftContainer/TimerContainer"]

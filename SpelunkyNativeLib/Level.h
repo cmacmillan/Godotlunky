@@ -139,6 +139,7 @@ public:
 	Label* ropeCountLabel;
 	Label* healthCountLabel;
 	Label* moneyCountLabel;
+	Label* timerLabel;
 	Label* levelIndexLabel;
 
 	bool lookAtGodolmec;

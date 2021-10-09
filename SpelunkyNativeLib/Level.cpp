@@ -507,6 +507,7 @@ void Level::_ready()
 	ropeCountLabel= uiRoot->get_node<Label>("TopLeftContainer/RopeCountContainer/Label");
 	healthCountLabel= uiRoot->get_node<Label>("TopLeftContainer/HealthCountContainer/Label");
 	moneyCountLabel = uiRoot->get_node<Label>("TopLeftContainer/MoneyCountContainer/Label");
+	timerLabel = uiRoot->get_node<Label>("TopLeftContainer/TimerContainer/Label");
 	levelIndexLabel = uiRoot->get_node<Label>("CurrentLevel");
 
 	auto fullscreenWipe = get_node<ColorRect>("/root/GameScene/CameraTarget/Camera2D/CanvasLayer/FullscreenWipe");
@@ -833,6 +834,7 @@ void Level::WriteHighScoreToGlobals() {
 	auto globals = get_node<Globals>("/root/Globals");
 	globals->Save();
 	globals->shouldRead = false;
+	globals->currentPlayTime = 0;
 	globals->levelIndex = 0;
 }
 
@@ -840,13 +842,12 @@ void Level::WriteHighScoreToGlobals() {
 std::vector<Body*>* hurtboxesToRemove = nullptr;
 std::vector<HitboxData*>* hitboxesToRemove= nullptr;
 std::vector<AutoPickup*>* autopickupsToRemove= nullptr;
-//float timerTest = 0;//delete me
 void Level::_process(float delta)
 {
-	//timerTest += delta;
-	//testCustomCollision.aabb.center = Vector2(12.65+godot::Math::sin(timerTest)*3,5);
-	//testCustomCollision.center = Vector2(12.65+godot::Math::sin(timerTest),5+godot::Math::sin(timerTest)*5);
-	//testCustomCollision.center = spelunker->body.aabb.center + Vector2(0,2);
+	auto globals = get_node<Globals>("/root/Globals");
+	if (!spelunker->isDead && !isFadingOut) {
+		globals->currentPlayTime += delta;
+	}
 	if (!hasPlayedFadeInSound) {
 		hasPlayedFadeInSound = true;
 		PlayAudio(fadeInSFX, spelunker->body.aabb.center);
@@ -859,13 +860,18 @@ void Level::_process(float delta)
 		fadeOutLerp -= delta;
 		((ShaderMaterial*)fullscreenWipeMaterial.ptr())->set_shader_param("C", fadeOutLerp);
 		if (fadeOutLerp <= 0) {
-			auto globals = get_node<Globals>("/root/Globals");
 			auto music = get_node<Music>("/root/Music");
 			if (!spelunker->isDead && globals->levelIndex == 4) {
 				music->nextAudio = music->creditsTheme;
 				music->audioSource->set_stream(music->creditsTheme);
 				music->audioSource->play();
 				music->currentVolume = 1.0f;
+				if (globals->bestPlayTime == 0) {
+					globals->bestPlayTime = globals->currentPlayTime;
+				}
+				else {
+					globals->bestPlayTime = godot::Math::min(globals->bestPlayTime, globals->currentPlayTime);
+				}
 				WriteHighScoreToGlobals();
 				get_tree()->change_scene("res://Credits.tscn");
 			}

@@ -629,7 +629,7 @@ position = Vector2( 238.851, 361.357 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 7 )
 animation = "Flicker"
-frame = 2
+frame = 3
 speed_scale = 2.0
 playing = true
 
@@ -639,7 +639,7 @@ position = Vector2( 1279.44, 361.357 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 7 )
 animation = "Flicker"
-frame = 1
+frame = 2
 speed_scale = 2.0
 playing = true
 
@@ -775,13 +775,15 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 margin_top = -36.5
-margin_right = 378.0
-margin_bottom = 163.5
-rect_scale = Vector2( 0.35, 0.35 )
+margin_right = 476.0
+margin_bottom = 196.5
+rect_scale = Vector2( 0.3, 0.3 )
 custom_fonts/font = ExtResource( 30 )
 custom_colors/font_color = Color( 0.376471, 0.423529, 0.439216, 1 )
 text = "highscore: $10000
-max depth beaten: 0/4"
+max depth beaten: 0/4
+fastest clear: 12:34
+challenge time: 3:00"
 align = 1
 valign = 1
 __meta__ = {

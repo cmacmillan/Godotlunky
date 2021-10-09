@@ -18,4 +18,5 @@ func _ready():
 			Globals.useMusic = false
 		Globals.maxDepthBeaten = file.get_8()
 		Globals.highScore = file.get_32()
+		Globals.bestPlayTime = file.get_float()
 		file.close()

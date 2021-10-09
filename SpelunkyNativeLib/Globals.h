@@ -28,6 +28,8 @@ public:
 	bool useMusic = true;
 	bool isInMainMenu = true;
 	bool isPaused = false;
+	float bestPlayTime = 0;
+	float currentPlayTime= 0;
 	Level* level;
 
 	int highScore;

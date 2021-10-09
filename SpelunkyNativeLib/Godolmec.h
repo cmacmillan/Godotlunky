@@ -13,7 +13,6 @@ enum class GodolmecState : int {
 	WaitingToSwitchStates=2,
 	WaitingToBreakFree=3,
 	FiringBombs=4,
-	WaitingToSwitchStatesForceJump=5,
 	Dying = 6,
 };
 class DoorOpener;
@@ -40,6 +39,7 @@ public:
 	int health;
 	float flashTime = 0;
 	bool isTakingDamage;
+	int jumpsUntilBombs = 0;
 
 	MovingPlatform jawHitbox1;
 	MovingPlatform faceHitbox1;
@@ -73,6 +73,8 @@ public:
 	void MoveTowardsPlayer();
 
 	void FinishAnimation();
+
+	void RandomizeJumpCount();
 
 	void StopShaking();
 

@@ -719,7 +719,12 @@ void Spelunker::_process(float delta)
 	level->bombCountLabel->set_text(String(std::to_string(this->bombCount).c_str()));
 	level->ropeCountLabel->set_text(String(std::to_string(this->ropeCount).c_str()));
 	level->moneyCountLabel->set_text(String(std::to_string(this->goldCollected).c_str()));
-	level->levelIndexLabel->set_text(String((std::to_string(this->levelIndex+1)+"/4").c_str()));
+	int minutes = globals->currentPlayTime / 60;
+	int seconds = globals->currentPlayTime - (60 * minutes);
+	if (!isDead) {
+		level->timerLabel->set_text(String((std::to_string(minutes) + ":" + (seconds < 10 ? "0" : "") + std::to_string(seconds)).c_str()));
+	}
+	level->levelIndexLabel->set_text(String((std::to_string(this->levelIndex + 1) + "/4").c_str()));
 }
 Spelunker::Spelunker() {
 	printf("const");
